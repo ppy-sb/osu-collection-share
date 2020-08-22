@@ -42,13 +42,13 @@ class CollectionSet {
     }, [])
     const reducedMaps = allMaps.filter((thing, index, self) =>
       index === self.findIndex(t => (
-        t.beatmap_id === thing.beatmap_id
+        t.md5 === thing.md5
       )))
     // console.log(allMaps.length, reducedMaps.length)
 
     // upserting all maps to beamtap
     const beatmapDocs = await Promise.all(reducedMaps.map(async (beatmap) => {
-      let doc = await Beatmap.findOne({ beatmap_id: beatmap.beatmap_id }).exec()
+      let doc = await Beatmap.findOne({ md5: beatmap.md5 }).exec()
       if (!doc) { doc = await Beatmap.create(beatmap) }
       return doc.toObject()
     }))
@@ -81,7 +81,7 @@ class CollectionSet {
 
       collection.mapsets.map((beatmapset, beatmapsetIndex) => {
         CollectionBeatmap.create(beatmapset.maps.map(map => ({
-          beatmap: beatmapDocs.find(docmap => docmap.beatmap_id == map.beatmap_id),
+          beatmap: beatmapDocs.find(docmap => docmap.md5 == map.md5),
           collectionSet: collectionSets[collectionIndex],
           set: beatmapsets[beatmapsetIndex],
           collectionDB

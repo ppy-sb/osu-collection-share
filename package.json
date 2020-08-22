@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "express-dev": "node ./server/app",
-    "express-api": "node ./server/app-api",
+    "express-dev": "node -r dotenv/config ./server/app",
+    "express-api": "node -r dotenv/config ./server/app-api",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",

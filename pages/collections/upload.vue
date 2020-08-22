@@ -268,23 +268,6 @@ export default {
         compiledCollectionData: this.uploadingCollections
       }).then((res) => { this.uploadResult = res.data }).catch(err => console.warn(err))
     },
-    convert () {
-      const collections = this.osuCollectionData.collection.map((collection) => {
-        return {
-          name: collection.name,
-          id: collection.name.replace(' ', '_'),
-          maps: collection.beatmapsMd5.map(md5 => this.findMapInOsuDB({ md5 }) || { md5, unknown: true })
-        }
-      }).filter(collection => collection.maps.length)
-      this.compiledCollectionData = collections.map((collection) => {
-        return {
-          name: collection.name,
-          id: collection.id,
-          mapsets: this.mapListToMapsetList(collection.maps).sort((a, b) => a.beatmap_id - b.beatmap_id)
-        }
-      })
-      console.log(this.compiledCollectionData)
-    },
     findMapInOsuDB (map) {
       return this.osuDBData.beatmaps.find(beatmap => beatmap.md5 === map.md5)
     },

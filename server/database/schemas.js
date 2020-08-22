@@ -6,56 +6,72 @@ const Schemas = {
   }),
   CollectionDB: new Mongoose.Schema({
     name: { type: String, default: 'Unnamed' },
-    slug: { type: String, default: 'Unnamed' },
+    slug: { type: String, default: 'Unnamed', index: true },
     description: { type: String, default: 'no' },
     user: {
-      _id: Mongoose.Types.ObjectId
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
     }
   }),
   CollectionSet: new Mongoose.Schema({
-    name: { type: String, default: 'Unnamed' },
-    slug: { type: String, default: 'Unnamed' },
+    name: { type: String, default: 'Unnamed', index: true },
+    slug: { type: String, default: 'Unnamed', index: true },
     collectionDB: {
-      _id: Mongoose.Types.ObjectId
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
     }
   }),
   Set: new Mongoose.Schema({
     name: { type: String, default: 'Unnamed' },
     id: { type: Number, default: -1 },
     collectionSets: {
-      _id: Mongoose.Types.ObjectId
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
     },
     collectionDB: {
-      _id: Mongoose.Types.ObjectId
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
     }
   }),
   CollectionBeatmap: new Mongoose.Schema({
     localOffset: { type: Number, default: 0 },
     beatmap: {
-      _id: Mongoose.Types.ObjectId
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
     },
     set: {
-      _id: Mongoose.Types.ObjectId
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
     },
     collectionSet: {
-      _id: Mongoose.Types.ObjectId
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
     },
     collectionDB: {
-      _id: Mongoose.Types.ObjectId
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
     }
   }),
   Beatmap: new Mongoose.Schema({
     approach_rate: { type: Number, default: -1 },
-    artist_name: { type: String, default: 'Unnamed' },
+    artist_name: { type: String, default: 'Unnamed', index: true },
     artist_name_unicode: { type: String, default: 'Unnamed' },
-    beatmap_id: { type: Number, default: -1, required: true },
-    beatmapset_id: { type: Number, default: -1, required: true },
+    beatmap_id: { type: Number, default: -1, index: true },
+    beatmapset_id: { type: Number, default: -1, index: true },
     circle_size: { type: Number, default: -1 },
-    creator_name: { type: String, default: 'Unnamed' },
+    creator_name: { type: String, default: 'Unnamed', index: true },
     difficulty: { type: String, required: true },
     drain_time: { type: Number, default: -1 },
     hp_drain: { type: Number, default: -1 },
-    md5: { type: String, default: 'Unnamed' },
+    md5: { type: String, required: true, index: true },
     mode: { type: Number, default: 0 },
     n_hitcircles: { type: Number, default: -1 },
     n_sliders: { type: Number, default: -1 },
