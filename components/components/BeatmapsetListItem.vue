@@ -13,7 +13,7 @@
                 <!-- <a :href="banchoBeatmapLink" v-html="score.beatmap.song_name" /> -->
                 {{ songName() }}
               </h5>
-              <p v-for="(map,index) in set.maps.filter((_,index) => index < 2)" :key="(()=>`${index}-diff-${set.id}-${map.beatmap_id}`)()" class="mb-1">
+              <p v-for="(map,index) in set.maps.filter((_,index) => index < 2)" :key="(()=>`${index}-diff-${set.id}-${map.md5}`)()" class="mb-1">
                 {{ map.difficulty }}
               </p>
             </div>
@@ -51,7 +51,7 @@
       <b-collapse :id="(()=>`collapse-${set.id}`)()">
         <b-table-simple>
           <b-tbody>
-            <b-tr v-for="map in set.maps" :key="`detail-${set.id}-${map.beatmap_id}`">
+            <b-tr v-for="map in set.maps" :key="`detail-${set.id}-${map.md5}`">
               <b-th>{{ map.difficulty }}</b-th>
               <b-td>
                 <b-button-group>
@@ -96,9 +96,6 @@ export default {
     beatmapLink () {
       return `https://osu.ppy.sb/s/${this.set.id}`
     },
-    // banchoBeatmapLink () {
-    //   return `https://osu.ppy.sh/beatmapsets/${this.score.beatmap.beatmapset_id}#/${this.score.beatmap.beatmap_id}`
-    // },
     smallPreviewImgSrc () {
       return `https://b.ppy.sh/thumb/${this.set.id}l.jpg`
     }

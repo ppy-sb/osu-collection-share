@@ -249,7 +249,7 @@ export default {
         return {
           name: collection.name,
           id: collection.id,
-          mapsets: this.mapListToMapsetList(collection.maps).sort((a, b) => a.beatmap_id - b.beatmap_id),
+          mapsets: this.mapListToMapsetList(collection.maps),
           upload: true
         }
       })
