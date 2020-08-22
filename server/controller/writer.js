@@ -1,6 +1,6 @@
-const { connection } = require('mongoose')
 const slug = require('slug')
 const models = require('../database/models.js')
+const getSlug = require('./slug.js')
 
 class CollectionSet {
   constructor ({ collectionDB, user, compiledCollectionData }) {
@@ -58,6 +58,8 @@ class CollectionSet {
 
     // create collectionDB
     this.collectionDB.user = user
+    const dbSlug = await getSlug(this.collectionDB.slug, CollectionDB)
+    if (dbSlug.sameCollectionDBExitsts) { this.collectionDB.slug = dbSlug.nextAvailable } else { this.collectionDB.slug = dbSlug.slug }
     const collectionDB = await CollectionDB.create(this.collectionDB)
 
     // create CollectionSets
@@ -86,7 +88,9 @@ class CollectionSet {
         }))).catch(error => console.warn(error))
       })
     }))
-    return true
+    return {
+      collectionDB
+    }
   }
 
   async findOrCreateUser () {

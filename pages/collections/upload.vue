@@ -44,6 +44,20 @@
             drop-placeholder="Drop file here..."
           />
         </b-form-group>
+        <b-form-group
+          label-cols-sm="3"
+          label="collection description:"
+          label-align-sm="right"
+          label-for="description"
+        >
+          <b-form-textarea
+            id="description"
+            v-model="collection.description"
+            placeholder="Enter something..."
+            rows="3"
+            max-rows="6"
+          />
+        </b-form-group>
         <b-button-group>
           <b-button :variant="osuCollectionData ? 'success' : 'primary'" @click="readData">
             parse
@@ -65,11 +79,24 @@
       last
     >
       <card shadow>
-        <b-form-checkbox
-          v-model="onlyShowUploading"
-        >
-          only show uploading collections
-        </b-form-checkbox>
+        <b-card-text>
+          <b-form-checkbox
+            v-show="!uploadResult"
+            v-model="onlyShowUploading"
+          >
+            only show uploading collections
+          </b-form-checkbox>
+          <div v-if="uploadResult">
+            <b-card-title>
+              done
+            </b-card-title>
+            <b-card-text>
+              <nuxt-link :to="`/collections/${uploadResult.collectionDB.slug}`">
+                collection link
+              </nuxt-link>
+            </b-card-text>
+          </div>
+        </b-card-text>
       </card>
       <card
         v-for="(c) of uploadingCollections"
@@ -232,12 +259,13 @@ export default {
       axios.post('/api/collectionDB/upload', {
         collectionDB: {
           name: this.collection.name,
-          slug: this.collection.slug
+          slug: this.collection.slug,
+          description: this.collection.description
         },
         user: {
           name: this.username
         },
-        compiledCollectionData: this.compiledCollectionData
+        compiledCollectionData: this.uploadingCollections
       }).then((res) => { this.uploadResult = res.data }).catch(err => console.warn(err))
     },
     convert () {

@@ -7,6 +7,7 @@ module.exports = {
   CollectionDB: new Mongoose.Schema({
     name: { type: String, default: 'Unnamed' },
     slug: { type: String, default: 'Unnamed' },
+    description: { type: String, default: 'no' },
     user: {
       _id: Mongoose.Types.ObjectId
     }
