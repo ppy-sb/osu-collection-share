@@ -99,7 +99,7 @@ export default {
     },
     methods: {
         switchLocale(locale) {
-            this.log(locale, "locale");
+            // this.log(locale, "locale");
             this.$root.locale = locale;
             this.setLocale();
         },

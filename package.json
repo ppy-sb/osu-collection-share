@@ -11,10 +11,13 @@
     "generate": "nuxt generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint": "npm run lint:js",
-    "test": "jest"
+    "test": "jest",
+    "i18n:report": "vue-cli-service i18n:report --src './*.?(js|vue)' --locales './locales/*.json'",
+    "standardize-locale": "node helpers/standardizeLocales.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
+    "@growthbunker/vueflags": "^0.1.2",
     "@nuxt/content": "^1.5.0",
     "@nuxtjs/axios": "^5.12.0",
     "body-parser": "^1.19.0",
@@ -26,6 +29,7 @@
     "nouislider": "^14.6.1",
     "nuxt": "^2.14.0",
     "nuxt-clipboard2": "^0.2.1",
+    "nuxt-i18n": "^6.13.11",
     "osu-db-parser": "^1.0.35",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.3",
@@ -41,6 +45,7 @@
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.1.0",
     "@nuxtjs/eslint-module": "^2.0.0",
+    "@vue/cli-service": "^4.5.4",
     "@vue/test-utils": "^1.0.3",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
@@ -48,6 +53,9 @@
     "eslint": "^7.5.0",
     "eslint-plugin-nuxt": "^1.0.0",
     "jest": "^26.1.0",
+    "json-stable-stringify": "^1.0.1",
+    "vue-cli-plugin-i18n": "^1.0.1",
+    "vue-i18n": "^8.21.0",
     "vue-jest": "^3.0.4"
   }
 }

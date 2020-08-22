@@ -1,5 +1,5 @@
 const Mongoose = require('mongoose')
-module.exports = {
+const Schemas = {
   User: new Mongoose.Schema({
     id: { type: Number, default: -1 },
     name: { type: String, default: 'Unknown' }
@@ -85,3 +85,6 @@ module.exports = {
     thread_id: { type: Number, default: -1 }
   })
 }
+Schemas.CollectionDB.index({ name: 'text', description: 'text' })
+
+module.exports = Schemas

@@ -1,25 +1,25 @@
 <template>
   <div id="wrapper" class="d-flex flex-column">
     <header class="header-global">
-      <starter-header />
+      <app-header />
     </header>
     <main class="flex-fill position-relative">
       <nuxt />
     </main>
     <footer class="footer">
-      <starter-footer />
+      <app-footer />
     </footer>
   </div>
 </template>
 
 <script>
-import StarterHeader from '~/components/argon-layout/starter/StarterHeader'
-import StarterFooter from '~/components/argon-layout/starter/StarterFooter'
+import AppHeader from '~/components/sb-layouts/AppHeader'
+import AppFooter from '~/components/sb-layouts/AppFooter'
 
 export default {
   components: {
-    StarterHeader,
-    StarterFooter
+    AppHeader,
+    AppFooter
   }
 }
 </script>

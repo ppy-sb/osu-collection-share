@@ -1,0 +1,21 @@
+{
+  "beatmapPreviewer": {},
+  "beatmaps": {},
+  "common": {},
+  "download": {},
+  "header": {
+    "findCollection": "Searching for collections? <<<<<<"
+  },
+  "landing": {},
+  "leaderboard": {},
+  "locale": "Swtich locale",
+  "mode": {
+  },
+  "scoreCard": {},
+  "statements": {
+    "testTitle": "collection sharing"
+  },
+  "user": {
+    "uploadedBy": "uploaded by"
+  }
+}

@@ -48,43 +48,10 @@
             <i class="ni ni-collection d-lg-none" />
             <span class="nav-link-inner--text">pages</span>
           </a>
-          <router-link 
-            to="/users/1001" 
-            class="dropdown-item"
-          >
-            User stats
-          </router-link>
-          <router-link
-            to="/beatmapsets/746506/1573320"
-            class="dropdown-item"
-          >
-            Beatmap info and scores(/beatmapsetId/beatmapId)
-          </router-link>
-          <router-link
-            to="/beatmap/1816243"
-            class="dropdown-item"
-          >
-            Beatmap info and scores(/beatmapId)
-          </router-link>
-          <router-link 
-            to="/leaderboard" 
-            class="dropdown-item"
-          >
-            Leaderboard
-          </router-link>
-          <router-link 
-            to="/leaderboard/CN" 
-            class="dropdown-item"
-          >
-            Country Leaderboard(CN)
-          </router-link>
         </base-dropdown>
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto text-nowrap">
-        <search-user style="min-width:150px" />
-        <nav-user />
-        <nav-login />
-        <nav-register />
+        <search-collection style="min-width:150px" />
         <!-- <li class="nav-item">
           <a
             class="nav-link nav-link-icon"
@@ -140,10 +107,7 @@ import BaseDropdown from "@/components/argon-components/BaseDropdown";
 import CloseButton from "@/components/argon-components/CloseButton";
 
 import SwitchLocale from "@/components/sb-components/SwitchLocale";
-import SearchUser from "@/components/sb-components/SearchUser";
-import NavUser from "@/components/sb-components/NavUser";
-import NavLogin from "@/components/sb-components/NavLogin";
-import NavRegister from "@/components/sb-components/NavRegister";
+import SearchCollection from "@/components/sb-components/SearchCollection";
 
 export default {
     components: {
@@ -151,10 +115,7 @@ export default {
         CloseButton,
         BaseDropdown,
         SwitchLocale,
-        SearchUser,
-        NavUser,
-        NavLogin,
-        NavRegister
+        SearchCollection,
     },
 };
 </script>

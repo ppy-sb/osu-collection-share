@@ -1,0 +1,97 @@
+{
+  "beatmapPreviewer": {},
+  "beatmaps": {
+    "combo": "@.capitalize:common.combo",
+    "index": "@:common.index",
+    "ingredient": "Make up",
+    "mods": "Mods",
+    "playedAt": "달성한 날짜",
+    "pp": "@:common.pp",
+    "score": "@.capitalize:common.score",
+    "user": "@.capitalize:common.user"
+  },
+  "common": {
+    "accuracy": "정확도",
+    "addAsFriend": "친구 추가",
+    "aka": "혹은",
+    "block": "차단",
+    "combo": "combo",
+    "fullCombo": "full combo",
+    "index": "순위",
+    "leaderboard": "리더보드",
+    "leaderboards": "리더보드",
+    "level": "래벨",
+    "miss": "miss",
+    "pp": "PP",
+    "rankedScore": "랭크된 점수",
+    "score": "점수",
+    "subtitle": "<strong><big>s</big></strong>uperb osu private server<br><strong><big>b</big></strong>ut not<br>(?)",
+    "title": "Ֆ osu.ppy.sb",
+    "totalScore": "총 점수",
+    "user": "플레이어"
+  },
+  "download": {
+    "dedicatedSwitcher": "dedicated switcher",
+    "description": "use the switcher we offered or use the \"ultimate switcher\" which includes @:common.title .",
+    "download": "download",
+    "subtitle": "",
+    "title": "서버 스위치",
+    "ultimateSwitcher": "ultimate switcher"
+  },
+  "header": {
+    "findUser": "누군가를 찾고 계십니까?"
+  },
+  "landing": {
+    "downloadSwitcher": "서버 스위처를 다운로드 하세요.",
+    "leaderboards": "@:common.leaderboards",
+    "onlineCount": "users online",
+    "scoresSubmitted": "scores submitted",
+    "subtitle": "@:common.subtitle",
+    "title": "@:common.title"
+  },
+  "leaderboard": {
+    "accuracy": "@.capitalize:common.accuracy",
+    "empty": "leaderboard is empty",
+    "index": "@:common.index",
+    "level": "@.capitalize:common.level",
+    "pp": "@:common.pp",
+    "rankedScore": "@.capitalize:common.rankedScore",
+    "totalScore": "@.capitalize:common.totalScore",
+    "user": "@.capitalize:common.user"
+  },
+  "locale": "언어",
+  "message": "hello i18n !!",
+  "mode": {
+    "catch": "osu!catch",
+    "mania": "osu!mania",
+    "osu": "osu!",
+    "taiko": "osu!taiko"
+  },
+  "scoreCard": {
+    "50": "50",
+    "100": "100",
+    "300": "300",
+    "countableMore": "No more rows | 더보기 | 더보기",
+    "fullCombo": "@.capitalize:common.fullCombo",
+    "miss": "@.capitalize:common.miss",
+    "more": "더보기"
+  },
+  "statements": {
+    "testTitle": "RX stat page preview 1"
+  },
+  "user": {
+    "accuracy": "정확도",
+    "addAsFriend": "@:common.addAsFriend",
+    "aka": "@:common.aka {aka}",
+    "block": "@:common.block",
+    "bp": "최고 성과",
+    "countryRank": "국내 순위",
+    "globalRank": "세계 순위 #{rank}",
+    "lastSeenAt": "마지막으로 접속한 시간: {fromNow}",
+    "playCount": "플레이 횟수",
+    "pp": "@:common.pp",
+    "recent": "최근 점수",
+    "registeredAt": "{at} 에 가입.",
+    "toggleRx": "Relax"
+  }
+}

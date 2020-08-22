@@ -62,7 +62,9 @@ module.exports = {
   plugins: [
     '~/plugins/argon/argon-kit',
     // { src: '~/plugins/database/index.js', mode: 'server' }
-    { src: '~/plugins/debounce/index.js', mode: 'client' }
+    { src: '~/plugins/debounce/index.js', mode: 'client' },
+    '~/plugins/i18n.js',
+    '~/plugins/vue-flag.js'
   ],
   /*
   ** Auto import components

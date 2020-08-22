@@ -43,7 +43,7 @@
               {{ collectionDB.name }}
             </h3>
             <div class="h6 font-weight-300">
-              uploaded by <i><a :href="`https://osu.ppy.sh/users/${user.name}`">{{ user.name }}</a></i>
+              {{ $t('user.uploadedBy') }} <i><a :href="`https://osu.ppy.sh/users/${user.name}`">{{ user.name }}</a></i>
             </div>
           </div>
           <div class="mt-5 py-5 border-top text-center">
@@ -113,7 +113,7 @@ export default {
     TopSectionLayout
   },
   asyncData ({ params }) {
-    return axios.get(`http://localhost:3000/api/collectionDB/${params.id}`).then((res) => {
+    return axios.get(`http://localhost:3000/api/collectionDB/get/${params.slug}`).then((res) => {
       return res.data
     })
   },

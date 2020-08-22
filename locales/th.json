@@ -1,0 +1,97 @@
+{
+  "beatmapPreviewer": {},
+  "beatmaps": {
+    "combo": "@.capitalize:common.combo",
+    "index": "@:common.index",
+    "ingredient": "Make up",
+    "mods": "Mods",
+    "playedAt": "ได้รับเมื่อ",
+    "pp": "@:common.pp",
+    "score": "@.capitalize:common.score",
+    "user": "@.capitalize:common.user"
+  },
+  "common": {
+    "accuracy": "ความแม่นยำ",
+    "addAsFriend": "เพิ่มเพื่อน",
+    "aka": "รู้จักกันในนามว่า",
+    "block": "บล็อก",
+    "combo": "combo",
+    "fullCombo": "full combo",
+    "index": "ที่",
+    "leaderboard": "กระดานคะแนน",
+    "leaderboards": "กระดานคะแนน",
+    "level": "เลเวล",
+    "miss": "miss",
+    "pp": "PP",
+    "rankedScore": "คะแนนแบบแรงค์",
+    "score": "แต้ม",
+    "subtitle": "<strong><big>s</big></strong>uperb osu private server<br><strong><big>b</big></strong>ut not<br>(?)",
+    "title": "Ֆ osu.ppy.sb",
+    "totalScore": "คะแนนทั้งหมด",
+    "user": "ผู้เล่น"
+  },
+  "download": {
+    "dedicatedSwitcher": "dedicated switcher",
+    "description": "use the switcher we offered or use the \"ultimate switcher\" which includes @:common.title .",
+    "download": "download",
+    "subtitle": "",
+    "title": "switchers",
+    "ultimateSwitcher": "ultimate switcher"
+  },
+  "header": {
+    "findUser": "หาใครอยู่หรือเปล่า?"
+  },
+  "landing": {
+    "downloadSwitcher": "โหลดตัวสลับเซิร์ฟเวอร์มา",
+    "leaderboards": "@:common.leaderboards",
+    "onlineCount": "users online",
+    "scoresSubmitted": "scores submitted",
+    "subtitle": "@:common.subtitle",
+    "title": "@:common.title"
+  },
+  "leaderboard": {
+    "accuracy": "@.capitalize:common.accuracy",
+    "empty": "leaderboard is empty",
+    "index": "@:common.index",
+    "level": "@.capitalize:common.level",
+    "pp": "@:common.pp",
+    "rankedScore": "@.capitalize:common.rankedScore",
+    "totalScore": "@.capitalize:common.totalScore",
+    "user": "@.capitalize:common.user"
+  },
+  "locale": "ภาษา",
+  "message": "hello i18n !!",
+  "mode": {
+    "catch": "osu!catch",
+    "mania": "osu!mania",
+    "osu": "osu!",
+    "taiko": "osu!taiko"
+  },
+  "scoreCard": {
+    "50": "50",
+    "100": "100",
+    "300": "300",
+    "countableMore": "No more rows | โหลดเพิ่มเติม | โหลดเพิ่มเติม",
+    "fullCombo": "@.capitalize:common.fullCombo",
+    "miss": "@.capitalize:common.miss",
+    "more": "โหลดเพิ่มเติม"
+  },
+  "statements": {
+    "testTitle": "RX stat page preview 1"
+  },
+  "user": {
+    "accuracy": "ความแม่นยำ",
+    "addAsFriend": "@:common.addAsFriend",
+    "aka": "@:common.aka {aka}",
+    "block": "@:common.block",
+    "bp": "คะแนนที่ดีที่สุด",
+    "countryRank": "ลำดับประเทศ",
+    "globalRank": "ลำดับทั่วโลก #{rank}",
+    "lastSeenAt": "เห็นล่าสุดเมื่อ: {fromNow}",
+    "playCount": "เล่นไปทั้งหมด",
+    "pp": "@:common.pp",
+    "recent": "คะแนนล่าสุด",
+    "registeredAt": "สมัครใน ppy.sb ตั้งแต่ {at}",
+    "toggleRx": "Relax"
+  }
+}
