@@ -2,7 +2,7 @@
   <profile-layout>
     <top-section-layout>
       <card shadow class="card-profile mt--300" no-body>
-        <div class="px-4">
+        <div v-if="collectionDB" class="px-4">
           <div class="row justify-content-center">
             <div class="col-lg-3 order-lg-2">
               <div class="card-profile-image">
@@ -54,60 +54,53 @@
             </div>
           </div>
         </div>
+        <div v-else>
+          <b-card-body>
+            <h2>collection not exist.</h2>
+            <h4>or something went (pretty badly) wrong!</h4>
+          </b-card-body>
+        </div>
       </card>
     </top-section-layout>
     <section-layout
+      v-if="compiledCollectionData"
       :contained="undefined"
       bg-variant="warning"
       skew
       shaped
       last
     >
-      <b-card v-for="(collection) of compiledCollectionData" :key="collection.slug" no-body class="mb-1" :name="collection.slug">
-        <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-button v-b-toggle="collection.slug" block variant="info">
-            {{ collection.name }}
-          </b-button>
-        </b-card-header>
-        <b-collapse :id="collection.slug" accordion="my-accordion" role="tabpanel">
-          <b-button-toolbar justify>
-            <b-button-group>
-              <b-button variant="primary" @click="() =>collectionSetIds(collection)">
-                copy all set's id
-              </b-button>
-              <b-button variant="info" @click="() =>collectionSetLinks(collection)">
-                copy all set's link
-              </b-button>
-              <b-button variant="warning" @click="() =>collectionBeatmapIds(collection)">
-                copy all map's id
-              </b-button>
-              <b-button variant="danger" @click="() =>collectionBeatmapLinks(collection)">
-                copy all map's link
-              </b-button>
-            </b-button-group>
-            <b-button-group>
-              <b-button variant="dark" @click="() =>copySomething(JSON.stringify(collection))">
-                copy as JSON Format
-              </b-button>
-            </b-button-group>
-          </b-button-toolbar>
-          <beatmapset-list-item v-for="(set) of collection.mapsets" :key="`${collection.name}-${set.id}`" :set="set" />
-        </b-collapse>
-      </b-card>
+      <card shadow>
+        <b-button-toolbar>
+          <b-button-group size="sm">
+            <b-button variant="primary" @click="copyCollectionSummary">
+              copy collection summary
+            </b-button>
+            <b-button variant="light" @click="saveCollectionSummary">
+              summary as text file (sayo compatible)
+            </b-button>
+            <b-button variant="success" @click="saveCollectionDB">
+              generate collection.db
+            </b-button>
+          </b-button-group>
+        </b-button-toolbar>
+      </card>
+      <collection-card v-for="(collection) of compiledCollectionData" :key="collection.slug" :collection="collection" />
     </section-layout>
   </profile-layout>
 </template>
 <script>
 import axios from 'axios'
-// import BeatmapsetCard from '@/components/BeatmapsetCard'
-import BeatmapsetListItem from '@/components/components/BeatmapsetListItem'
-// import RecentCard from '@/components/sb-components/RecentCard'
+import CollectionCard from '@/components/CollectionCard'
+
 import SectionLayout from '@/components/sb-layouts/components/SectionLayout'
 import TopSectionLayout from '@/components/sb-layouts/components/TopSectionLayout'
 import ProfileLayout from '@/components/sb-layouts/ProfileLayout'
+const FileSaver = require('file-saver')
+const osuColle = require('osucolle')
 export default {
   components: {
-    BeatmapsetListItem,
+    CollectionCard,
     SectionLayout,
     ProfileLayout,
     TopSectionLayout
@@ -124,14 +117,6 @@ export default {
       })
     }
   },
-  // data () {
-  //   return {
-  //     compiledCollectionData: {
-  //       type: Array,
-  //       default: () => []
-  //     }
-  //   }
-  // },
   computed: {
     avatarSrc () {
       return `https://a.ppy.sh/${this.user.id}`
@@ -144,17 +129,51 @@ export default {
     beatmapLink (beatmap) {
       return `https://osu.ppy.sh/b/${beatmap.beatmap_id}`
     },
+    copyCollectionSummary () {
+      this.copySomething(this.collectionSummary)
+    },
+    saveCollectionSummary () {
+      const blob = new Blob([this.collectionSummary()], { type: 'text/plain;charset=utf-8' })
+      FileSaver.saveAs(blob, `collection-summary-${this.collectionDB.slug}.txt`)
+    },
+    collectionSummary () {
+      const description = [
+        `# creator: ${this.user.name}`,
+        `# generated At: ${new Date()}`,
+        '# ========',
+        `# ${this.collectionDB.description.replace('\r', '\n').replace('\n', '\n# ')}`,
+        '# ========'
+      ].join('\n')
+      const ids = this.compiledCollectionData.map(this.collectionSetIds).join('\n\n')
+      return description + '\n\n' + ids
+    },
+    generateCollectionDB () {
+      const db = new osuColle.Database()
+      this.compiledCollectionData.map((collection) => {
+        db.appendCollection(collection.name)
+        collection.mapsets.map((set) => {
+          set.maps.map(map => db.collection(collection.name).appendBeatmap(map.md5))
+        })
+      })
+      return db
+    },
+    saveCollectionDB () {
+      const db = this.generateCollectionDB()
+      const buffer = db.toBuffer()
+      const blob = new Blob([buffer], { type: 'application/octet-stream;charset=utf-8' })
+      FileSaver.saveAs(blob, `collection-${this.collectionDB.slug}.db`)
+    },
     collectionSetIds (collection) {
-      this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.id).join('\n')}`)
+      return (`# ${collection.name}\n${collection.mapsets.map(set => set.id).join('\n')}`)
     },
     collectionBeatmapIds (collection) {
-      this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.maps.map(map => map.beatmap_id).join('\n')).join('\n')}`)
+      return (`# ${collection.name}\n${collection.mapsets.map(set => set.maps.map(map => map.beatmap_id).join('\n')).join('\n')}`)
     },
     collectionSetLinks (collection) {
-      this.copySomething(`${collection.name}\n${collection.mapsets.map(set => this.beatmapsetLink(set)).join('\n')}`)
+      return (`# ${collection.name}\n${collection.mapsets.map(set => this.beatmapsetLink(set)).join('\n')}`)
     },
     collectionBeatmapLinks (collection) {
-      this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.maps.map(map => this.beatmapLink(map)).join('\n')).join('\n')}`)
+      return (`# ${collection.name}\n${collection.mapsets.map(set => set.maps.map(map => this.beatmapLink(map)).join('\n')).join('\n')}`)
     },
     async copySomething (text) {
       try {
