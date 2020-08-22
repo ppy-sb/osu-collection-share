@@ -113,9 +113,16 @@ export default {
     TopSectionLayout
   },
   asyncData ({ params }) {
-    return axios.get(`/api/collectionDB/get/${params.slug}`).then((res) => {
-      return res.data
-    })
+    if (process.server) {
+      return axios.get(`http://localhost:3000/api/collectionDB/get/${params.slug}`).then((res) => {
+        return res.data
+      })
+    }
+    if (process.client) {
+      return axios.get(`/api/collectionDB/get/${params.slug}`).then((res) => {
+        return res.data
+      })
+    }
   },
   // data () {
   //   return {
