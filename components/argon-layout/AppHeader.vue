@@ -1,39 +1,23 @@
 <template>
-  <header class="header-global">
-    <base-nav 
-      class="navbar-main" 
-      transparent 
-      type 
-      effect="light" 
-      expand
-    >
-      <router-link 
-        slot="brand" 
-        class="navbar-brand mr-lg-5" 
-        to="/"
-      >
-        <!-- <img src="img/brand/white.png" alt="logo"> -->
-        <big>Ֆ</big> osu.ppy.sb
-      </router-link>
+    <header class="header-global">
+        <base-nav class="navbar-main" transparent type="" effect="light" expand>
+            <nuxt-link slot="brand" class="navbar-brand mr-lg-5" to="/argon-demo/">
+                <img src="/argon/img/brand/white.png" alt="logo">
+            </nuxt-link>
 
-      <div 
-        slot="content-header" 
-        slot-scope="{closeMenu}" 
-        class="row"
-      >
-        <div class="col-6 collapse-brand">
-          <a href="https://demos.creative-tim.com/vue-argon-design-system/documentation/">
-            <!-- <img src="img/brand/blue.png"> -->
-            <big>Ֆ</big> osu.ppy.sb
-          </a>
-        </div>
-        <div class="col-6 collapse-close">
-          <close-button @click="closeMenu" />
-        </div>
-      </div>
+            <div class="row" slot="content-header" slot-scope="{closeMenu}">
+                <div class="col-6 collapse-brand">
+                    <nuxt-link to="/argon-demo/">
+                        <img src="/argon/img/brand/blue.png">
+                    </nuxt-link>
+                </div>
+                <div class="col-6 collapse-close">
+                    <close-button @click="closeMenu"></close-button>
+                </div>
+            </div>
 
-      <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-        <!-- <base-dropdown class="nav-item" menu-classes="dropdown-menu-xl">
+            <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+                <base-dropdown class="nav-item" menu-classes="dropdown-menu-xl">
                     <a slot="title" href="#" class="nav-link" data-toggle="dropdown" role="button">
                         <i class="ni ni-ui-04 d-lg-none"></i>
                         <span class="nav-link-inner--text">Components</span>
@@ -62,139 +46,48 @@
                             </div>
                         </a>
                     </div>
-                </base-dropdown>-->
-        <base-dropdown 
-          tag="li" 
-          class="nav-item"
-        >
-          <a 
-            slot="title" 
-            href="#" 
-            class="nav-link" 
-            data-toggle="dropdown" 
-            role="button" 
-            @click.prevent=""
-          >
-            <i class="ni ni-collection d-lg-none" />
-            <span class="nav-link-inner--text">pages</span>
-          </a>
-          <router-link 
-            to="/users/1001" 
-            class="dropdown-item"
-          >
-            User stats
-          </router-link>
-          <router-link
-            to="/beatmapsets/746506/1573320"
-            class="dropdown-item"
-          >
-            Beatmap info and scores(/beatmapsetId/beatmapId)
-          </router-link>
-          <router-link
-            to="/beatmap/1816243"
-            class="dropdown-item"
-          >
-            Beatmap info and scores(/beatmapId)
-          </router-link>
-          <router-link 
-            to="/leaderboard" 
-            class="dropdown-item"
-          >
-            Leaderboard
-          </router-link>
-          <router-link 
-            to="/leaderboard/CN" 
-            class="dropdown-item"
-          >
-            Country Leaderboard(CN)
-          </router-link>
-        </base-dropdown>
-      </ul>
-      <ul class="navbar-nav align-items-lg-center ml-lg-auto">
-        <base-dropdown 
-          tag="li" 
-          class="nav-item"
-        >
-          <a 
-            slot="title" 
-            href="#" 
-            class="nav-link" 
-            data-toggle="dropdown" 
-            role="button" 
-            @click.prevent=""
-          >
-            <i class="ni ni-collection d-lg-none" />
-            <span class="nav-link-inner--text">{{ $t("locale") }}(Set Locale)</span>
-          </a>
-          <a 
-            class="dropdown-item" 
-            @click.prevent="switchLocale('zh-CN')"
-          >
-            <gb-flag 
-              code="CN" 
-              size="small" 
-              icon-path="/assets/flags" 
-              class="mr-1"
-            />中文(中国)
-          </a>
-          <a 
-            class="dropdown-item" 
-            @click.prevent="switchLocale('en-GB')"
-          >
-            <gb-flag 
-              code="GB" 
-              size="small" 
-              icon-path="/assets/flags" 
-              class="mr-1"
-            />English(International)
-          </a>
-          <a 
-            class="dropdown-item" 
-            @click.prevent="switchLocale('en-US')"
-          >
-            <gb-flag 
-              code="US" 
-              size="small" 
-              icon-path="/assets/flags" 
-              class="mr-1"
-            />English(US)
-          </a>
-        </base-dropdown>
-        <!-- <li class="nav-item">
-                    <a
-                        class="nav-link nav-link-icon"
-                        href="https://www.facebook.com/creativetim"
-                        target="_blank"
-                        rel="noopener"
-                        data-toggle="tooltip"
-                        title="Like us on Facebook"
-                    >
-                        <i class="fa fa-facebook-square"></i>
+                </base-dropdown>
+                <base-dropdown tag="li" class="nav-item">
+                    <a slot="title" href="#" class="nav-link" data-toggle="dropdown" role="button">
+                        <i class="ni ni-collection d-lg-none"></i>
+                        <span class="nav-link-inner--text">Examples</span>
+                    </a>
+                    <nuxt-link to="/argon-demo/landing" class="dropdown-item">Landing</nuxt-link>
+                    <nuxt-link to="/argon-demo/profile" class="dropdown-item">Profile</nuxt-link>
+                    <nuxt-link to="/argon-demo/login" class="dropdown-item">Login</nuxt-link>
+                    <nuxt-link to="/argon-demo/register" class="dropdown-item">Register</nuxt-link>
+                </base-dropdown>
+            </ul>
+            <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+                <li class="nav-item">
+                    <a class="nav-link nav-link-icon" href="https://www.facebook.com/creativetim" target="_blank" rel="noopener"
+                       data-toggle="tooltip" title="Like us on Facebook">
+                        <i class="fab fa-facebook-square"></i>
                         <span class="nav-link-inner--text d-lg-none">Facebook</span>
                     </a>
-                </li> -->
-        <!-- <li class="nav-item">
+                </li>
+                <li class="nav-item">
                     <a class="nav-link nav-link-icon" href="https://www.instagram.com/creativetimofficial"
                        target="_blank" rel="noopener" data-toggle="tooltip" title="Follow us on Instagram">
-                        <i class="fa fa-instagram"></i>
+                        <i class="fab fa-instagram"></i>
                         <span class="nav-link-inner--text d-lg-none">Instagram</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link nav-link-icon" href="https://twitter.com/creativetim" target="_blank" rel="noopener"
                        data-toggle="tooltip" title="Follow us on Twitter">
-                        <i class="fa fa-twitter-square"></i>
+                        <i class="fab fa-twitter-square"></i>
                         <span class="nav-link-inner--text d-lg-none">Twitter</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link nav-link-icon" href="https://github.com/creativetimofficial/vue-argon-design-system"
                        target="_blank" rel="noopener" data-toggle="tooltip" title="Star us on Github">
-                        <i class="fa fa-github"></i>
+                        <i class="fab fa-github"></i>
                         <span class="nav-link-inner--text d-lg-none">Github</span>
                     </a>
-                </li>-->
-        <!-- <li class="nav-item d-none d-lg-block ml-lg-4">
+                </li>
+                <li class="nav-item d-none d-lg-block ml-lg-4">
                     <a href="https://www.creative-tim.com/product/vue-argon-design-system" target="_blank" rel="noopener"
                        class="btn btn-neutral btn-icon">
                 <span class="btn-inner--icon">
@@ -202,35 +95,22 @@
                 </span>
                         <span class="nav-link-inner--text">Download</span>
                     </a>
-                </li>-->
-      </ul>
-    </base-nav>
-  </header>
+                </li>
+            </ul>
+        </base-nav>
+    </header>
 </template>
 <script>
-import BaseNav from "@/components/argon-components/BaseNav";
-import BaseDropdown from "@/components/argon-components/BaseDropdown";
-import CloseButton from "@/components/argon-components/CloseButton";
+import BaseNav from "~/components/argon/BaseNav";
+import BaseDropdown from "~/components/argon/BaseDropdown";
+import CloseButton from "~/components/argon/CloseButton";
 
 export default {
-    components: {
-        BaseNav,
-        CloseButton,
-        BaseDropdown
-    },
-    created() {
-        this.setLocale();
-    },
-    methods: {
-        switchLocale(locale) {
-            this.log(locale, "locale");
-            this.$root.locale = locale;
-            this.setLocale();
-        },
-        setLocale() {
-            this.$root.$i18n.locale = this.$root.locale;
-        }
-    }
+  components: {
+    BaseNav,
+    CloseButton,
+    BaseDropdown
+  }
 };
 </script>
 <style>

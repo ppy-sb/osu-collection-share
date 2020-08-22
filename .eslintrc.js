@@ -14,5 +14,6 @@ module.exports = {
   plugins: [
   ],
   // add your custom rules here
-  rules: {}
+  rules: {},
+  ignorePatterns: ['components/argon/*', 'components/argon-components/*', 'components/argon-demo/*', 'components/argon-layout/*', 'components/sb-components/*', 'components/sb-layouts/*', 'components/sb-layouts/components/*']
 }

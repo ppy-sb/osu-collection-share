@@ -84,9 +84,6 @@ export default {
     return {
       logger: false
     };
-  },
-  mounted() {
-    this.log(this.$props, "section props");
   }
 };
 </script>

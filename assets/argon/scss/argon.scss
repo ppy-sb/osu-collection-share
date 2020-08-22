@@ -1,0 +1,100 @@
+/*!
+
+=========================================================
+* Vue Argon Design System - v1.1.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-design-system
+* Copyright 2019 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://github.com/creativetimofficial/argon-design-system/blob/master/LICENSE.md)
+
+* Coded by www.creative-tim.com
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
+// Core
+
+@import "bootstrap/functions";
+@import "custom/_functions";
+
+@import "custom/_variables";
+@import "bootstrap/variables";
+
+@import "bootstrap/mixins";
+@import "custom/_mixins";
+
+// Bootstrap components
+
+@import "bootstrap/root";
+@import "bootstrap/reboot";
+@import "bootstrap/type";
+@import "bootstrap/images";
+@import "bootstrap/code";
+@import "bootstrap/grid";
+@import "bootstrap/tables";
+@import "bootstrap/forms";
+@import "bootstrap/buttons";
+@import "bootstrap/transitions";
+@import "bootstrap/dropdown";
+@import "bootstrap/button-group";
+@import "bootstrap/input-group";
+@import "bootstrap/custom-forms";
+@import "bootstrap/nav";
+@import "bootstrap/navbar";
+@import "bootstrap/card";
+@import "bootstrap/breadcrumb";
+@import "bootstrap/pagination";
+@import "bootstrap/badge";
+@import "bootstrap/jumbotron";
+@import "bootstrap/alert";
+@import "bootstrap/progress";
+@import "bootstrap/media";
+@import "bootstrap/list-group";
+@import "bootstrap/close";
+@import "bootstrap/modal";
+@import "bootstrap/tooltip";
+@import "bootstrap/popover";
+@import "bootstrap/carousel";
+@import "bootstrap/utilities";
+@import "bootstrap/print";
+
+// Custom components
+
+@import "custom/_reboot.scss";
+@import "custom/_global.scss";
+@import "custom/_utilities.scss";
+
+@import "custom/_accordion.scss";
+@import "custom/_alerts.scss";
+@import "custom/_avatars.scss";
+@import "custom/_badge.scss";
+@import "custom/_buttons.scss";
+@import "custom/_card.scss";
+@import "custom/_carousel.scss";
+@import "custom/_close.scss";
+@import "custom/_custom-forms.scss";
+@import "custom/_dropdown.scss";
+@import "custom/_footer.scss";
+@import "custom/_forms.scss";
+@import "custom/_grid.scss";
+@import "custom/_icons.scss";
+@import "custom/_input-group.scss";
+@import "custom/_list-group.scss";
+@import "custom/_modal.scss";
+@import "custom/_nav.scss";
+@import "custom/_navbar.scss";
+@import "custom/_pagination.scss";
+@import "custom/_popover.scss";
+@import "custom/_progress.scss";
+@import "custom/_section.scss";
+@import "custom/_type.scss";
+
+// Vendor
+
+@import "custom/vendor/flatpickr.scss";
+@import "custom/vendor/headroom.scss";
+@import "custom/vendor/nouislider.scss";

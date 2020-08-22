@@ -1,17 +1,19 @@
 <template>
-  <b-card no-body>
-    <b-card-header>{{ songName() }}</b-card-header>
-    <b-card-text>
-      <b-list-group>
-        <b-list-group-item v-for="map in set.maps" :key="(() => `set-${set.id}-${map.beatmap_id}`)()">
-          {{ map }}
-        </b-list-group-item>
-      </b-list-group>
-    </b-card-text>
-  </b-card>
+  <beatmap-list-card :set="set">
+    <template v-slot:header>
+      <h4>{{ songName() }}</h4>
+    </template>
+  </beatmap-list-card>
 </template>
+
 <script>
+import BeatmapListCard from './components/BeatmapListCard.vue'
+
 export default {
+  components: {
+    BeatmapListCard
+    // SyncLoader
+  },
   props: {
     set: {
       type: Object,

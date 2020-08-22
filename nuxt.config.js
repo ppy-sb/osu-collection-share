@@ -1,5 +1,5 @@
 
-export default {
+module.exports = {
   /*
   ** Nuxt rendering mode
   ** See https://nuxtjs.org/api/configuration-mode
@@ -22,20 +22,47 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' }
     ]
   },
-  serverMiddleware: ['~/api/upload.js'],
+
+  /*
+  ** Configuration for @nuxtjs/pwa
+  ** https://developer.mozilla.org/en-US/docs/Web/Manifest
+  */
+  manifest: {
+    name: 'Vue Argon Design',
+    short_name: 'Argon Design',
+    description: 'Vue Argon Design System for Nuxt',
+    theme_color: '#172b4d'
+  },
+
+  meta: {
+    // apple-mobile-web-app-capable=yes
+    // https://medium.com/@firt/dont-use-ios-web-app-meta-tag-irresponsibly-in-your-progressive-web-apps-85d70f4438cb
+    mobileAppIOS: true,
+    appleStatusBarStyle: '#172b4d'
+  },
+  // serverMiddleware: [{ path: '/api', handler: '~/api/index.js' }],
   /*
   ** Global CSS
   */
   css: [
+    '~assets/argon/vendor/nucleo/css/nucleo.css',
+    '@fortawesome/fontawesome-free/css/all.css',
+    '~assets/argon/scss/argon.scss',
+    'bootstrap-vue/dist/bootstrap-vue.css',
+    '~assets/transitions.css'
   ],
+
   /*
   ** Plugins to load before mounting the App
-  ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    '~/plugins/argon/argon-kit',
+    // { src: '~/plugins/database/index.js', mode: 'server' }
+    { src: '~/plugins/debounce/index.js', mode: 'client' }
   ],
   /*
   ** Auto import components
@@ -53,12 +80,30 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
-    // Doc: https://bootstrap-vue.js.org
-    'bootstrap-vue/nuxt',
+    // // Doc: https://bootstrap-vue.js.org
+    // 'bootstrap-vue/nuxt',
+    // // Doc: https://axios.nuxtjs.org/usage
+    // '@nuxtjs/axios',
+    // Doc: https://github.com/nuxt/content
+    '@nuxt/content',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    // Doc: https://github.com/nuxt/content
-    '@nuxt/content'
+    // Doc: https://bootstrap-vue.js.org/docs/
+    ['bootstrap-vue/nuxt', {
+      bootstrapCSS: false,
+      bootstrapVueCSS: false
+      // componentPlugins: [
+      //   'Carousel',
+      //   'Spinner'
+      // ],
+      // directivePlugins: [
+      //   'Tooltip',
+      //   'Popover'
+      // ]
+
+    }],
+    'nuxt-clipboard2'
+    // '@nuxtjs/pwa'
   ],
   /*
   ** Axios module configuration
@@ -75,5 +120,10 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+    extend (config, ctx) {
+      config.node = {
+        fs: 'empty'
+      }
+    }
   }
 }
