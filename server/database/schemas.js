@@ -68,7 +68,7 @@ const Schemas = {
     beatmapset_id: { type: Number, default: -1, index: true },
     circle_size: { type: Number, default: -1 },
     creator_name: { type: String, default: 'Unnamed', index: true },
-    difficulty: { type: String, required: true },
+    difficulty: { type: String },
     drain_time: { type: Number, default: -1 },
     hp_drain: { type: Number, default: -1 },
     md5: { type: String, required: true, index: true },
