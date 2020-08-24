@@ -2,6 +2,12 @@
 
 ## Build Setup
 
+### database
+create .env file contains database connect uri
+```
+DB_URI=``
+```
+
 ```bash
 # install dependencies
 $ npm install
