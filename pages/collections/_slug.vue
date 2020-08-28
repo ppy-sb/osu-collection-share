@@ -11,7 +11,10 @@
                 </a>
               </div>
             </div>
-            <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center" style="visibility:hidden">
+            <div
+              class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center"
+              style="visibility:hidden"
+            >
               <div class="card-profile-actions py-4 mt-lg-0">
                 <base-button type="info" size="sm" class="mr-4">
                   Connect
@@ -39,11 +42,12 @@
             </div>
           </div>
           <div class="text-center mt-5">
-            <h3>
-              {{ collectionDB.name }}
-            </h3>
+            <h3>{{ collectionDB.name }}</h3>
             <div class="h6 font-weight-300">
-              {{ $t('user.uploadedBy') }} <i><a :href="`https://osu.ppy.sh/users/${user.name}`">{{ user.name }}</a></i>
+              {{ $t('user.uploadedBy') }}
+              <i>
+                <a :href="`https://osu.ppy.sh/users/${user.name}`">{{ user.name }}</a>
+              </i>
             </div>
           </div>
           <div class="mt-5 py-5 border-top text-center">
@@ -76,7 +80,10 @@
             <b-button variant="primary" @click="copyCollectionSummary">
               copy collection summary
             </b-button>
-            <b-button variant="light" @click="saveCollectionSummary">
+            <b-button
+              variant="light"
+              @click="saveCollectionSummary"
+            >
               summary as text file (sayo compatible)
             </b-button>
             <b-button variant="success" @click="saveCollectionDB">
@@ -85,7 +92,11 @@
           </b-button-group>
         </b-button-toolbar>
       </card>
-      <collection-card v-for="(collection) of compiledCollectionData" :key="collection.slug" :collection="collection" />
+      <collection-card
+        v-for="(collection) of compiledCollectionData"
+        :key="collection.slug"
+        :collection="collection"
+      />
     </section-layout>
   </profile-layout>
 </template>
@@ -130,7 +141,7 @@ export default {
       return `https://osu.ppy.sh/b/${beatmap.beatmap_id}`
     },
     copyCollectionSummary () {
-      this.copySomething(this.collectionSummary)
+      this.copySomething(this.collectionSummary())
     },
     saveCollectionSummary () {
       const blob = new Blob([this.collectionSummary()], { type: 'text/plain;charset=utf-8' })
