@@ -175,7 +175,10 @@ export default {
       FileSaver.saveAs(blob, `collection-${this.collectionDB.slug}.db`)
     },
     collectionSetIds (collection) {
-      return (`# ${collection.name}\n${collection.mapsets.map(set => set.id).join('\n')}`)
+      return (`# ${collection.name}\n${collection.mapsets.map((set) => {
+        if (set.id === -1) { return `# unsubmitted set [${set.artist.name} - ${set.song.title}]: ${set.maps.map(map => `(${map.difficulty})`)}` }
+        return set.id
+      }).join('\n')}`)
     },
     collectionBeatmapIds (collection) {
       return (`# ${collection.name}\n${collection.mapsets.map(set => set.maps.map(map => map.beatmap_id).join('\n')).join('\n')}`)
