@@ -73,7 +73,7 @@
                 </div>
 
                 <div v-if="map.mode === 0">
-                  difficulty:<br>
+                  star rating:<br>
                   NM: {{ map.star_rating_standard[0].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
                   HR: {{ map.star_rating_standard[16].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
                   DT: {{ map.star_rating_standard[64].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
