@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body class="mb-1" :name="collection.slug">
+  <b-card no-body :name="collection.slug">
     <b-card-header header-tag="header" class="p-1" role="tab">
       <b-button v-b-toggle="collection.slug" block variant="info">
         {{ collection.name }}
@@ -29,7 +29,7 @@
           </b-button-group>
         </b-button-toolbar>
       </b-card-body>
-      <beatmapset-list-item v-for="(set) of collection.mapsets" :key="`${collection.name}-${set.id}`" :set="set" />
+      <beatmapset-list-item v-for="(set) of collection.mapsets" :key="`${collection.name}-${set.id}`" :set="set" class="border-right-0 border-left-0" />
     </b-collapse>
   </b-card>
 </template>

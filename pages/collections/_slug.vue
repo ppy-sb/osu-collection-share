@@ -96,6 +96,7 @@
         <collection-card
           v-for="(collection) of compiledCollectionData"
           :key="`collection-${collection.slug}`"
+          style="border: 0"
           :collection="collection"
         />
       </b-card>
