@@ -77,7 +77,7 @@
       <b-card class="shadow" no-body>
         <b-card-body>
           <b-button-toolbar>
-            <b-button-group size="sm">
+            <b-button-group size="sm" class="flex-wrap">
               <b-button variant="primary" @click="copyCollectionSummary">
                 copy collection summary
               </b-button>
@@ -203,27 +203,4 @@ export default {
 }
 </script>
 <style>
-.hover-big-shadow::before {
-  content: "";
-  height: 100%;
-  width: 100%;
-  /* display: inline-block; */
-  position: absolute;
-  background-image: linear-gradient(
-    -90deg,
-    #d077f3 0%,
-    #009bff 47%,
-    #2ac9db 100%
-  );
-  opacity: 0;
-  border-radius: 100px;
-  filter: blur(5em);
-  z-index: -1;
-  transition: all 0.15s ease;
-}
-.hover-big-shadow:hover::before {
-  content: "";
-  opacity: 0.3;
-  transition: all 0.15s ease;
-}
 </style>

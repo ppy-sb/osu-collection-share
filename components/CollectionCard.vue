@@ -8,7 +8,7 @@
     <b-collapse :id="collection.slug" accordion="my-accordion" role="tabpanel">
       <b-card-body>
         <b-button-toolbar justify>
-          <b-button-group size="sm">
+          <b-button-group size="sm" class="flex-wrap">
             <b-button variant="primary" @click="() =>collectionSetIds(collection)">
               copy all set's id
             </b-button>
