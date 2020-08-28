@@ -74,29 +74,31 @@
       shaped
       last
     >
-      <card shadow>
-        <b-button-toolbar>
-          <b-button-group size="sm">
-            <b-button variant="primary" @click="copyCollectionSummary">
-              copy collection summary
-            </b-button>
-            <b-button
-              variant="light"
-              @click="saveCollectionSummary"
-            >
-              summary as text file (sayo compatible)
-            </b-button>
-            <b-button variant="success" @click="saveCollectionDB">
-              generate collection.db
-            </b-button>
-          </b-button-group>
-        </b-button-toolbar>
-      </card>
-      <collection-card
-        v-for="(collection) of compiledCollectionData"
-        :key="collection.slug"
-        :collection="collection"
-      />
+      <b-card class="shadow" no-body>
+        <b-card-body>
+          <b-button-toolbar>
+            <b-button-group size="sm">
+              <b-button variant="primary" @click="copyCollectionSummary">
+                copy collection summary
+              </b-button>
+              <b-button
+                variant="light"
+                @click="saveCollectionSummary"
+              >
+                summary as text file (sayo compatible)
+              </b-button>
+              <b-button variant="success" @click="saveCollectionDB">
+                generate collection.db
+              </b-button>
+            </b-button-group>
+          </b-button-toolbar>
+        </b-card-body>
+        <collection-card
+          v-for="(collection) of compiledCollectionData"
+          :key="collection.slug"
+          :collection="collection"
+        />
+      </b-card>
     </section-layout>
   </profile-layout>
 </template>

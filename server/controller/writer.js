@@ -81,7 +81,7 @@ class CollectionSet {
 
       collection.mapsets.map((beatmapset, beatmapsetIndex) => {
         CollectionBeatmap.create(beatmapset.maps.map(map => ({
-          beatmap: beatmapDocs.find(docmap => docmap.md5 == map.md5),
+          beatmap: beatmapDocs.find(docmap => docmap.md5 === map.md5),
           collectionSet: collectionSets[collectionIndex],
           set: beatmapsets[beatmapsetIndex],
           collectionDB
