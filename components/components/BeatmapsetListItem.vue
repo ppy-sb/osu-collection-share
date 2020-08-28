@@ -115,7 +115,7 @@ export default {
   },
   computed: {
     beatmapSetLink () {
-      return `https://osu.ppy.sb/s/${this.set.id}`
+      return `https://osu.ppy.sh/s/${this.set.id}`
     },
     smallPreviewImgSrc () {
       return `https://b.ppy.sh/thumb/${this.set.id}l.jpg`
@@ -133,7 +133,7 @@ export default {
       return `https://osu.ppy.sh/community/forums/topics/${map.thread_id}`
     },
     beatmapLink (map) {
-      return `https://osu.ppy.sb/b/${map.beatmap_id}`
+      return `https://osu.ppy.sh/b/${map.beatmap_id}`
     }
   }
 }
