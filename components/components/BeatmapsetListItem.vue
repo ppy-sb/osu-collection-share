@@ -35,11 +35,11 @@
         </div>
         <div class="mt-auto">
           <h4 class="mb-0 float-right text-right text-nowrap">
-            <b-button-group size="sm">
+            <b-button-group size="sm" class="mb-1">
               <b-button v-b-toggle="`collapse-${set.id}`" variant="primary">
                 More
               </b-button>
-              <b-button variant="secondary">
+              <b-button variant="light" :href="beatmapSetLink" target="_blank">
                 beatmapset page
               </b-button>
             </b-button-group>
@@ -47,23 +47,44 @@
         </div>
       </div>
     </div>
-    <slot>
-      <b-collapse :id="(()=>`collapse-${set.id}`)()">
-        <b-table-simple>
-          <b-tbody>
-            <b-tr v-for="map in set.maps" :key="`detail-${set.id}-${map.md5}`">
-              <b-th>{{ map.difficulty }}</b-th>
-              <b-td>
-                <b-button-group>
-                  <b-button>thread</b-button>
-                  <b-button>/b/ link</b-button>
-                </b-button-group>
-              </b-td>
-            </b-tr>
-          </b-tbody>
-        </b-table-simple>
-      </b-collapse>
-    </slot>
+    <b-collapse :id="(()=>`collapse-${set.id}`)()">
+      <b-table-simple>
+        <b-tbody>
+          <b-tr v-for="map in set.maps" :key="`detail-${set.id}-${map.md5}`">
+            <b-th>{{ map.difficulty }}</b-th>
+            <b-td>
+              <b-button-group size="sm">
+                <b-button variant="light" :href="thread(map)" target="_blank">
+                  thread
+                </b-button>
+                <b-button variant="success" :href="beatmapLink(map)" target="_blank">
+                  /b/ link
+                </b-button>
+                <b-button v-b-toggle="`collapse-${set.id}-${map.md5}`">
+                  beatmap static
+                </b-button>
+              </b-button-group>
+              <b-collapse :id="(()=>`collapse-${set.id}-${map.md5}`)()" :key="`collaspe-${set.id}-${map.md5}`">
+                <div>
+                  AR: {{ map.approach_rate.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                  CS: {{ map.circle_size.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                  HP: {{ map.hp_drain.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                  OD: {{ map.overall_difficulty.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                </div>
+
+                <div v-if="map.mode === 0">
+                  difficulty:<br>
+                  NM: {{ map.star_rating_standard[0].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                  HR: {{ map.star_rating_standard[16].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                  DT: {{ map.star_rating_standard[64].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                  DTHR: {{ map.star_rating_standard[80].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                </div>
+              </b-collapse>
+            </b-td>
+          </b-tr>
+        </b-tbody>
+      </b-table-simple>
+    </b-collapse>
   </b-list-group-item>
 </template>
 <script>
@@ -93,7 +114,7 @@ export default {
     }
   },
   computed: {
-    beatmapLink () {
+    beatmapSetLink () {
       return `https://osu.ppy.sb/s/${this.set.id}`
     },
     smallPreviewImgSrc () {
@@ -107,6 +128,12 @@ export default {
     smallerFloatHtml (str) {
       const splitted = str.split('.')
       return `${splitted[0]}<small class="float-number">.${splitted[1]}</small></span>`
+    },
+    thread (map) {
+      return `https://osu.ppy.sh/community/forums/topics/${map.thread_id}`
+    },
+    beatmapLink (map) {
+      return `https://osu.ppy.sb/b/${map.beatmap_id}`
     }
   }
 }

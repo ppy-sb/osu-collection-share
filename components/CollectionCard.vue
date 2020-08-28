@@ -6,27 +6,29 @@
       </b-button>
     </b-card-header>
     <b-collapse :id="collection.slug" accordion="my-accordion" role="tabpanel">
-      <b-button-toolbar justify>
-        <b-button-group>
-          <b-button variant="primary" @click="() =>collectionSetIds(collection)">
-            copy all set's id
-          </b-button>
-          <b-button variant="info" @click="() =>collectionSetLinks(collection)">
-            copy all set's link
-          </b-button>
-          <b-button variant="warning" @click="() =>collectionBeatmapIds(collection)">
-            copy all map's id
-          </b-button>
-          <b-button variant="danger" @click="() =>collectionBeatmapLinks(collection)">
-            copy all map's link
-          </b-button>
-        </b-button-group>
-        <b-button-group>
-          <b-button variant="dark" @click="() =>copySomething(JSON.stringify(collection))">
-            copy as JSON Format
-          </b-button>
-        </b-button-group>
-      </b-button-toolbar>
+      <b-card-body>
+        <b-button-toolbar justify>
+          <b-button-group size="sm">
+            <b-button variant="primary" @click="() =>collectionSetIds(collection)">
+              copy all set's id
+            </b-button>
+            <b-button variant="info" @click="() =>collectionSetLinks(collection)">
+              copy all set's link
+            </b-button>
+            <b-button variant="warning" @click="() =>collectionBeatmapIds(collection)">
+              copy all map's id
+            </b-button>
+            <b-button variant="danger" @click="() =>collectionBeatmapLinks(collection)">
+              copy all map's link
+            </b-button>
+          </b-button-group>
+          <b-button-group size="sm">
+            <b-button variant="dark" @click="() =>copySomething(JSON.stringify(collection))">
+              copy as JSON Format
+            </b-button>
+          </b-button-group>
+        </b-button-toolbar>
+      </b-card-body>
       <beatmapset-list-item v-for="(set) of collection.mapsets" :key="`${collection.name}-${set.id}`" :set="set" />
     </b-collapse>
   </b-card>
