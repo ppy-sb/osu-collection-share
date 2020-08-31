@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import BeatmapsetListItem from '@/components/components/BeatmapsetListItem'
+import BeatmapsetListItem from '@/components/sb-components/BeatmapsetListItem'
 
 export default {
   components: {

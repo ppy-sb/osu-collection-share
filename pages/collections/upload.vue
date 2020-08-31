@@ -137,7 +137,7 @@
 <script>
 import axios from 'axios'
 // import BeatmapsetCard from '@/components/BeatmapsetCard'
-import BeatmapsetListItem from '@/components/components/BeatmapsetListItem'
+import BeatmapsetListItem from '@/components/sb-components/BeatmapsetListItem'
 // import RecentCard from '@/components/sb-components/RecentCard'
 import SectionLayout from '@/components/sb-layouts/components/SectionLayout'
 import TopSectionLayout from '@/components/sb-layouts/components/TopSectionLayout'
