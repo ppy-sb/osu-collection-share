@@ -89,7 +89,7 @@
   </base-dropdown>
 </template>
 <script>
-import BaseDropdown from "@/components/argon-components/BaseDropdown";
+import BaseDropdown from "@/components/argon/BaseDropdown";
 export default {
     components: {
         BaseDropdown

@@ -1,5 +1,8 @@
 {
   "collectionCard": {
+    "beatmapLink": "/b/ link",
+    "beatmapSetPage": "beatmapset page",
+    "beatmapStatic": "beatmap static",
     "copyBeatmapIds": "copy all map's id",
     "copyBeatmapLinks": "copy all map's link",
     "copySetIds": "copy all set's id",
@@ -7,7 +10,8 @@
     "mapCount": "maps",
     "more": "More",
     "otherDiffs": "other diffs",
-    "setId": "set id:"
+    "setId": "set id:",
+    "thread": "thread"
   },
   "header": {
     "findCollection": "Searching for collections? <<<<<<"
@@ -44,14 +48,10 @@
     "uploadedBy": "uploaded by"
   },
   "viewer": {
-    "beatmapLink": "/b/ link",
-    "beatmapSetPage": "beatmapset page",
-    "beatmapStatic": "beatmap static",
     "collectionNonExists": "collection not exist.",
     "copySummary": "copy collection summary",
     "generateCollectionDB": "generate collection.db",
     "somethingWentWrong": "or something went (pretty badly) wrong!",
-    "summaryAsText": "summary as text file (sayo compatible)",
-    "thread": "thread"
+    "summaryAsText": "summary as text file (sayo compatible)"
   }
 }

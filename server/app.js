@@ -1,6 +1,7 @@
 const { Nuxt, Builder } = require('nuxt')
 
-const app = require('express')()
+const express = require('express')
+const app = express()
 const isProd = process.env.NODE_ENV === 'production'
 const port = process.env.PORT || 3000
 
@@ -9,6 +10,7 @@ const config = require('../nuxt.config.js')
 config.dev = !isProd
 const nuxt = new Nuxt(config)
 
+app.use(express.static('../static'))
 app.use('/api', require('./api'))
 
 // 用 Nuxt.js 渲染每个路由

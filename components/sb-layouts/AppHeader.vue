@@ -102,9 +102,9 @@
   </header>
 </template>
 <script>
-import BaseNav from "@/components/argon-components/BaseNav";
-import BaseDropdown from "@/components/argon-components/BaseDropdown";
-import CloseButton from "@/components/argon-components/CloseButton";
+import BaseNav from "@/components/argon/BaseNav";
+import BaseDropdown from "@/components/argon/BaseDropdown";
+import CloseButton from "@/components/argon/CloseButton";
 
 import SwitchLocale from "@/components/sb-components/SwitchLocale";
 import SearchCollection from "@/components/sb-components/SearchCollection";
