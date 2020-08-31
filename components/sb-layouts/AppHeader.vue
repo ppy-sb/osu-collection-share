@@ -48,6 +48,9 @@
             <i class="ni ni-collection d-lg-none" />
             <span class="nav-link-inner--text">pages</span>
           </a>
+          <nuxt-link :to="{name: 'collections-upload'}" class="dropdown-item">
+            {{ $t('upload.upload') }}
+          </nuxt-link>
         </base-dropdown>
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto text-nowrap">

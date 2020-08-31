@@ -99,7 +99,7 @@
                 {{ $t('upload.done') }}
               </b-card-title>
               <b-card-text>
-                <nuxt-link :to="`/collections/${uploadResult.collectionDB.slug}`">
+                <nuxt-link :to="{name: 'collections-slug', params:{ slug: uploadResult.collectionDB.slug }}">
                   {{ $t('upload.collectionLink') }}
                 </nuxt-link>
               </b-card-text>
@@ -124,7 +124,7 @@
                 :id="`${c.name}-upload`"
                 v-model="c.upload"
               >
-                {{ $t('upload') }}
+                {{ $t('upload.upload') }}
               </b-form-checkbox>
             </b-card-body>
             <beatmapset-list-item v-for="(set) of c.mapsets" :key="`${c.name}-${set.id}`" :set="set" class="border-right-0 border-left-0" />
