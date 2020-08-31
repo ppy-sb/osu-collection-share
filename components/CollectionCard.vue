@@ -10,16 +10,16 @@
         <b-button-toolbar justify>
           <b-button-group size="sm" class="flex-wrap">
             <b-button variant="primary" @click="() =>collectionSetIds(collection)">
-              copy all set's id
+              {{ $t('collectionCard.copySetIds') }}
             </b-button>
             <b-button variant="info" @click="() =>collectionSetLinks(collection)">
-              copy all set's link
+              {{ $t('collectionCard.copySetLinks') }}
             </b-button>
             <b-button variant="warning" @click="() =>collectionBeatmapIds(collection)">
-              copy all map's id
+              {{ $t('collectionCard.copyBeatmapIds') }}
             </b-button>
             <b-button variant="danger" @click="() =>collectionBeatmapLinks(collection)">
-              copy all map's link
+              {{ $t('collectionCard.copyBeatmapLinks') }}
             </b-button>
           </b-button-group>
           <b-button-group size="sm">

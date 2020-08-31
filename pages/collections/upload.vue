@@ -1,75 +1,82 @@
 <template>
   <profile-layout>
     <top-section-layout>
-      <card shadow class="card-profile mt--300">
-        <b-card-text>
-          osu.db are only used for referencing the map in your collection.db and will not be uploaded!
-          thus we may collect some data to improve other user's experirence such as your local offset
-        </b-card-text>
-        <b-form-group
-          label-cols-sm="3"
-          label="collections name:"
-          label-align-sm="right"
-          label-for="collectionName"
-          :description="collection.slug"
-        >
-          <b-form-input id="collectionName" v-model="collection.name" placeholder="my collections" />
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="3"
-          label="collections.db:"
-          label-align-sm="right"
-          label-for="collectionDB"
-        >
-          <b-form-file
-            id="collectionDB"
-            v-model="collectionDB"
-            :state="Boolean(collectionDB)"
-            placeholder="Choose collection.db in your osu folder or drop it here..."
-            drop-placeholder="Drop file here..."
-            :description="collectionDB"
-          />
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="3"
-          label="osu.db:"
-          label-align-sm="right"
-          label-for="osuDB"
-        >
-          <b-form-file
-            id="osuDB"
-            v-model="osuDB"
-            :state="Boolean(osuDB)"
-            placeholder="Choose osu.db in your osu folder  or drop it here..."
-            drop-placeholder="Drop file here..."
-          />
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="3"
-          label="collection description:"
-          label-align-sm="right"
-          label-for="description"
-        >
-          <b-form-textarea
-            id="description"
-            v-model="collection.description"
-            placeholder="Enter something..."
-            rows="3"
-            max-rows="6"
-          />
-        </b-form-group>
-        <b-button-group>
-          <b-button :variant="osuCollectionData ? 'success' : 'primary'" @click="readData">
-            parse
-          </b-button>
-          <b-button v-if="osuCollectionData" :variant="compiledCollectionData.length ? 'success' : 'primary'" @click="compileData">
-            compile
-          </b-button>
-          <b-button v-if="compiledCollectionData.length" variant="primary" @click="upload">
-            upload
-          </b-button>
-        </b-button-group>
-      </card>
+      <b-overlay
+        :show="onJob"
+        rounded
+        spinner
+        opacity="0.6"
+        spinner-variant="primary"
+      >
+        <card shadow class="card-profile mt--300">
+          <b-card-text>
+            {{ $t('upload.disclaimer') }}
+          </b-card-text>
+          <b-form-group
+            label-cols-sm="3"
+            :label="$t('upload.form.label.collectionName')"
+            label-align-sm="right"
+            label-for="collectionName"
+            :description="collection.slug"
+          >
+            <b-form-input id="collectionName" v-model="collection.name" :placeholder="$t('upload.form.placeholder.myCollection')" />
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="3"
+            :label="$t('upload.form.label.collectionDB')"
+            label-align-sm="right"
+            label-for="collectionDB"
+          >
+            <b-form-file
+              id="collectionDB"
+              v-model="collectionDB"
+              :state="Boolean(collectionDB)"
+              :placeholder="$t('upload.form.placeholder.collectionDB')"
+              :drop-placeholder="$t('upload.form.placeholder.dropFile')"
+              :description="collectionDB"
+            />
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="3"
+            label="osu.db:"
+            label-align-sm="right"
+            label-for="osuDB"
+          >
+            <b-form-file
+              id="osuDB"
+              v-model="osuDB"
+              :state="Boolean(osuDB)"
+              :placeholder="$t('upload.form.placeholder.osuDB')"
+              :drop-placeholder="$t('upload.form.placeholder.dropFile')"
+            />
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="3"
+            :label="$t('upload.form.label.collectionDescription')"
+            label-align-sm="right"
+            label-for="description"
+          >
+            <b-form-textarea
+              id="description"
+              v-model="collection.description"
+              :placeholder="$t('upload.form.placeholder.descriptionPlaceholder')"
+              rows="3"
+              max-rows="6"
+            />
+          </b-form-group>
+          <b-button-group>
+            <b-button :variant="osuCollectionData ? 'success' : 'primary'" @click="readData">
+              {{ $t('upload.parse') }}
+            </b-button>
+            <b-button v-if="osuCollectionData" :variant="compiledCollectionData.length ? 'success' : 'primary'" @click="compileData">
+              {{ $t('upload.compile') }}
+            </b-button>
+            <b-button v-if="compiledCollectionData.length" variant="primary" @click="upload">
+              {{ $t('upload.upload') }}
+            </b-button>
+          </b-button-group>
+        </card>
+      </b-overlay>
     </top-section-layout>
     <section-layout
       :contained="undefined"
@@ -78,69 +85,51 @@
       shaped
       last
     >
-      <card shadow>
-        <b-card-text>
-          <b-form-checkbox
-            v-show="!uploadResult"
-            v-model="onlyShowUploading"
-          >
-            only show uploading collections
-          </b-form-checkbox>
-          <div v-if="uploadResult">
-            <b-card-title>
-              done
-            </b-card-title>
-            <b-card-text>
-              <nuxt-link :to="`/collections/${uploadResult.collectionDB.slug}`">
-                collection link
-              </nuxt-link>
-            </b-card-text>
-          </div>
-        </b-card-text>
-      </card>
-      <card
-        v-for="(c) of uploadingCollections"
-        :key="c.id"
-        shadow
-        no-body
-        class="mb-1"
-        :name="c.id"
-      >
-        <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-button v-b-toggle="c.id" block variant="primary">
-            {{ c.name }}
-          </b-button>
-        </b-card-header>
-        <b-collapse :id="c.id" accordion="my-accordion" role="tabpanel">
-          <b-button-toolbar justify>
-            <b-button-group>
-              <b-button variant="primary" @click="() =>collectionSetIds(c)">
-                copy all set's id
-              </b-button>
-              <b-button variant="info" @click="() =>collectionSetLinks(c)">
-                copy all set's link
-              </b-button>
-              <b-button variant="warning" @click="() =>collectionBeatmapIds(c)">
-                copy all map's id
-              </b-button>
-              <b-button variant="danger" @click="() =>collectionBeatmapLinks(c)">
-                copy all map's link
-              </b-button>
-            </b-button-group>
-            <b-button-group>
-              <b-button variant="dark" @click="() =>copySomething(JSON.stringify(c))">
-                copy as JSON Format
-              </b-button>
-            </b-button-group>
-          </b-button-toolbar>
-          <b-form-checkbox
-            :id="`${c.name}-upload`"
-            v-model="c.upload"
-          >
-            upload
-          </b-form-checkbox>
-          <beatmapset-list-item v-for="(set) of c.mapsets" :key="`${c.name}-${set.id}`" :set="set" />
-        </b-collapse>
+      <card shadow no-body>
+        <b-card-body>
+          <b-card-text>
+            <b-form-checkbox
+              v-show="!uploadResult"
+              v-model="onlyShowUploading"
+            >
+              {{ $t('upload.onlyShowUploadingCollections') }}
+            </b-form-checkbox>
+            <div v-if="uploadResult">
+              <b-card-title>
+                {{ $t('upload.done') }}
+              </b-card-title>
+              <b-card-text>
+                <nuxt-link :to="`/collections/${uploadResult.collectionDB.slug}`">
+                  {{ $t('upload.collectionLink') }}
+                </nuxt-link>
+              </b-card-text>
+            </div>
+          </b-card-text>
+        </b-card-body>
+        <b-card
+          v-for="(c) of uploadingCollections"
+          :key="c.id"
+          no-body
+          class="mb-1"
+          :name="c.id"
+        >
+          <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-button v-b-toggle="c.id" block variant="info">
+              {{ c.name }}
+            </b-button>
+          </b-card-header>
+          <b-collapse :id="c.id" accordion="my-accordion" role="tabpanel">
+            <b-card-body>
+              <b-form-checkbox
+                :id="`${c.name}-upload`"
+                v-model="c.upload"
+              >
+                {{ $t('upload') }}
+              </b-form-checkbox>
+            </b-card-body>
+            <beatmapset-list-item v-for="(set) of c.mapsets" :key="`${c.name}-${set.id}`" :set="set" class="border-right-0 border-left-0" />
+          </b-collapse>
+        </b-card>
       </card>
     </section-layout>
   </profile-layout>
@@ -165,6 +154,7 @@ export default {
   data () {
     return {
       username: 'Unknown',
+      onJob: false,
       collection: {
         name: '',
         slug: ''
@@ -202,7 +192,6 @@ export default {
     },
     async osuDB (file) {
       this.osuDBBuffer = await this.readUploadedFileAsBuffer(file)
-      console.log('done')
     }
   },
   mounted () {
@@ -225,37 +214,68 @@ export default {
       })
     },
     readData () {
-      if (!this.osuDBBuffer || !this.collectionDBBuffer) {
-        return console.log('sth went wrong')
-      }
+      this.onJob = true
+      if (!this.osuDBBuffer || !this.collectionDBBuffer) { return console.log('sth went wrong') }
 
       const ultimateDB = new OsuDBParser(this.osuDBBuffer, this.collectionDBBuffer)
 
       this.osuDBData = ultimateDB.getOsuDBData()
       this.osuCollectionData = ultimateDB.getCollectionData()
-      // console.log({ osuCollectionData, osuDBData })
       this.username = this.osuDBData.username
       if (this.collection.name === '') { this.collection.name = `${this.osuDBData.username}'s collection` }
+      this.onJob = false
     },
-    compileData () {
-      const collections = this.osuCollectionData.collection.map((collection) => {
-        return {
-          name: collection.name,
-          id: collection.name.replace(' ', '_'),
-          maps: collection.beatmapsMd5.map(md5 => this.findMapInOsuDB({ md5 }) || { md5, unknown: true })
+    async compileData () {
+      this.onJob = true
+      this.compiledCollectionData = await this.$worker.run((osuDBData, osuCollectionData) => {
+        function mapListToMapsetList (mapset) {
+          return mapset.reduce((acc, beatmap) => {
+            if (beatmap.unknown) {
+              console.log('unknown beatmap', beatmap.md5)
+              return acc
+            }
+            let set = acc.find(set => set.id === beatmap.beatmapset_id)
+            if (!set) {
+              set = {
+                id: beatmap.beatmapset_id,
+                artist: {
+                  name: beatmap.artist_name,
+                  unicodeName: beatmap.artist_name_unicode
+                },
+                song: {
+                  title: beatmap.song_title,
+                  unicodeTitle: beatmap.song_title_unicode
+                },
+                thread: beatmap.thread_id,
+                maps: []
+              }
+              acc.push(set)
+            }
+            set.maps.push(beatmap)
+            return acc
+          }, [])
         }
-      }).filter(collection => collection.maps.length)
-      this.compiledCollectionData = collections.map((collection) => {
-        return {
-          name: collection.name,
-          id: collection.id,
-          mapsets: this.mapListToMapsetList(collection.maps),
-          upload: true
-        }
-      })
-      console.log(this.compiledCollectionData)
+
+        const collections = osuCollectionData.collection.map((collection) => {
+          return {
+            name: collection.name,
+            id: collection.name.replace(' ', '_'),
+            maps: collection.beatmapsMd5.map(md5 => osuDBData.beatmaps.find(beatmap => beatmap.md5 === md5) || { md5, unknown: true })
+          }
+        }).filter(collection => collection.maps.length)
+        return collections.map((collection) => {
+          return {
+            name: collection.name,
+            id: collection.id,
+            mapsets: mapListToMapsetList(collection.maps),
+            upload: true
+          }
+        })
+      }, [this.osuDBData, this.osuCollectionData])
+      this.onJob = false
     },
     upload () {
+      this.onJob = true
       axios.post('/api/collectionDB/upload', {
         collectionDB: {
           name: this.collection.name,
@@ -266,37 +286,7 @@ export default {
           name: this.username
         },
         compiledCollectionData: this.uploadingCollections
-      }).then((res) => { this.uploadResult = res.data }).catch(err => console.warn(err))
-    },
-    findMapInOsuDB (map) {
-      return this.osuDBData.beatmaps.find(beatmap => beatmap.md5 === map.md5)
-    },
-    mapListToMapsetList (mapset) {
-      return mapset.reduce((acc, beatmap) => {
-        if (beatmap.unknown) {
-          console.log('unknown beatmap', beatmap.md5)
-          return acc
-        }
-        let set = acc.find(set => set.id === beatmap.beatmapset_id)
-        if (!set) {
-          set = {
-            id: beatmap.beatmapset_id,
-            artist: {
-              name: beatmap.artist_name,
-              unicodeName: beatmap.artist_name_unicode
-            },
-            song: {
-              title: beatmap.song_title,
-              unicodeTitle: beatmap.song_title_unicode
-            },
-            thread: beatmap.thread_id,
-            maps: []
-          }
-          acc.push(set)
-        }
-        set.maps.push(beatmap)
-        return acc
-      }, [])
+      }).then((res) => { this.uploadResult = res.data }).catch(err => console.warn(err)).then(() => { this.onJob = false })
     },
     beatmapsetLink (set) {
       return `https://osu.ppy.sh/beatmapsets/${set.id}`

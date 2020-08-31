@@ -60,8 +60,8 @@
         </div>
         <div v-else>
           <b-card-body>
-            <h2>collection not exist.</h2>
-            <h4>or something went (pretty badly) wrong!</h4>
+            <h2>{{ $t('viewer.collectionNonExits') }}</h2>
+            <h4>{{ $t('viewer.somethingWentWrong') }}</h4>
           </b-card-body>
         </div>
       </card>
@@ -79,16 +79,16 @@
           <b-button-toolbar>
             <b-button-group size="sm" class="flex-wrap">
               <b-button variant="primary" @click="copyCollectionSummary">
-                copy collection summary
+                {{ $t('viewer.copySummary') }}
               </b-button>
               <b-button
                 variant="light"
                 @click="saveCollectionSummary"
               >
-                summary as text file (sayo compatible)
+                {{ $t('viewer.summaryAsText') }}
               </b-button>
               <b-button variant="success" @click="saveCollectionDB">
-                generate collection.db
+                {{ $t('viewer.generateCollectionDB') }}
               </b-button>
             </b-button-group>
           </b-button-toolbar>

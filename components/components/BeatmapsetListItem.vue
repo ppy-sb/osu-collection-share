@@ -18,29 +18,29 @@
               </p>
             </div>
           </div>
-          <small v-if="set.maps.length > 2">{{ set.maps.length - 2 }} other diffs</small>
+          <small v-if="set.maps.length > 2">{{ set.maps.length - 2 }} {{ $t('collectionCard.otherDiffs') }}</small>
         </div>
       </div>
       <div class="d-flex align-items-end flex-column">
         <div class="align-top">
           <small
             class="float-right text-right text-nowrap"
-          >set id: {{ set.id }}</small>
+          >{{ $t('collectionCard.setId') }} {{ set.id }}</small>
           <br>
           <p
             class="float-right text-right mb-0 text-nowrap"
           >
-            <span>{{ set.maps.length }}</span> maps
+            <span>{{ set.maps.length }}</span> {{ $t("collectionCard.mapCount") }}
           </p>
         </div>
         <div class="mt-auto">
           <h4 class="mb-0 float-right text-right text-nowrap">
             <b-button-group size="sm" class="mb-1">
               <b-button v-b-toggle="`collapse-${set.id}`" variant="primary">
-                More
+                {{ $t('collectionCard.more') }}
               </b-button>
               <b-button variant="light" :href="beatmapSetLink" target="_blank">
-                beatmapset page
+                {{ $t('collectionCard.beatmapSetPage') }}
               </b-button>
             </b-button-group>
           </h4>
@@ -55,13 +55,13 @@
             <b-td>
               <b-button-group size="sm">
                 <b-button variant="light" :href="thread(map)" target="_blank">
-                  thread
+                  {{ $t('collectionCard.thread') }}
                 </b-button>
                 <b-button variant="success" :href="beatmapLink(map)" target="_blank">
-                  /b/ link
+                  {{ $t('collectionCard.beatmapLink') }}
                 </b-button>
                 <b-button v-b-toggle="`collapse-${set.id}-${map.md5}`">
-                  beatmap static
+                  {{ $t('collectionCard.beatmapStatic') }}
                 </b-button>
               </b-button-group>
               <b-collapse :id="(()=>`collapse-${set.id}-${map.md5}`)()" :key="`collaspe-${set.id}-${map.md5}`">

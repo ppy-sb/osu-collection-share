@@ -1,29 +1,8 @@
 {
-  "beatmapPreviewer": {},
-  "beatmaps": {
-
-  },
-  "common": {
-  },
-  "download": {
-
-  },
   "header": {
     "findCollection": "找收藏夹？"
   },
-  "landing": {
-  },
-  "leaderboard": {
-  },
-  "locale": "切换语言",
-  "mode": {
-    "catch": "接💩",
-    "mania": "骂娘",
-    "osu": "屙屎",
-    "taiko": "咚咚咚"
-  },
-  "scoreCard": {
-  },
+  "scoreCard": {},
   "statements": {
     "testTitle": "共享收藏夹(共享经济?)"
   },

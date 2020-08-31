@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line nuxt/no-cjs-in-config
 module.exports = {
   /*
   ** Nuxt rendering mode
@@ -63,6 +64,7 @@ module.exports = {
     '~/plugins/argon/argon-kit',
     // { src: '~/plugins/database/index.js', mode: 'server' }
     { src: '~/plugins/debounce/index.js', mode: 'client' },
+    { src: '~/plugins/vue-worker.js', mode: 'client' },
     '~/plugins/i18n.js',
     '~/plugins/vue-flag.js'
   ],

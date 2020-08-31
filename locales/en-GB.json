@@ -1,21 +1,57 @@
 {
-  "beatmapPreviewer": {},
-  "beatmaps": {},
-  "common": {},
-  "download": {},
+  "collectionCard": {
+    "copyBeatmapIds": "copy all map's id",
+    "copyBeatmapLinks": "copy all map's link",
+    "copySetIds": "copy all set's id",
+    "copySetLinks": "copy all set's link",
+    "mapCount": "maps",
+    "more": "More",
+    "otherDiffs": "other diffs",
+    "setId": "set id:"
+  },
   "header": {
     "findCollection": "Searching for collections? <<<<<<"
   },
   "landing": {},
-  "leaderboard": {},
   "locale": "Swtich locale",
-  "mode": {
-  },
-  "scoreCard": {},
   "statements": {
     "testTitle": "collection sharing"
   },
+  "upload": {
+    "collectionLink": "collection link",
+    "compile": "compile",
+    "disclaimer": "osu.db are only used for referencing the map in your collection.db and will not be uploaded! thus we may collect some data to improve other user's experirence such as your local offset",
+    "done": "done",
+    "form": {
+      "label": {
+        "collectionDB": "collection.db:",
+        "collectionDescription": "collection description:",
+        "collectionName": "name your collection:"
+      },
+      "placeholder": {
+        "collectionDB": "Choose collection.db in your osu! folder or drop it here...",
+        "descriptionPlaceholder": "Enter something...",
+        "dropFile": "Drop file here...",
+        "myCollection": "my collection",
+        "osuDB": "Choose osu!.db in your osu! folder or drop it here..."
+      }
+    },
+    "onlyShowUploadingCollections": "only show uploading collections",
+    "parse": "parse",
+    "upload": "upload"
+  },
   "user": {
     "uploadedBy": "uploaded by"
+  },
+  "viewer": {
+    "beatmapLink": "/b/ link",
+    "beatmapSetPage": "beatmapset page",
+    "beatmapStatic": "beatmap static",
+    "collectionNonExists": "collection not exist.",
+    "copySummary": "copy collection summary",
+    "generateCollectionDB": "generate collection.db",
+    "somethingWentWrong": "or something went (pretty badly) wrong!",
+    "summaryAsText": "summary as text file (sayo compatible)",
+    "thread": "thread"
   }
 }
