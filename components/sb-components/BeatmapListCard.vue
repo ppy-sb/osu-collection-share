@@ -51,9 +51,6 @@ import SyncLoader from 'vue-spinner/src/SyncLoader.vue'
 
 import ScoreListItem from './BeatmapsetListItem'
 export default {
-  // mounted() {
-  //     this.init();
-  // },
   components: {
     ScoreListItem,
     SyncLoader
@@ -72,58 +69,11 @@ export default {
       default: false
     }
   },
-  data: () => ({
-    // increaseClicked: 0,
-    // showCount: 10,
-    // loading: true,
-    // bp: [],
-    // cachedMap: []
-  }),
-  computed: {
-    // sliced() {
-    //     return this.list.slice(0, this.showCount);
-    // }
-  },
   methods: {
-    // async apiGetMap(beatmap) {
-    //     let map = undefined;
-    //     if ((map = this.cachedMap.find(map => map.id) == beatmap.id))
-    //         return map;
-    //     else {
-    //         const beatmap = await $axios
-    //             .get(`http://47.101.168.165:5005/api/map/${mapped.id}`)
-    //             .then(res => res.data[0])
-    //             .then(
-    //                 res => new nodeOsu.Beatmap({ parseNumeric: true }, res)
-    //             );
-    //         this.cachedMap.push(beatmap);
-    //         return beatmap;
-    //     }
-    // },
-    // async init() {
-    //     const bp = await axios({
-    //         url: `${this.$root.apiBase}/users/scores/rxbestall`,
-    //         params: {
-    //             id: this.$route.params.id
-    //         }
-    //     }).then(res => res.data.scores);
-    //     // console.log(bp);
-    //     this.loading = true;
-    //     this.increaseClicked = 0;
-    //     this.showCount = 10;
-    //     this.bp.length = 0;
-    //     this.bp.push(...bp);
-    //     this.loading = false;
-    // },
+
     increaseLength () {
       this.$emit('moreClicked')
     }
   }
-
-  // watch: {
-  //     $route(to, from) {
-  //         this.init();
-  //     }
-  // }
 }
 </script>

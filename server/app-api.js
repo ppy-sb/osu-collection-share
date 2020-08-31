@@ -1,7 +1,7 @@
 // const { Nuxt, Builder } = require('nuxt')
 
 const app = require('express')()
-const isProd = process.env.NODE_ENV === 'production'
+// const isProd = process.env.NODE_ENV === 'production'
 const port = process.env.PORT || 3000
 
 // // 用指定的配置对象实例化 Nuxt.js

@@ -39,9 +39,6 @@ export default {
             });
         }
     },
-    created() {
-        // this.search();
-    },
     methods: {
         /**
          * api : https://qiita.com/AKB428/items/64938febfd4dcf6ea698
@@ -52,11 +49,6 @@ export default {
                 this.searchText = searchText;
                 axios
                     .get(`/api/collectionDB/search/${searchText}`)
-                    // .then(res => {
-                    //     console.log(res.data)
-                    //     if (res.data.code != 200) throw Error()
-                    //     else return res
-                    // })
                     .then(response => {
                         if (response.data)
                             this.results = response.data;

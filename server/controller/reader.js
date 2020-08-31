@@ -11,19 +11,19 @@ class CollectionReader {
   }
 
   async toCollection () {
-    const { CollectionDB, CollectionSet, Set, CollectionBeatmap, Beatmap, User } = this.models
-    const collectionDB = await CollectionDB.findOne(this.query).exec().then(doc => doc.toObject()).catch(err => null)
+    const { CollectionDB, CollectionSet, CollectionBeatmap, User } = this.models
+    const collectionDB = await CollectionDB.findOne(this.query).exec().then(doc => doc.toObject()).catch(_err => null)
     if (!collectionDB) { return null }
 
-    const user = await User.findOne(collectionDB.user).exec().then(doc => doc.toObject()).catch(err => null)
-    const collections = await CollectionSet.find({ collectionDB: { _id: collectionDB._id } }).exec().then(docs => docs.map(doc => doc.toObject())).catch(err => null)
-    const allCollectionMaps = await CollectionBeatmap.find({ collectionDB: { _id: collectionDB._id } }).exec().then(docs => docs.map(doc => doc.toObject())).catch(err => null)
+    const user = await User.findOne(collectionDB.user).exec().then(doc => doc.toObject()).catch(_err => null)
+    const collections = await CollectionSet.find({ collectionDB: { _id: collectionDB._id } }).exec().then(docs => docs.map(doc => doc.toObject())).catch(_err => null)
+    const allCollectionMaps = await CollectionBeatmap.find({ collectionDB: { _id: collectionDB._id } }).exec().then(docs => docs.map(doc => doc.toObject())).catch(_err => null)
     const allBeatmaps = await this.docCollectionBeatmapToMap(allCollectionMaps)
     const collectionResult = allCollectionMaps.reduce((acc, map, index) => {
-      const beatmap = allBeatmaps.find(beatmap => beatmap._id.toString() == map.beatmap._id.toString())
-      const collection = acc.find(what => what._id.toString() == map.collectionSet._id.toString())
+      const beatmap = allBeatmaps.find(beatmap => beatmap._id.toString() === map.beatmap._id.toString())
+      const collection = acc.find(what => what._id.toString() === map.collectionSet._id.toString())
       if (!collection.maps) { collection.maps = [] }
-      if (!beatmap) console.log(map)
+      if (!beatmap) { console.log(map) }
       collection.maps.push(beatmap)
       return acc
     }, collections)
