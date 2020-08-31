@@ -1,12 +1,57 @@
 {
-  "header": {
-    "findCollection": "找收藏夹？"
+  "collectionCard": {
+    "beatmapLink": "/b/ 链接",
+    "beatmapSetPage": "图集页面",
+    "beatmapStatic": "谱面状态",
+    "copyBeatmapIds": "复制所有谱面Id",
+    "copyBeatmapLinks": "复制所有谱面链接",
+    "copySetIds": "复制所有图集Id",
+    "copySetLinks": "复制所有图集链接",
+    "mapCount": "谱面",
+    "more": "更多",
+    "otherDiffs": "其他难度",
+    "setId": "图集Id：",
+    "thread": "进程"
   },
-  "scoreCard": {},
+  "header": {
+    "findCollection": "搜索收藏夹 <<<<<<"
+  },
+  "landing": {},
+  "locale": "切换语言",
   "statements": {
-    "testTitle": "共享收藏夹(共享经济?)"
+    "testTitle": "收藏夹分享"
+  },
+  "upload": {
+    "collectionLink": "收藏夹链接",
+    "compile": "编译",
+    "disclaimer": "我们需要您的 osu.db，只是为了提取 collection.db 中的谱面信息，它并不会被上传！我们可能需要收集一些信息来提升其他玩家的体验，比如您的本地 offset",
+    "done": "完成",
+    "form": {
+      "label": {
+        "collectionDB": "collection.db:",
+        "collectionDescription": "收藏夹描述:",
+        "collectionName": "收藏夹名称:"
+      },
+      "placeholder": {
+        "collectionDB": "选择 osu! 文件夹中的 collection.db 或者把它拖拽到这里...",
+        "descriptionPlaceholder": "写点什么...",
+        "dropFile": "拖拽到这里...",
+        "myCollection": "我的收藏夹",
+        "osuDB": "选择 osu! 文件夹中的 osu!.db 或者把它拖拽到这里..."
+      }
+    },
+    "onlyShowUploadingCollections": "只显示正在上传的收藏夹",
+    "parse": "解析",
+    "upload": "上传"
   },
   "user": {
-    "uploadedBy": "上传者:"
+    "uploadedBy": "上传由 "
+  },
+  "viewer": {
+    "collectionNonExists": "收藏夹不存在。",
+    "copySummary": "复制收藏夹摘要",
+    "generateCollectionDB": "生成 collection.db",
+    "somethingWentWrong": "对不起，我搞砸了。",
+    "summaryAsText": "保存为文本文件（兼容sayo）"
   }
 }
