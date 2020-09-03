@@ -1,30 +1,35 @@
 {
   "collectionCard": {
-    "beatmapLink": "/b/ 链接",
+    "beatmapLink": "链接",
     "beatmapSetPage": "图集页面",
-    "beatmapStatic": "谱面状态",
-    "copyBeatmapIds": "复制所有谱面Id",
+    "beatmapStatic": "详情",
+    "copyBeatmapIds": "复制所有谱面ID",
     "copyBeatmapLinks": "复制所有谱面链接",
-    "copySetIds": "复制所有图集Id",
+    "copySetIds": "复制所有图集ID",
     "copySetLinks": "复制所有图集链接",
-    "mapCount": "谱面",
-    "more": "更多",
-    "otherDiffs": "其他难度",
-    "setId": "图集Id：",
-    "thread": "进程"
+    "mapCount": "张图",
+    "more": "所有难度",
+    "otherDiffs": "难度未显示",
+    "setId": "图集ID：",
+    "thread": "讨论"
   },
   "header": {
     "findCollection": "搜索收藏夹 <<<<<<"
   },
-  "landing": {},
+  "landing": {
+    "recentCollectionsButton": "最近上传",
+    "subtitle": "阅尽世间 [ 好图 ]",
+    "title": "OSU!收藏夹分享站",
+    "topCollectionsButton": "最受好评"
+  },
   "locale": "切换语言",
   "statements": {
-    "testTitle": "收藏夹分享"
+    "testTitle": "OSU!收藏夹分享站"
   },
   "upload": {
     "collectionLink": "收藏夹链接",
-    "compile": "编译",
-    "disclaimer": "我们需要您的 osu.db，只是为了提取 collection.db 中的谱面信息，它并不会被上传！我们可能需要收集一些信息来提升其他玩家的体验，比如您的本地 offset",
+    "compile": "生成",
+    "disclaimer": "我们需要您提供 osu.db，只是为了提取 collection.db 中的谱面信息，它并不会被上传！因此我们可能会收集一些数据来改善其他玩家的体验，例如您的本地 offset",
     "done": "完成",
     "form": {
       "label": {
@@ -40,12 +45,12 @@
         "osuDB": "选择 osu! 文件夹中的 osu!.db 或者把它拖拽到这里..."
       }
     },
-    "onlyShowUploadingCollections": "只显示正在上传的收藏夹",
+    "onlyShowUploadingCollections": "只显示待上传的收藏夹",
     "parse": "解析",
     "upload": "上传"
   },
   "user": {
-    "uploadedBy": "上传由 "
+    "uploadedBy": "上传者："
   },
   "viewer": {
     "collectionNonExists": "收藏夹不存在。",
