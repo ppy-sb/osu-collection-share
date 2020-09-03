@@ -60,7 +60,7 @@
         </div>
         <div v-else>
           <b-card-body>
-            <h2>{{ $t('viewer.collectionNonExits') }}</h2>
+            <h2>{{ $t('viewer.collectionNonExists') }}</h2>
             <h4>{{ $t('viewer.somethingWentWrong') }}</h4>
           </b-card-body>
         </div>
