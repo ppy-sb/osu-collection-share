@@ -6,7 +6,7 @@
       <nuxt />
     </main>
 
-    <app-footer class="has-cards" />
+    <app-footer />
   </div>
 </template>
 

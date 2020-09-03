@@ -29,7 +29,9 @@
           </b-button-group>
         </b-button-toolbar>
       </b-card-body>
-      <beatmapset-list-item v-for="(set) of collection.mapsets" :key="`${collection.name}-${set.id}`" :set="set" class="border-right-0 border-left-0" />
+      <b-list-group>
+        <beatmapset-list-item v-for="(set) of collection.mapsets" :key="`${collection.name}-${set.id}`" :set="set" class="border-right-0 border-left-0" />
+      </b-list-group>
     </b-collapse>
   </b-card>
 </template>
@@ -56,6 +58,12 @@ export default {
   methods: {
     songName () {
       return `${this.set.artist.name} - ${this.set.song.title}`
+    },
+    beatmapsetLink (set) {
+      return `https://osu.ppy.sh/beatmapsets/${set.id}`
+    },
+    beatmapLink (beatmap) {
+      return `https://osu.ppy.sh/b/${beatmap.beatmap_id}`
     },
     collectionSetIds () {
       this.copySomething(`# ${this.collection.name}\n${this.collection.mapsets.map(set => set.id).join('\n')}`)

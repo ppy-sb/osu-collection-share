@@ -89,23 +89,23 @@
   </base-dropdown>
 </template>
 <script>
-import BaseDropdown from "@/components/argon/BaseDropdown";
+import BaseDropdown from '@/components/argon/BaseDropdown'
 export default {
-    components: {
-        BaseDropdown
+  components: {
+    BaseDropdown
+  },
+  created () {
+    this.setLocale()
+  },
+  methods: {
+    switchLocale (locale) {
+      // this.log(locale, "locale");
+      this.$root.locale = locale
+      this.setLocale()
     },
-    created() {
-        this.setLocale();
-    },
-    methods: {
-        switchLocale(locale) {
-            // this.log(locale, "locale");
-            this.$root.locale = locale;
-            this.setLocale();
-        },
-        setLocale() {
-            this.$root.$i18n.locale = this.$root.locale;
-        }
+    setLocale () {
+      this.$root.$i18n.locale = this.$root.locale
     }
-};
+  }
+}
 </script>

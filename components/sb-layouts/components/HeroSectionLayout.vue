@@ -23,8 +23,8 @@
 </template>
 <script>
 export default {
-    props: ["shaped"]
-};
+  props: ['shaped']
+}
 </script>
 <style>
 </style>

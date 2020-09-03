@@ -15,7 +15,7 @@
       v-if="shaped !== undefined"
       :class="[
         shapeClass ? shapeClass : 'shape-style-1',
-        useBootstrapColor == undefined 
+        useBootstrapColor == undefined
           ? bgVariant !== undefined ? `bg-gradient-${bgVariant}` : 'bg-gradient-secondary'
           : bgVariant !== undefined ? `shape-${bgVariant}` :'shape-secondary',
         skew !== undefined ? 'shape-skew' : ''
@@ -35,9 +35,9 @@
 <script>
 export default {
   props: {
-    bubbleCount:{
+    bubbleCount: {
       type: Number,
-      default: 7,
+      default: 7
     },
     shapeClass: {
       type: String,
@@ -80,12 +80,12 @@ export default {
       default: undefined
     }
   },
-  data() {
+  data () {
     return {
       logger: false
-    };
+    }
   }
-};
+}
 </script>
 <style scoped>
 .fill-shaped-pt {

@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer has-cards">
+  <footer class="footer">
     <!-- <div class="container container-lg">
             <div class="row">
                 <div class="col-md-6 mb-5 mb-md-0">
@@ -87,20 +87,19 @@
 <script>
 // import VueJsonPretty from "vue-json-pretty";
 export default {
-  name: "AppFooter",
+  name: 'AppFooter',
   components: {
     // VueJsonPretty
   },
-  data() {
+  data () {
     return {
       year: new Date().getFullYear()
-    };
+    }
   }
   // computed: {
   //   sbData() {
   //     return this.$sb.debug();
   //   }
   // }
-};
+}
 </script>
-<style></style>
