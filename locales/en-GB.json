@@ -16,10 +16,15 @@
   "header": {
     "findCollection": "Searching for collections? <<<<<<"
   },
-  "landing": {},
+  "landing": {
+    "recentCollectionsButton": "recent",
+    "subtitle": "find more [ M A P S ]",
+    "title": "collection sharing",
+    "topCollectionsButton": "most voted"
+  },
   "locale": "Swtich locale",
   "statements": {
-    "testTitle": "collection sharing"
+    "testTitle": "collection sharing alpha"
   },
   "upload": {
     "collectionLink": "collection link",

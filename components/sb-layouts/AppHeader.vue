@@ -1,24 +1,24 @@
 <template>
   <header class="header-global">
-    <base-nav 
-      transparent 
-      type 
-      effect="light" 
-      expand 
+    <base-nav
+      transparent
+      type
+      effect="light"
+      expand
       class="navbar-main pt-4"
     >
-      <router-link 
-        slot="brand" 
-        class="navbar-brand mr-lg-5" 
+      <router-link
+        slot="brand"
+        class="navbar-brand mr-lg-5"
         to="/"
       >
         <!-- <img src="img/brand/white.png" alt="logo"> -->
         <big>Ֆ</big> osu.ppy.sb
       </router-link>
 
-      <div 
-        slot="content-header" 
-        slot-scope="{closeMenu}" 
+      <div
+        slot="content-header"
+        slot-scope="{closeMenu}"
         class="row"
       >
         <div class="col-6 collapse-brand">
@@ -33,8 +33,8 @@
       </div>
 
       <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-        <base-dropdown 
-          tag="li" 
+        <base-dropdown
+          tag="li"
           class="nav-item"
         >
           <a
@@ -48,7 +48,7 @@
             <i class="ni ni-collection d-lg-none" />
             <span class="nav-link-inner--text">pages</span>
           </a>
-          <nuxt-link :to="{name: 'collections-upload'}" class="dropdown-item">
+          <nuxt-link :to="{name: 'upload'}" class="dropdown-item">
             {{ $t('upload.upload') }}
           </nuxt-link>
         </base-dropdown>
@@ -105,22 +105,22 @@
   </header>
 </template>
 <script>
-import BaseNav from "@/components/argon/BaseNav";
-import BaseDropdown from "@/components/argon/BaseDropdown";
-import CloseButton from "@/components/argon/CloseButton";
+import BaseNav from '@/components/argon/BaseNav'
+import BaseDropdown from '@/components/argon/BaseDropdown'
+import CloseButton from '@/components/argon/CloseButton'
 
-import SwitchLocale from "@/components/sb-components/SwitchLocale";
-import SearchCollection from "@/components/sb-components/SearchCollection";
+import SwitchLocale from '@/components/sb-components/SwitchLocale'
+import SearchCollection from '@/components/sb-components/SearchCollection'
 
 export default {
-    components: {
-        BaseNav,
-        CloseButton,
-        BaseDropdown,
-        SwitchLocale,
-        SearchCollection,
-    },
-};
+  components: {
+    BaseNav,
+    CloseButton,
+    BaseDropdown,
+    SwitchLocale,
+    SearchCollection
+  }
+}
 </script>
 <style>
 </style>

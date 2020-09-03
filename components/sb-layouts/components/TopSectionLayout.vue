@@ -42,12 +42,12 @@ export default {
     },
     variant: {
       type: String,
-      default: "primary"
+      default: 'primary'
     },
     useBootstrapColor: {
       type: Boolean,
       default: false
     }
   }
-};
+}
 </script>

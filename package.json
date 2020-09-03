@@ -10,9 +10,8 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "lint": "npm run lint:js",
     "test": "jest",
-    "i18n:report": "vue-cli-service i18n:report --src './*.?(js|vue)' --locales './locales/*.json'",
+    "i18n:report": "vue-cli-service i18n:report --src './{pages,components}/**/*.vue' --locales './locales/*.json'",
     "standardize-locale": "node helpers/standardizeLocales.js"
   },
   "dependencies": {
@@ -26,6 +25,7 @@
     "express": "^4.17.1",
     "file-saver": "^2.0.2",
     "lodash.debounce": "^4.0.8",
+    "moment": "^2.27.0",
     "mongoose": "5.9.29",
     "nouislider": "^14.6.1",
     "nuxt": "^2.14.0",

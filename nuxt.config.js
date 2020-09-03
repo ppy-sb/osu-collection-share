@@ -66,7 +66,8 @@ module.exports = {
     { src: '~/plugins/debounce/index.js', mode: 'client' },
     { src: '~/plugins/vue-worker.js', mode: 'client' },
     '~/plugins/i18n.js',
-    '~/plugins/vue-flag.js'
+    '~/plugins/vue-flag.js',
+    '~/plugins/moment.js'
   ],
   /*
   ** Auto import components
@@ -129,5 +130,6 @@ module.exports = {
         fs: 'empty'
       }
     }
-  }
+  },
+  telemetry: false
 }
