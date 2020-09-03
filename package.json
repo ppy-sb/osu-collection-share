@@ -11,7 +11,7 @@
     "generate": "nuxt generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "test": "jest",
-    "i18n:report": "vue-cli-service i18n:report --src './**/*.vue' --locales './locales/*.json'",
+    "i18n:report": "vue-cli-service i18n:report --src './{pages,components}/**/*.vue' --locales './locales/*.json'",
     "standardize-locale": "node helpers/standardizeLocales.js"
   },
   "dependencies": {
