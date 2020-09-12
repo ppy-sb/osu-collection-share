@@ -20,7 +20,8 @@ export default ({ app, store }) => {
   app.i18n = new VueI18n({
     locale: 'en-GB',
     fallbackLocale: 'en-GB',
-    messages: loadLocaleMessages()
+    messages: loadLocaleMessages(),
+    silentTranslationWarn: true
   })
 
   app.i18n.path = (link) => {

@@ -89,3 +89,4 @@ sw.*
 # Vim swap files
 *.swp
 locales/backup/*
+server/database/osu-collection-share.code-workspace

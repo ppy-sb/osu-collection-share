@@ -18,7 +18,7 @@ Moment.install = function (Vue, { locale = 'en-gb' } = {}) {
   // 3. 注入组件选项
   Vue.mixin({
     beforeCreate () {
-      this.$moment.locale((this.$root.locale || locale) || 'en')
+      this.$moment.locale((this.$root.locale || locale) || 'en-GB')
     },
     methods: {
       moment (...any) {
@@ -26,7 +26,7 @@ Moment.install = function (Vue, { locale = 'en-gb' } = {}) {
         return this.$moment(...any)
       },
       setLocale () {
-        this.$moment.locale((this.$root.locale || locale) || 'en')
+        this.$moment.locale((this.$root.locale || locale) || 'en-GB')
       }
     }
   })
