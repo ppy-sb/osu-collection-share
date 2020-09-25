@@ -25,6 +25,7 @@ const Schemas = {
   }),
   Set: new Mongoose.Schema({
     name: { type: String, default: 'Unnamed' },
+    folderName: { type: String },
     id: { type: Number, default: -1 },
     collectionSets: {
       _id: {
@@ -72,6 +73,7 @@ const Schemas = {
     drain_time: { type: Number, default: -1 },
     hp_drain: { type: Number, default: -1 },
     md5: { type: String, required: true, index: true },
+    folder_name: { type: String },
     mode: { type: Number, default: 0 },
     n_hitcircles: { type: Number, default: -1 },
     n_sliders: { type: Number, default: -1 },

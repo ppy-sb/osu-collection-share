@@ -236,19 +236,32 @@ export default {
       if (this.collection.name === '') { this.collection.name = `${this.osuDBData.username}'s collection` }
       this.onJob = false
     },
+
     async compileData () {
       this.onJob = true
       this.compiledCollectionData = await this.$worker.run((osuDBData, osuCollectionData) => {
+        function setIdGuessFromFolderName (name) {
+          name = name.split(' ')
+          console.log(name)
+          if (!Number.isInteger(parseInt(name[0]))) { return null }
+          const conjectureSid = parseInt(name[0])
+          return conjectureSid
+        }
+
         function mapListToMapsetList (mapset) {
           return mapset.reduce((acc, beatmap) => {
             if (beatmap.unknown) {
               console.log('unknown beatmap', beatmap.md5)
               return acc
             }
-            let set = acc.find(set => set.id === beatmap.beatmapset_id)
+            let set = acc.find((set) => {
+              if (beatmap.beatmapset_id !== -1) { return set.id === beatmap.beatmapset_id } else { return set.folderName === beatmap.folder_name }
+            })
+            if (set) { set.maps.push(beatmap) }
             if (!set) {
               set = {
-                id: beatmap.beatmapset_id,
+                id: beatmap.beatmapset_id === -1 ? setIdGuessFromFolderName(beatmap.folder_name) : beatmap.beatmapset_id,
+                folderName: beatmap.folder_name,
                 artist: {
                   name: beatmap.artist_name,
                   unicodeName: beatmap.artist_name_unicode
@@ -262,7 +275,6 @@ export default {
               }
               acc.push(set)
             }
-            set.maps.push(beatmap)
             return acc
           }, [])
         }
@@ -274,6 +286,7 @@ export default {
             maps: collection.beatmapsMd5.map(md5 => osuDBData.beatmaps.find(beatmap => beatmap.md5 === md5) || { md5, unknown: true })
           }
         }).filter(collection => collection.maps.length)
+
         return collections.map((collection) => {
           return {
             name: collection.name,
