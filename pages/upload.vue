@@ -142,8 +142,10 @@ import BeatmapsetListItem from '@/components/sb-components/BeatmapsetListItem'
 import SectionLayout from '@/components/sb-layouts/components/SectionLayout'
 import TopSectionLayout from '@/components/sb-layouts/components/TopSectionLayout'
 import ProfileLayout from '@/components/sb-layouts/ProfileLayout'
+// const OsuDBParser = require('osu-db-parser')
+// const OsuDBParserWorker = require('@/assets/scripts/parseDB.worker.js')
+import OsuDBParserWorker from '@/assets/scripts/parseDB.worker.js'
 const debounce = require('lodash.debounce')
-const OsuDBParser = require('osu-db-parser')
 export default {
   components: {
     BeatmapsetListItem,
@@ -213,15 +215,24 @@ export default {
         temporaryFileReader.readAsArrayBuffer(inputFile)
       })
     },
-    readData () {
+    async readData () {
       this.onJob = true
       if (!this.osuDBBuffer || !this.collectionDBBuffer) { return console.log('sth went wrong') }
 
-      const ultimateDB = new OsuDBParser(this.osuDBBuffer, this.collectionDBBuffer)
+      // const { osuDBData, osuCollectionData } =
+      const worker = new OsuDBParserWorker()
+      const resultPromise = new Promise((resolve, reject) => {
+        worker.onmessage = result => resolve(result.data)
+      })
+      worker.postMessage({ osuDBBuffer: this.osuDBBuffer, collectionDBBuffer: this.collectionDBBuffer })
 
-      this.osuDBData = ultimateDB.getOsuDBData()
-      this.osuCollectionData = ultimateDB.getCollectionData()
+      const { osuDBData, osuCollectionData } = await resultPromise
+      worker.terminate()
+
+      this.osuDBData = osuDBData
+      this.osuCollectionData = osuCollectionData
       this.username = this.osuDBData.username
+
       if (this.collection.name === '') { this.collection.name = `${this.osuDBData.username}'s collection` }
       this.onJob = false
     },

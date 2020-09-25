@@ -125,7 +125,13 @@ module.exports = {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
-    extend (config, ctx) {
+    extend (config, { isDev, isClient }) {
+      // Web Worker support
+      config.module.rules.push({
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' },
+        exclude: /(node_modules)/
+      })
       config.node = {
         fs: 'empty'
       }
