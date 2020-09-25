@@ -17,7 +17,7 @@
             :label="$t('upload.form.label.collectionName')"
             label-align-sm="right"
             label-for="collectionName"
-            :description="collection.slug"
+            :description="notices.describeSlug"
           >
             <b-form-input id="collectionName" v-model="collection.name" :placeholder="$t('upload.form.placeholder.myCollection')" />
           </b-form-group>
@@ -161,6 +161,9 @@ export default {
         name: '',
         slug: ''
       },
+      notices: {
+        describeSlug: ''
+      },
       compiledCollectionData: [],
       collectionDB: undefined,
       collectionDBBuffer: undefined,
@@ -181,12 +184,12 @@ export default {
   watch: {
     'collection.name': debounce(async function (newVal) {
       const result = await this.convSlugApi(newVal)
-      if (result.sameCollectionsDBExists) {
+      if (result.sameCollectionDBExists) {
         this.collection.slug = result.nextAvailable
-        // this.collection.description = this.collection.slug
+        this.notices.describeSlug = `will be created as ${this.collection.slug}`
       } else {
         this.collection.slug = result.slug
-        // this.collection.description = `will be created as ${this.collection.slug}`
+        this.notices.describeSlug = this.collection.slug
       }
     }, 300),
     async collectionDB (file) {

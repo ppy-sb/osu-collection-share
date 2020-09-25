@@ -59,7 +59,7 @@ class CollectionSet {
     // create collectionDB
     this.collectionDB.user = user
     const dbSlug = await getSlug(this.collectionDB.slug, CollectionDB)
-    if (dbSlug.sameCollectionDBExitsts) { this.collectionDB.slug = dbSlug.nextAvailable } else { this.collectionDB.slug = dbSlug.slug }
+    if (dbSlug.sameCollectionDBExists) { this.collectionDB.slug = dbSlug.nextAvailable } else { this.collectionDB.slug = dbSlug.slug }
     const collectionDB = await CollectionDB.create(this.collectionDB)
 
     // create CollectionSets
