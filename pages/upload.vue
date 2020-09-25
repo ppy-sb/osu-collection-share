@@ -256,7 +256,7 @@ export default {
             let set = acc.find((set) => {
               if (beatmap.beatmapset_id !== -1) { return set.id === beatmap.beatmapset_id } else { return set.folderName === beatmap.folder_name }
             })
-            if (set) { set.maps.push(beatmap) }
+            // if (set) { set.maps.push(beatmap) }
             if (!set) {
               set = {
                 id: beatmap.beatmapset_id === -1 ? setIdGuessFromFolderName(beatmap.folder_name) : beatmap.beatmapset_id,
@@ -274,6 +274,7 @@ export default {
               }
               acc.push(set)
             }
+            set.maps.push(beatmap)
             return acc
           }, [])
         }
