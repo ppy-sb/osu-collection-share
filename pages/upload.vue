@@ -242,7 +242,6 @@ export default {
       this.compiledCollectionData = await this.$worker.run((osuDBData, osuCollectionData) => {
         function setIdGuessFromFolderName (name) {
           name = name.split(' ')
-          console.log(name)
           if (!Number.isInteger(parseInt(name[0]))) { return null }
           const conjectureSid = parseInt(name[0])
           return conjectureSid
