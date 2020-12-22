@@ -48,7 +48,7 @@ export default {
       if (this.results.length === 0 || this.searchText !== searchText) {
         this.searchText = searchText
         axios
-          .get(`/api/collectionDB/search/${searchText}`)
+          .get(`/api/pool/search/${searchText}`)
           .then((response) => {
             if (response.data) { this.results = response.data }
           })

@@ -2,9 +2,9 @@ const slug = require('slug')
 const models = require('../database/models.js')
 const getSlug = require('./slug.js')
 
-class CollectionSet {
-  constructor ({ collectionDB, user, compiledCollectionData }) {
-    this.collectionDB = collectionDB
+class PoolSet {
+  constructor ({ pool, user, compiledCollectionData }) {
+    this.pool = pool
     this.user = user
     this.compiledCollectionData = compiledCollectionData
     this.models = models
@@ -34,7 +34,7 @@ class CollectionSet {
   }
 
   async save () {
-    const { CollectionDB, CollectionSet, Set, CollectionBeatmap, Beatmap } = this.models
+    const { Pool, PoolSet, Set, PoolBeatmap, Beatmap } = this.models
 
     const allMaps = this.compiledCollectionData.reduce((acc, collection) => {
       collection.mapsets.map(set => acc.push(...set.maps))
@@ -56,15 +56,15 @@ class CollectionSet {
     // create or find user
     const user = await this.findOrCreateUser()
 
-    // create collectionDB
-    this.collectionDB.user = user
-    const dbSlug = await getSlug(this.collectionDB.slug, CollectionDB)
-    if (dbSlug.sameCollectionDBExists) { this.collectionDB.slug = dbSlug.nextAvailable } else { this.collectionDB.slug = dbSlug.slug }
-    const collectionDB = await CollectionDB.create(this.collectionDB)
+    // create pool
+    this.pool.user = user
+    const dbSlug = await getSlug(this.pool.slug, Pool)
+    if (dbSlug.samePoolExists) { this.pool.slug = dbSlug.nextAvailable } else { this.pool.slug = dbSlug.slug }
+    const pool = await Pool.create(this.pool)
 
-    // create CollectionSets
-    const collectionSets = await CollectionSet.create(this.compiledCollectionData.map((collection) => {
-      collection.collectionDB = collectionDB
+    // create poolSet
+    const collectionSet = await PoolSet.create(this.compiledCollectionData.map((collection) => {
+      collection.pool = pool
       collection.slug = slug(collection.name)
       return collection
     })).then(b => b.map(collection => collection.toObject()))
@@ -72,24 +72,24 @@ class CollectionSet {
     // create Sets
     await Promise.all(this.compiledCollectionData.map(async (collection, collectionIndex) => {
       const beatmapsets = await Set.create(collection.mapsets.map((beatmapset) => {
-        beatmapset.collectionSets = collection.collectionSets
-        beatmapset.collectionDB = collectionDB
+        beatmapset.collectionSet = collection.collectionSet
+        beatmapset.pool = pool
         return beatmapset
       }))
 
-      // create CollectionBeatmap
+      // create PoolBeatmap
 
       collection.mapsets.map((beatmapset, beatmapsetIndex) => {
-        CollectionBeatmap.create(beatmapset.maps.map(map => ({
+        PoolBeatmap.create(beatmapset.maps.map(map => ({
           beatmap: beatmapDocs.find(docmap => docmap.md5 === map.md5),
-          collectionSet: collectionSets[collectionIndex],
+          collectionSet: collectionSet[collectionIndex],
           set: beatmapsets[beatmapsetIndex],
-          collectionDB
+          pool
         }))).catch(error => console.warn(error))
       })
     }))
     return {
-      collectionDB
+      pool
     }
   }
 
@@ -103,10 +103,10 @@ class CollectionSet {
   }
 }
 
-module.exports = CollectionSet
+module.exports = PoolSet
 
 // {
-//   collectionDB: { name: "arily's collection", slug: 'arilys-collection' },
+//   pool: { name: "arily's collection", slug: 'arilys-collection' },
 //   user: { name: 'arily' },
 //   compiledCollectionData: [
 //     { name: 'A', id: 'A', mapsets: [Array], upload: true },

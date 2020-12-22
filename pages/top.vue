@@ -22,14 +22,14 @@ export default {
   },
   asyncData () {
     if (process.server) {
-      return axios.get('http://localhost:3000/api/collectionDB/top').then((res) => {
+      return axios.get('http://localhost:3000/api/pool/top').then((res) => {
         return {
           list: res.data
         }
       })
     }
     if (process.client) {
-      return axios.get('/api/collectionDB/top').then((res) => {
+      return axios.get('/api/pool/top').then((res) => {
         return {
           list: res.data
         }

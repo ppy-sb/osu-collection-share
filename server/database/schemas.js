@@ -14,6 +14,16 @@ const Schemas = {
       }
     }
   }),
+  Pool: new Mongoose.Schema({
+    name: { type: String, default: 'Unnamed' },
+    slug: { type: String, default: 'Unnamed', index: true },
+    description: { type: String, default: 'no' },
+    user: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    }
+  }),
   CollectionSet: new Mongoose.Schema({
     name: { type: String, default: 'Unnamed', index: true },
     slug: { type: String, default: 'Unnamed', index: true },
@@ -23,16 +33,35 @@ const Schemas = {
       }
     }
   }),
+  PoolSet: new Mongoose.Schema({
+    name: { type: String, default: 'Unnamed', index: true },
+    slug: { type: String, default: 'Unnamed', index: true },
+    Pool: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    }
+  }),
   Set: new Mongoose.Schema({
     name: { type: String, default: 'Unnamed' },
     folderName: { type: String },
     id: { type: Number, default: -1 },
-    collectionSets: {
+    collectionSet: {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
       }
     },
     collectionDB: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    },
+    poolSet: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    },
+    pool: {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
       }
@@ -56,6 +85,29 @@ const Schemas = {
       }
     },
     collectionDB: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    }
+  }),
+  PoolBeatmap: new Mongoose.Schema({
+    localOffset: { type: Number, default: 0 },
+    beatmap: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    },
+    set: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    },
+    poolSet: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    },
+    pool: {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
       }

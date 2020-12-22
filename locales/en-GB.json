@@ -33,12 +33,12 @@
     "done": "done",
     "form": {
       "label": {
-        "collectionDB": "collection.db:",
+        "pool": "collection.db:",
         "collectionDescription": "collection description:",
         "collectionName": "name your collection:"
       },
       "placeholder": {
-        "collectionDB": "Choose collection.db in your osu! folder or drop it here...",
+        "pool": "Choose collection.db in your osu! folder or drop it here...",
         "descriptionPlaceholder": "Enter something...",
         "dropFile": "Drop file here...",
         "myCollection": "my collection",
@@ -55,7 +55,7 @@
   "viewer": {
     "collectionNonExists": "collection not exist.",
     "copySummary": "copy collection summary",
-    "generateCollectionDB": "generate collection.db",
+    "generatepool": "generate collection.db",
     "somethingWentWrong": "or something went (pretty badly) wrong!",
     "summaryAsText": "summary as text file (sayo compatible)"
   }

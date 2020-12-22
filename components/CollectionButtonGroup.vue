@@ -10,8 +10,8 @@
       >
         {{ $t('viewer.summaryAsText') }}
       </b-button>
-      <b-button variant="success" @click="saveCollectionDB">
-        {{ $t('viewer.generateCollectionDB') }}
+      <b-button variant="success" @click="savepool">
+        {{ $t('viewer.generatepool') }}
       </b-button>
     </b-button-group>
   </b-button-toolbar>
@@ -21,7 +21,7 @@ const FileSaver = require('file-saver')
 const osuColle = require('osucolle')
 export default {
   props: {
-    collectionDB: { type: Object, default: () => ({ slug: '', name: 'no name' }) },
+    pool: { type: Object, default: () => ({ slug: '', name: 'no name' }) },
     user: { type: Object, default: () => ({ name: 'no name' }) },
     compiledCollectionData: { type: Array, default: () => [] }
   },
@@ -37,20 +37,20 @@ export default {
     },
     saveCollectionSummary () {
       const blob = new Blob([this.collectionSummary()], { type: 'text/plain;charset=utf-8' })
-      FileSaver.saveAs(blob, `collection-summary-${this.collectionDB.slug}.txt`)
+      FileSaver.saveAs(blob, `collection-summary-${this.pool.slug}.txt`)
     },
     collectionSummary () {
       const description = [
         `# creator: ${this.user.name}`,
         `# generated At: ${new Date()}`,
         '# ========',
-        `# ${this.collectionDB.description.replace('\r', '\n').replace('\n', '\n# ')}`,
+        `# ${this.pool.description.replace('\r', '\n').replace('\n', '\n# ')}`,
         '# ========'
       ].join('\n')
       const ids = this.compiledCollectionData.map(this.collectionSetIds).join('\n\n')
       return description + '\n\n' + ids
     },
-    generateCollectionDB () {
+    generatepool () {
       const db = new osuColle.Database()
       this.compiledCollectionData.map((collection) => {
         db.appendCollection(collection.name)
@@ -60,11 +60,11 @@ export default {
       })
       return db
     },
-    saveCollectionDB () {
-      const db = this.generateCollectionDB()
+    savepool () {
+      const db = this.generatepool()
       const buffer = db.toBuffer()
       const blob = new Blob([buffer], { type: 'application/octet-stream;charset=utf-8' })
-      FileSaver.saveAs(blob, `collection-${this.collectionDB.slug}.db`)
+      FileSaver.saveAs(blob, `collection-${this.pool.slug}.db`)
     },
     collectionSetIds (collection) {
       return (`# ${collection.name}\n${collection.mapsets.map((set) => {

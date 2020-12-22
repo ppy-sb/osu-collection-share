@@ -11,7 +11,7 @@ module.exports = async (t, model) => {
   }
   return {
     slug: s,
-    sameCollectionDBExists: sameDBExists,
+    samePoolExists: sameDBExists,
     nextAvailable: sameDBExists ? slug(`${t}-${increase}`) : undefined
   }
 }

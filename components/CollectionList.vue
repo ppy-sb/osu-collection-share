@@ -4,7 +4,7 @@
       <b-list-group-item v-for="collection in list" :key="collection._id">
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1">
-            <nuxt-link :to="{name:'collections-slug', params: {slug: collection.slug}}">
+            <nuxt-link :to="{name:'pools-slug', params: {slug: collection.slug}}">
               {{ collection.name }}
             </nuxt-link>
           </h5>

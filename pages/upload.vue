@@ -23,17 +23,17 @@
           </b-form-group>
           <b-form-group
             label-cols-sm="3"
-            :label="$t('upload.form.label.collectionDB')"
+            :label="$t('upload.form.label.pool')"
             label-align-sm="right"
-            label-for="collectionDB"
+            label-for="pool"
           >
             <b-form-file
-              id="collectionDB"
-              v-model="collectionDB"
-              :state="Boolean(collectionDB)"
-              :placeholder="$t('upload.form.placeholder.collectionDB')"
+              id="pool"
+              v-model="pool"
+              :state="Boolean(pool)"
+              :placeholder="$t('upload.form.placeholder.pool')"
               :drop-placeholder="$t('upload.form.placeholder.dropFile')"
-              :description="collectionDB"
+              :description="pool"
             />
           </b-form-group>
           <b-form-group
@@ -99,7 +99,7 @@
                 {{ $t('upload.done') }}
               </b-card-title>
               <b-card-text>
-                <nuxt-link :to="{name: 'collections-slug', params:{ slug: uploadResult.collectionDB.slug }}">
+                <nuxt-link :to="{name: 'collections-slug', params:{ slug: uploadResult.pool.slug }}">
                   {{ $t('upload.collectionLink') }}
                 </nuxt-link>
               </b-card-text>
@@ -165,8 +165,8 @@ export default {
         describeSlug: ''
       },
       compiledCollectionData: [],
-      collectionDB: undefined,
-      collectionDBBuffer: undefined,
+      pool: undefined,
+      poolBuffer: undefined,
       osuDB: undefined,
       osuDBBuffer: undefined,
       osuCollectionData: undefined,
@@ -184,7 +184,7 @@ export default {
   watch: {
     'collection.name': debounce(async function (newVal) {
       const result = await this.convSlugApi(newVal)
-      if (result.sameCollectionDBExists) {
+      if (result.samePoolExists) {
         this.collection.slug = result.nextAvailable
         this.notices.describeSlug = `will be created as ${this.collection.slug}`
       } else {
@@ -192,8 +192,8 @@ export default {
         this.notices.describeSlug = this.collection.slug
       }
     }, 300),
-    async collectionDB (file) {
-      this.collectionDBBuffer = await this.readUploadedFileAsBuffer(file)
+    async pool (file) {
+      this.poolBuffer = await this.readUploadedFileAsBuffer(file)
     },
     async osuDB (file) {
       this.osuDBBuffer = await this.readUploadedFileAsBuffer(file)
@@ -220,14 +220,14 @@ export default {
     },
     async readData () {
       this.onJob = true
-      if (!this.osuDBBuffer || !this.collectionDBBuffer) { return console.log('sth went wrong') }
+      if (!this.osuDBBuffer || !this.poolBuffer) { return console.log('sth went wrong') }
 
       // const { osuDBData, osuCollectionData } =
       const worker = new OsuDBParserWorker()
       const resultPromise = new Promise((resolve, reject) => {
         worker.onmessage = result => resolve(result.data)
       })
-      worker.postMessage({ osuDBBuffer: this.osuDBBuffer, collectionDBBuffer: this.collectionDBBuffer })
+      worker.postMessage({ osuDBBuffer: this.osuDBBuffer, poolBuffer: this.poolBuffer })
 
       const { osuDBData, osuCollectionData } = await resultPromise
       worker.terminate()
@@ -303,8 +303,8 @@ export default {
     },
     upload () {
       this.onJob = true
-      axios.post('/api/collectionDB/upload', {
-        collectionDB: {
+      axios.post('/api/pool/upload', {
+        pool: {
           name: this.collection.name,
           slug: this.collection.slug,
           description: this.collection.description

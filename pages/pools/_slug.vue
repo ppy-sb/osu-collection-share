@@ -2,7 +2,7 @@
   <profile-layout>
     <top-section-layout>
       <card shadow class="card-profile mt--300" no-body>
-        <div v-if="collectionDB" class="px-4">
+        <div v-if="pool" class="px-4">
           <div class="row justify-content-center">
             <div class="col-lg-3 order-lg-2">
               <div class="card-profile-image">
@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="text-center mt-5">
-            <h3>{{ collectionDB.name }}</h3>
+            <h3>{{ pool.name }}</h3>
             <div class="h6 font-weight-300">
               {{ $t('user.uploadedBy') }}
               <i>
@@ -53,7 +53,7 @@
           <div class="mt-5 py-5 border-top text-center">
             <div class="row justify-content-center">
               <div class="col-lg-9">
-                <p>{{ collectionDB.description || 'no description' }}</p>
+                <p>{{ pool.description || 'no description' }}</p>
               </div>
             </div>
           </div>
@@ -77,7 +77,7 @@
       <b-card class="shadow" no-body>
         <b-card-body>
           <collection-button-group
-            :collection-d-b="collectionDB"
+            :collection-d-b="pool"
             :compiled-collection-data="compiledCollectionData"
             :user="user"
           />
@@ -111,12 +111,12 @@ export default {
   },
   asyncData ({ params }) {
     if (process.server) {
-      return axios.get(`http://localhost:3000/api/collectionDB/get/${params.slug}`).then((res) => {
+      return axios.get(`http://localhost:3000/api/pool/get/${params.slug}`).then((res) => {
         return res.data
       })
     }
     if (process.client) {
-      return axios.get(`/api/collectionDB/get/${params.slug}`).then((res) => {
+      return axios.get(`/api/pool/get/${params.slug}`).then((res) => {
         return res.data
       })
     }
