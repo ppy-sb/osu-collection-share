@@ -27,7 +27,7 @@ const Schemas = {
     name: { type: String, default: 'Unnamed' },
     folderName: { type: String },
     id: { type: Number, default: -1 },
-    collectionSets: {
+    collectionSet: {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
       }

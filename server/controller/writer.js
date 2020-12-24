@@ -72,7 +72,7 @@ class CollectionSet {
     // create Sets
     await Promise.all(this.compiledCollectionData.map(async (collection, collectionIndex) => {
       const beatmapsets = await Set.create(collection.mapsets.map((beatmapset) => {
-        beatmapset.collectionSets = collection.collectionSets
+        beatmapset.collectionSet = collection.collectionSet
         beatmapset.collectionDB = collectionDB
         return beatmapset
       }))
