@@ -1,5 +1,5 @@
 const slug = require('slug')
-const models = require('../database/models.js')
+const models = require('../../../database/models.js')
 const getSlug = require('./slug.js')
 
 class CollectionSet {

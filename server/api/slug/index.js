@@ -1,5 +1,5 @@
-const models = require('../database/models')
-const getSlug = require('../controller/slug')
+const models = require('../../database/models')
+const getSlug = require('./slug')
 module.exports = async (req, res, next) => {
   const target = req.params[0] || undefined
   if (target === undefined) { next(Error('slug required')) }

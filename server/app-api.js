@@ -19,9 +19,9 @@ if (app.get('env') === 'production') {
 app.use(express.static('../static'))
 
 app.use(session(sess))
-app.use('/api', require('./api'))
+app.use('/api', require('./router'))
 
-app.use('/api', require('./api'))
+app.use('/api', require('./router'))
 
 // 用 Nuxt.js 渲染每个路由
 // app.use(nuxt.render)

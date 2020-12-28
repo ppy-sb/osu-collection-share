@@ -11,7 +11,7 @@ config.dev = !isProd
 const nuxt = new Nuxt(config)
 
 app.use(express.static('../static'))
-app.use('/api', require('./api'))
+app.use('/api', require('./router'))
 
 // 用 Nuxt.js 渲染每个路由
 app.use(nuxt.render)

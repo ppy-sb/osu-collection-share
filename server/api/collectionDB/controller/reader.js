@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const models = require('../database/models.js')
+const models = require('../../../database/models.js')
 class CollectionReader {
   constructor (query) {
     this.query = query

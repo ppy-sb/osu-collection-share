@@ -23,21 +23,6 @@ const Schemas = {
       }
     }
   }),
-  Set: new Mongoose.Schema({
-    name: { type: String, default: 'Unnamed' },
-    folderName: { type: String },
-    id: { type: Number, default: -1 },
-    collectionSet: {
-      _id: {
-        type: Mongoose.Types.ObjectId, index: true
-      }
-    },
-    collectionDB: {
-      _id: {
-        type: Mongoose.Types.ObjectId, index: true
-      }
-    }
-  }),
   CollectionBeatmap: new Mongoose.Schema({
     localOffset: { type: Number, default: 0 },
     beatmap: {
@@ -60,6 +45,59 @@ const Schemas = {
         type: Mongoose.Types.ObjectId, index: true
       }
     }
+  }),
+  Pool: new Mongoose.Schema({
+    name: { type: String, required: true },
+    slug: { type: String, required: true, index: true },
+    description: { type: String, default: 'no' },
+    uploader: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    },
+    staff: [{
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    }]
+  }),
+  PoolBracket: new Mongoose.Schema({
+    name: { type: String, required: true, index: true },
+    slug: { type: String, required: true, index: true },
+    pool: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    }
+  }),
+  PoolBeatmap: new Mongoose.Schema({
+    localOffset: { type: Number },
+    mods: Number,
+    beatmap: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    },
+    set: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    },
+    poolBracket: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    },
+    pool: {
+      _id: {
+        type: Mongoose.Types.ObjectId, index: true
+      }
+    }
+  }),
+  Set: new Mongoose.Schema({
+    name: { type: String },
+    folderName: { type: String },
+    id: { type: Number, default: -1 }
   }),
   Beatmap: new Mongoose.Schema({
     approach_rate: { type: Number, default: -1 },
