@@ -37,6 +37,7 @@
         <b-list-group v-if="!tournament">
           <beatmapset-list-item v-for="(set) of collection.mapsets" :key="`${collection.name}-${set.id}`" :set="set" class="border-right-0 border-left-0" />
         </b-list-group>
+
         <b-table-simple
           v-else
           hover
@@ -89,7 +90,7 @@
             </b-tr>
           </b-thead>
           <b-tbody>
-            <template v-for="(set, setIndex) of collection.mapsets">
+            <template v-for="(set, setIndex) of collection.mapsets.slice((tournamentMode.currentPage - 1) * 10, tournamentMode.currentPage * 10)">
               <b-tr v-for="(map, mapIndex) in set.maps" :key="`collapse-${set.id}-${map.md5}`">
                 <b-td :variant="edit ? map.indexStatus ? 'success' : 'danger' : ''">
                   <!-- {{ { setIndex, mapIndex, index: map.index } }} -->
@@ -123,13 +124,14 @@
               </b-tr>
             </template>
           </b-tbody>
-          <!-- <b-tfoot>
+          <b-tfoot v-if="collection.mapsets.length > tournamentMode.perPage">
             <b-tr>
-              <b-td colspan="7" variant="secondary" class="text-right">
-                Total Rows: <b>5</b>
+              <b-td colspan="7" variant="secondary">
+                <base-pagination v-model="tournamentMode.currentPage" align="center" :per-page="tournamentMode.perPage" :total="collection.mapsets.length" />
+                <!-- Total Rows: <b>5</b> -->
               </b-td>
             </b-tr>
-          </b-tfoot> -->
+          </b-tfoot>
         </b-table-simple>
       </slot>
       <slot name="footing" />
@@ -170,6 +172,14 @@ export default {
     edit: {
       type: Boolean,
       default: false
+    }
+  },
+  data () {
+    return {
+      tournamentMode: {
+        currentPage: 1,
+        perPage: 10
+      }
     }
   },
   methods: {

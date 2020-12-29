@@ -261,7 +261,7 @@ export default {
       ],
       existScoreType: [
         'Score',
-        'ScoveV2',
+        'ScoreV2',
         'Accuracy'
       ],
       compiledCollectionData: [],
@@ -382,7 +382,7 @@ export default {
         const collections = osuCollectionData.collection.map((collection) => {
           return {
             name: collection.name,
-            id: collection.name.replace(' ', '_'),
+            id: collection.name.split(' ').join('-'),
             maps: collection.beatmapsMd5.map(md5 => osuDBData.beatmaps.find(beatmap => beatmap.md5 === md5) || { md5, unknown: true })
           }
         }).filter(collection => collection.maps.length)
