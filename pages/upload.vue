@@ -282,16 +282,16 @@ export default {
     }
   },
   watch: {
-    // async 'collection.name' (newVal) {
-    //   const result = await this.convSlugApi(newVal)
-    //   if (result.sameCollectionDBExists) {
-    //     this.collection.slug = result.nextAvailable
-    //     this.notices.describeSlug = `will be created as ${this.collection.slug}`
-    //   } else {
-    //     this.collection.slug = result.slug
-    //     this.notices.describeSlug = this.collection.slug
-    //   }
-    // },
+    async 'collection.name' (newVal) {
+      const result = await this.convSlugApi(newVal)
+      if (result.sameCollectionDBExists) {
+        this.collection.slug = result.nextAvailable
+        this.notices.describeSlug = `will be created as ${this.collection.slug}`
+      } else {
+        this.collection.slug = result.slug
+        this.notices.describeSlug = this.collection.slug
+      }
+    },
     async collectionDB (file) {
       this.collectionDBBuffer = await this.readUploadedFileAsBuffer(file)
     },
