@@ -1,22 +1,25 @@
 const Mongoose = require('mongoose')
 const Schemas = {
   User: new Mongoose.Schema({
-    id: { type: Number, default: -1 },
-    name: { type: String, default: 'Unknown' }
+    id: { type: Number },
+    name: { type: String, default: 'Guest' }
   }),
   CollectionDB: new Mongoose.Schema({
-    name: { type: String, default: 'Unnamed' },
-    slug: { type: String, default: 'Unnamed', index: true },
-    description: { type: String, default: 'no' },
+    name: { type: String },
+    slug: { type: String, required: true, index: true },
+    description: { type: String, default: '...' },
     user: {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
       }
-    }
+    },
+    tournament: { type: Boolean }
   }),
   CollectionSet: new Mongoose.Schema({
-    name: { type: String, default: 'Unnamed', index: true },
-    slug: { type: String, default: 'Unnamed', index: true },
+    name: { type: String, index: true },
+    slug: { type: String, index: true },
+    mod: { type: Array, default: undefined },
+    scoreType: { type: String },
     collectionDB: {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
@@ -24,9 +27,9 @@ const Schemas = {
     }
   }),
   Set: new Mongoose.Schema({
-    name: { type: String, default: 'Unnamed' },
+    name: { type: String },
     folderName: { type: String },
-    id: { type: Number, default: -1 },
+    id: { type: Number },
     collectionSet: {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
@@ -59,31 +62,32 @@ const Schemas = {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
       }
-    }
+    },
+    index: { type: Number }
   }),
   Beatmap: new Mongoose.Schema({
-    approach_rate: { type: Number, default: -1 },
-    artist_name: { type: String, default: 'Unnamed', index: true },
-    artist_name_unicode: { type: String, default: 'Unnamed' },
-    beatmap_id: { type: Number, default: -1, index: true },
-    beatmapset_id: { type: Number, default: -1, index: true },
-    circle_size: { type: Number, default: -1 },
-    creator_name: { type: String, default: 'Unnamed', index: true },
+    approach_rate: { type: Number },
+    artist_name: { type: String, index: true },
+    artist_name_unicode: { type: String },
+    beatmap_id: { type: Number, index: true },
+    beatmapset_id: { type: Number, index: true },
+    circle_size: { type: Number },
+    creator_name: { type: String, index: true },
     difficulty: { type: String },
-    drain_time: { type: Number, default: -1 },
-    hp_drain: { type: Number, default: -1 },
+    drain_time: { type: Number },
+    hp_drain: { type: Number },
     md5: { type: String, required: true, index: true },
     folder_name: { type: String },
     mode: { type: Number, default: 0 },
-    n_hitcircles: { type: Number, default: -1 },
-    n_sliders: { type: Number, default: -1 },
-    n_spinners: { type: Number, default: -1 },
-    online_offset: { type: Number, default: -1 },
-    overall_difficulty: { type: Number, default: -1 },
+    n_hitcircles: { type: Number },
+    n_sliders: { type: Number },
+    n_spinners: { type: Number },
+    online_offset: { type: Number },
+    overall_difficulty: { type: Number },
     ranked_status: { type: Number, default: 5 },
-    slider_velocity: { type: Number, default: -1 },
-    song_source: { type: String, default: 'Unnamed' },
-    song_tags: { type: String, default: 'Unnamed' },
+    slider_velocity: { type: Number },
+    song_source: { type: String },
+    song_tags: { type: String },
     song_title: { type: String, default: 'Unknown' },
     song_title_unicode: { type: String, default: 'Unknown' },
     star_rating_ctb: Object,
@@ -100,7 +104,7 @@ const Schemas = {
       272: { type: Number, default: 0 }
     },
     star_rating_taiko: Object,
-    thread_id: { type: Number, default: -1 }
+    thread_id: { type: Number }
   })
 }
 Schemas.CollectionDB.index({ name: 'text', description: 'text' })

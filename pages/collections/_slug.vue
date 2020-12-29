@@ -50,12 +50,25 @@
               </i>
             </div>
           </div>
-          <div class="mt-5 py-5 border-top text-center">
+          <div class="mt-5 py-4 border-top text-center">
             <div class="row justify-content-center">
               <div class="col-lg-9">
                 <p>{{ collectionDB.description || 'no description' }}</p>
               </div>
             </div>
+          </div>
+          <collection-button-group
+            class="pb-3"
+            :collection-d-b="collectionDB"
+            :compiled-collection-data="compiledCollectionData"
+            :user="user"
+          />
+          <div v-if="collectionDB.tournament" class="tournament">
+            <h1>
+              <b-badge>
+                tournament
+              </b-badge>
+            </h1>
           </div>
         </div>
         <div v-else>
@@ -75,26 +88,27 @@
       last
     >
       <b-card class="shadow" no-body>
-        <b-card-body>
-          <collection-button-group
-            :collection-d-b="collectionDB"
-            :compiled-collection-data="compiledCollectionData"
-            :user="user"
-          />
-        </b-card-body>
-        <collection-card
+        <!-- <b-card-body>
+
+        </b-card-body> -->
+        <collection-section
           v-for="(collection) of compiledCollectionData"
           :key="`collection-${collection.slug}`"
           style="border: 0"
           :collection="collection"
-        />
+          :tournament="collectionDB.tournament"
+        >
+          <template v-if="collectionDB.tournament" #title>
+            {{ collection.name }} | Mods Enabled: {{ collection.mod.join(', ') }} | Scoring: {{ collection.scoreType }}
+          </template>
+        </collection-section>
       </b-card>
     </section-layout>
   </profile-layout>
 </template>
 <script>
 import axios from 'axios'
-import CollectionCard from '@/components/CollectionCard'
+import CollectionSection from '@/components/CollectionSection'
 import CollectionButtonGroup from '@/components/CollectionButtonGroup'
 
 import SectionLayout from '@/components/sb-layouts/components/SectionLayout'
@@ -103,7 +117,7 @@ import ProfileLayout from '@/components/sb-layouts/ProfileLayout'
 export default {
   watchQuery: ['slug'],
   components: {
-    CollectionCard,
+    CollectionSection,
     CollectionButtonGroup,
     SectionLayout,
     ProfileLayout,
@@ -129,4 +143,10 @@ export default {
 }
 </script>
 <style>
+.tournament{
+  position: absolute;
+  top: -1em;
+  right: -2em;
+  transform: rotate(12deg);
+}
 </style>

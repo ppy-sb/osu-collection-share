@@ -14,6 +14,7 @@ class CollectionReader {
     const { CollectionDB, CollectionSet, CollectionBeatmap, User } = this.models
     const collectionDB = await CollectionDB.findOne(this.query).exec().then(doc => doc.toObject()).catch(_err => null)
     if (!collectionDB) { return null }
+    this.collectionDB = collectionDB
 
     const user = await User.findOne(collectionDB.user).exec().then(doc => doc.toObject()).catch(_err => null)
     const collections = await CollectionSet.find({ collectionDB: { _id: collectionDB._id } }).exec().then(docs => docs.map(doc => doc.toObject())).catch(_err => null)
@@ -24,6 +25,8 @@ class CollectionReader {
       const collection = acc.find(what => what._id.toString() === map.collectionSet._id.toString())
       if (!collection.maps) { collection.maps = [] }
       if (!beatmap) { console.log(map) }
+      beatmap.index = map.index
+      beatmap.localOffset = map.localOffset
       collection.maps.push(beatmap)
       return acc
     }, collections)
@@ -32,6 +35,9 @@ class CollectionReader {
         name: collection.name,
         _id: collection._id,
         slug: collection.slug,
+        mod: collection.mod,
+        scoreType: collection.scoreType,
+        tournament: collection.tournament,
         mapsets: this.mapListToMapsetList(collection.maps)
       }
     })
@@ -43,6 +49,7 @@ class CollectionReader {
   }
 
   mapListToMapsetList (mapset) {
+    if (this.collectionDB.tournament) { mapset.sort((a, b) => a.index - b.index) }
     return mapset.reduce((acc, beatmap) => {
       // if (beatmap.unknown) {
       //   console.log('unknown beatmap', beatmap.md5)
@@ -73,9 +80,9 @@ class CollectionReader {
   async docCollectionBeatmapToMap (cbs) {
     const ids = cbs.map(cb => mongoose.Types.ObjectId(cb.beatmap._id))
     return await this.models.Beatmap.find().where('_id').in(ids).exec()
-    // .then(res =>{
-    //   return res.map(d => d.toObject())
-    // })
+      .then((res) => {
+        return res.map(d => d.toObject())
+      })
   }
 }
 

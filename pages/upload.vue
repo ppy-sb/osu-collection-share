@@ -19,7 +19,7 @@
             label-for="collectionName"
             :description="notices.describeSlug"
           >
-            <b-form-input id="collectionName" v-model="collection.name" :placeholder="$t('upload.form.placeholder.myCollection')" />
+            <b-form-input id="collectionName" v-model="collection.name" :placeholder="$t('upload.form.placeholder.myCollection')" debounce="300" />
           </b-form-group>
           <b-form-group
             label-cols-sm="3"
@@ -94,6 +94,22 @@
             >
               {{ $t('upload.onlyShowUploadingCollections') }}
             </b-form-checkbox>
+            <b-form-checkbox
+              v-show="!uploadResult"
+              v-model="isTournamentPool"
+            >
+              {{ $t('upload.isTournamentPool') }}
+            </b-form-checkbox>
+            <b-button-toolbar class="pt-2">
+              <b-button-group size="sm">
+                <b-button variant="info" @click="() => compiledCollectionData.map(c => c.upload = true)">
+                  {{ $t('upload.checkAll') }}
+                </b-button>
+                <b-button variant="success" @click="() => compiledCollectionData.map(c => c.upload = false)">
+                  {{ $t('upload.uncheckAll') }}
+                </b-button>
+              </b-button-group>
+            </b-button-toolbar>
             <div v-if="uploadResult">
               <b-card-title>
                 {{ $t('upload.done') }}
@@ -106,7 +122,69 @@
             </div>
           </b-card-text>
         </b-card-body>
-        <b-card
+        <collection-section
+          v-for="(c) of compiledCollectionData"
+          v-show="c.upload || !onlyShowUploading"
+          :key="`collection-${c.slug}`"
+          style="border: 0"
+          :collection="c"
+          :title-button-variant="c.upload ? 'success' :'danger'"
+          :edit="true"
+          :tournament="isTournamentPool"
+          :mod="c.mod || []"
+          @updateIndex="(result) => updateIndex(c, result)"
+        >
+          <template #heading>
+            <b-card-body>
+              <b-form-group
+                label="Upload Collection"
+                :label-for="`collection-${c.slug}-upload`"
+                label-cols="3"
+              >
+                <b-form-checkbox
+                  :id="`collection-${c.slug}-upload`"
+                  v-model="c.upload"
+                  class="pt-2"
+                >
+                  {{ $t('upload.upload') }}
+                </b-form-checkbox>
+              </b-form-group>
+              <div v-if="isTournamentPool">
+                <b-form-group
+                  label="Mod"
+                  :label-for="`collection-${c.slug}-mod`"
+                  label-cols="3"
+                  :state="c.modstate"
+                  invalid-feedback="This field is required"
+                >
+                  <b-form-checkbox-group
+                    :id="`collection-${c.slug}-mod`"
+                    v-model="c.mod"
+                    class="pt-2"
+                    :state="c.modState"
+                    :options="existMods"
+                  />
+                </b-form-group>
+                <b-form-group
+                  label="Scoring"
+                  :label-for="`collection-${c.slug}-scoring`"
+                  label-cols="3"
+                  :state="c.scoreState"
+                  invalid-feedback="This field is required"
+                >
+                  <b-form-radio-group
+                    :id="`collection-${c.slug}-scoring`"
+                    v-model="c.scoreType"
+                    class="pt-2"
+                    :state="c.scoreState"
+                    :options="existScoreType"
+                  />
+                </b-form-group>
+              </div>
+            </b-card-body>
+          </template>
+        </collection-section>
+        <!-- <b-card
           v-for="(c) of uploadingCollections"
           :key="c.id"
           no-body
@@ -129,7 +207,7 @@
             </b-card-body>
             <beatmapset-list-item v-for="(set) of c.mapsets" :key="`${c.name}-${set.id}`" :set="set" class="border-right-0 border-left-0" />
           </b-collapse>
-        </b-card>
+        </b-card> -->
       </card>
     </section-layout>
   </profile-layout>
@@ -137,21 +215,24 @@
 <script>
 import axios from 'axios'
 // import BeatmapsetCard from '@/components/BeatmapsetCard'
-import BeatmapsetListItem from '@/components/sb-components/BeatmapsetListItem'
+// import BeatmapsetListItem from '@/components/sb-components/BeatmapsetListItem'
 // import RecentCard from '@/components/sb-components/RecentCard'
 import SectionLayout from '@/components/sb-layouts/components/SectionLayout'
 import TopSectionLayout from '@/components/sb-layouts/components/TopSectionLayout'
 import ProfileLayout from '@/components/sb-layouts/ProfileLayout'
+
+import CollectionSection from '@/components/CollectionSection'
 // const OsuDBParser = require('osu-db-parser')
 // const OsuDBParserWorker = require('@/assets/scripts/parseDB.worker.js')
 import OsuDBParserWorker from '@/assets/scripts/parseDB.worker.js'
-const debounce = require('lodash.debounce')
+// const debounce = require('lodash.debounce')
 export default {
   components: {
-    BeatmapsetListItem,
+    // BeatmapsetListItem,
     SectionLayout,
     ProfileLayout,
-    TopSectionLayout
+    TopSectionLayout,
+    CollectionSection
   },
   data () {
     return {
@@ -164,6 +245,25 @@ export default {
       notices: {
         describeSlug: ''
       },
+      existMods: [
+        'NM',
+        'EZ',
+        'NF',
+        'HT',
+        'HR',
+        'DT',
+        'NC',
+        'HD',
+        'FL',
+        'FM',
+        'RX',
+        'TB'
+      ],
+      existScoreType: [
+        'Score',
+        'ScoveV2',
+        'Accuracy'
+      ],
       compiledCollectionData: [],
       collectionDB: undefined,
       collectionDBBuffer: undefined,
@@ -172,35 +272,32 @@ export default {
       osuCollectionData: undefined,
       osuDBData: undefined,
       uploadResult: undefined,
-      onlyShowUploading: false
+      onlyShowUploading: false,
+      isTournamentPool: false
     }
   },
   computed: {
     uploadingCollections () {
-      if (this.onlyShowUploading) { return this.compiledCollectionData.filter(collection => collection.upload) }
-      return this.compiledCollectionData
+      return this.compiledCollectionData.filter(collection => collection.upload)
     }
   },
   watch: {
-    'collection.name': debounce(async function (newVal) {
-      const result = await this.convSlugApi(newVal)
-      if (result.sameCollectionDBExists) {
-        this.collection.slug = result.nextAvailable
-        this.notices.describeSlug = `will be created as ${this.collection.slug}`
-      } else {
-        this.collection.slug = result.slug
-        this.notices.describeSlug = this.collection.slug
-      }
-    }, 300),
+    // async 'collection.name' (newVal) {
+    //   const result = await this.convSlugApi(newVal)
+    //   if (result.sameCollectionDBExists) {
+    //     this.collection.slug = result.nextAvailable
+    //     this.notices.describeSlug = `will be created as ${this.collection.slug}`
+    //   } else {
+    //     this.collection.slug = result.slug
+    //     this.notices.describeSlug = this.collection.slug
+    //   }
+    // },
     async collectionDB (file) {
       this.collectionDBBuffer = await this.readUploadedFileAsBuffer(file)
     },
     async osuDB (file) {
       this.osuDBBuffer = await this.readUploadedFileAsBuffer(file)
     }
-  },
-  mounted () {
-
   },
   methods: {
     readUploadedFileAsBuffer (inputFile) {
@@ -294,7 +391,9 @@ export default {
           return {
             name: collection.name,
             id: collection.id,
+            slug: collection.id,
             mapsets: mapListToMapsetList(collection.maps),
+            mod: [],
             upload: true
           }
         })
@@ -307,7 +406,8 @@ export default {
         collectionDB: {
           name: this.collection.name,
           slug: this.collection.slug,
-          description: this.collection.description
+          description: this.collection.description,
+          tournament: this.isTournamentPool
         },
         user: {
           name: this.username
@@ -315,38 +415,51 @@ export default {
         compiledCollectionData: this.uploadingCollections
       }).then((res) => { this.uploadResult = res.data }).catch(err => console.warn(err)).then(() => { this.onJob = false })
     },
+    updateIndex (collection, result) {
+      const set = collection.mapsets[result.setIndex]
+      const map = set.maps[result.mapIndex]
+      this.$set(map, 'index', result.value)
+      this.recalculateMapIndexStatus(collection, map)
+    },
+    recalculateMapIndexStatus (collection) {
+      collection.mapsets.map(set => set.maps.map((map) => {
+        if (map.index === undefined || map.index === '') { return this.$set(map, 'indexStatus', false) }
+        const conflict = collection.mapsets.find(set => set.maps.find(foreignMap => foreignMap !== map && foreignMap.index === map.index)) !== undefined
+        this.$set(map, 'indexStatus', !conflict)
+      }))
+    },
     beatmapsetLink (set) {
       return `https://osu.ppy.sh/beatmapsets/${set.id}`
     },
     beatmapLink (beatmap) {
       return `https://osu.ppy.sh/b/${beatmap.beatmap_id}`
     },
-    collectionSetIds (collection) {
-      this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.id).join('\n')}`)
-    },
-    collectionBeatmapIds (collection) {
-      this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.maps.map(map => map.beatmap_id).join('\n')).join('\n')}`)
-    },
-    collectionSetLinks (collection) {
-      this.copySomething(`${collection.name}\n${collection.mapsets.map(set => this.beatmapsetLink(set)).join('\n')}`)
-    },
-    collectionBeatmapLinks (collection) {
-      this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.maps.map(map => this.beatmapLink(map)).join('\n')).join('\n')}`)
-    },
-    async copySomething (text) {
-      try {
-        await this.$copyText(text)
-      } catch (e) {
-        console.error(e)
-      }
-    },
+    // collectionSetIds (collection) {
+    //   this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.id).join('\n')}`)
+    // },
+    // collectionBeatmapIds (collection) {
+    //   this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.maps.map(map => map.beatmap_id).join('\n')).join('\n')}`)
+    // },
+    // collectionSetLinks (collection) {
+    //   this.copySomething(`${collection.name}\n${collection.mapsets.map(set => this.beatmapsetLink(set)).join('\n')}`)
+    // },
+    // collectionBeatmapLinks (collection) {
+    //   this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.maps.map(map => this.beatmapLink(map)).join('\n')).join('\n')}`)
+    // },
+    // async copySomething (text) {
+    //   try {
+    //     await this.$copyText(text)
+    //   } catch (e) {
+    //     console.error(e)
+    //   }
+    // },
     async convSlugApi (name) {
       return await axios.get('/api/slug/' + name).then(res => res.data)
     }
   }
 }
 </script>
-<style>
+<style lang="scss">
 .hover-big-shadow::before {
   content: "";
   height: 100%;
@@ -369,5 +482,8 @@ export default {
   content: "";
   opacity: 0.3;
   transition: all 0.15s ease;
+}
+.section-shaped .shape.shape-skew + .container .bv-no-focus-ring {
+  margin-top: 0 !important;
 }
 </style>

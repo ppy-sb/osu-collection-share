@@ -45,9 +45,12 @@
         "osuDB": "Choose osu!.db in your osu! folder or drop it here..."
       }
     },
-    "onlyShowUploadingCollections": "only show uploading collections",
+    "onlyShowUploadingCollections": "show uploading collections only",
+    "isTournamentPool": "tournament pool mode (allows you to fill in mods etc.)",
     "parse": "parse",
-    "upload": "upload"
+    "upload": "upload",
+    "checkAll": "select all collections",
+    "uncheckAll": "deselect all collections"
   },
   "user": {
     "uploadedBy": "uploaded by"

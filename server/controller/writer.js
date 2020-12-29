@@ -18,12 +18,12 @@ class CollectionSet {
  * @return {Promise}  always resolves a BulkWriteResult
  */
   bulkSave (records, Model, match) {
-    match = match || 'id'
+    match = match || ['id']
     return new Promise(function (resolve, reject) {
       const bulk = Model.collection.initializeUnorderedBulkOp()
       records.map(function (record) {
         const query = {}
-        query[match] = record[match]
+        match.map((m) => { query[m] = record[m] })
         bulk.find(query).upsert().updateOne(record)
       })
       bulk.execute(function (err, bulkres) {
@@ -33,9 +33,7 @@ class CollectionSet {
     })
   }
 
-  async save () {
-    const { CollectionDB, CollectionSet, Set, CollectionBeatmap, Beatmap } = this.models
-
+  async populateBeatmap () {
     const allMaps = this.compiledCollectionData.reduce((acc, collection) => {
       collection.mapsets.map(set => acc.push(...set.maps))
       return acc
@@ -48,10 +46,19 @@ class CollectionSet {
 
     // upserting all maps to beamtap
     const beatmapDocs = await Promise.all(reducedMaps.map(async (beatmap) => {
-      let doc = await Beatmap.findOne({ md5: beatmap.md5 }).exec()
-      if (!doc) { doc = await Beatmap.create(beatmap) }
+      let doc = await this.models.Beatmap.findOne({ md5: beatmap.md5 }).exec()
+      if (!doc) { doc = await this.models.Beatmap.create(beatmap) }
       return doc.toObject()
     }))
+    return beatmapDocs
+  }
+
+  async save () {
+    const { CollectionDB, CollectionSet, CollectionBeatmap } = this.models
+
+    // insert new beatmaps to the beatmap collections
+    const beatmapDocs = await this.populateBeatmap()
+    const beatmapDocSets = new Map(beatmapDocs.map(b => [b.md5, b]))
 
     // create or find user
     const user = await this.findOrCreateUser()
@@ -71,20 +78,22 @@ class CollectionSet {
 
     // create Sets
     await Promise.all(this.compiledCollectionData.map(async (collection, collectionIndex) => {
-      const beatmapsets = await Set.create(collection.mapsets.map((beatmapset) => {
+      const s = collection.mapsets.map((beatmapset) => {
         beatmapset.collectionSet = collection.collectionSet
         beatmapset.collectionDB = collectionDB
         return beatmapset
-      }))
+      })
+
+      const beatmapsets = await Promise.all(s.map(s => this.findOrCreateSet(s)))
 
       // create CollectionBeatmap
-
       collection.mapsets.map((beatmapset, beatmapsetIndex) => {
         CollectionBeatmap.create(beatmapset.maps.map(map => ({
-          beatmap: beatmapDocs.find(docmap => docmap.md5 === map.md5),
+          beatmap: beatmapDocSets.get(map.md5),
           collectionSet: collectionSets[collectionIndex],
           set: beatmapsets[beatmapsetIndex],
-          collectionDB
+          collectionDB,
+          index: map.index
         }))).catch(error => console.warn(error))
       })
     }))
@@ -100,6 +109,15 @@ class CollectionSet {
     if (_user) { user = _user } else { user = await User.create(this.user) }
 
     return user
+  }
+
+  async findOrCreateSet (s) {
+    const { Set } = this.models
+    let set
+    const _set = await Set.findOne({ $or: [{ id: s.id }, { folderName: s.folderName }] }).exec()
+    if (_set) { set = _set } else { set = await Set.create(s) }
+
+    return set
   }
 }
 

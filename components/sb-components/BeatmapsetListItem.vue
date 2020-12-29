@@ -86,6 +86,11 @@
       </b-table-simple>
     </b-collapse>
   </b-list-group-item>
+  <!-- <b-list-group-item v-else class="rounded-0">
+    <b-list-group-item v-for="(map) in set.maps" :key="`collapse-${set.id}-${map.md5}`">
+      {{ map.difficulty }}
+    </b-list-group-item>
+  </b-list-group-item> -->
 </template>
 <script>
 // const moment = require("moment");
