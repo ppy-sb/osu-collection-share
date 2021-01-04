@@ -34,9 +34,18 @@
         </b-card-body>
       </slot>
       <slot name="list">
-        <b-list-group v-if="!tournament">
-          <beatmapset-list-item v-for="(set) of collection.mapsets" :key="`${collection.name}-${set.id}`" :set="set" class="border-right-0 border-left-0" />
-        </b-list-group>
+        <template v-if="!tournament">
+          <keep-alive>
+            <b-list-group>
+              <template v-for="(set, index) of collection.mapsets">
+                <keep-alive :key="`${collection.name}-${set.id}`">
+                  <beatmapset-list-item v-if="index >= (currentPage - 1) * 10 && index < currentPage * 10" :key="`${collection.name}-${set.id}`" :set="set" class="border-right-0 border-left-0" />
+                </keep-alive>
+              </template>
+            </b-list-group>
+          </keep-alive>
+          <base-pagination v-model="currentPage" align="center" :per-page="perPage" :total="collection.mapsets.length" />
+        </template>
 
         <b-table-simple
           v-else
@@ -47,87 +56,62 @@
           responsive
           bordered
         >
-          <!-- <b-list-group-item v-for="(map) in set.maps" :key="`collapse-${set.id}-${map.md5}`">
-      {{ map.difficulty }}
-    </b-list-group-item> -->
-          <!-- <caption>Items sold in August, grouped by Country and City:</caption> -->
-          <colgroup><col><col><col></colgroup>
-          <colgroup><col><col><col><col></colgroup>
-          <b-thead>
-            <b-tr>
-              <b-th colspan="3">
-                Beatmap
-              </b-th>
-              <b-th colspan="4">
-                Info
-              </b-th>
-            </b-tr>
-            <b-tr>
-              <b-th style="width:1px">
-                #
-              </b-th>
-              <b-th
-                style=""
-                class="text-right"
-              >
-                Beatmapset
-              </b-th>
-              <b-th
-                style=""
-              >
-                Version
-              </b-th>
-              <b-th class="text-right">
-                bid
-              </b-th>
-              <b-th class="text-right">
-                Star
-              </b-th>
-              <b-th class="text-right">
-                Duration
-              </b-th>
-              <!-- <b-th>Rings</b-th> -->
-            </b-tr>
-          </b-thead>
+          <tournament-head />
           <b-tbody>
-            <template v-for="(set, setIndex) of collection.mapsets.slice((tournamentMode.currentPage - 1) * 10, tournamentMode.currentPage * 10)">
-              <b-tr v-for="(map, mapIndex) in set.maps" :key="`collapse-${set.id}-${map.md5}`">
+            <template v-for="(set, setIndex) of collection.mapsets.slice((currentPage - 1) * 10, currentPage * 10)">
+              <b-tr
+                v-for="(map, mapIndex) in set.maps"
+                :key="`collapse-${set.id}-${map.md5}`"
+                :style="`--var-bg: url('https://assets.ppy.sh/beatmaps/${set.id}/covers/cover@2x.jpg')`"
+              >
                 <b-td :variant="edit ? map.indexStatus ? 'success' : 'danger' : ''">
-                  <!-- {{ { setIndex, mapIndex, index: map.index } }} -->
                   <b-form-input
                     v-if="edit"
                     size="sm"
                     style="width:50px"
                     type="number"
                     :value="map.index"
-                    @change="(value) => $emit('updateIndex',{ setIndex, mapIndex, value })"
+                    @change="(value) => $emit('updateIndex',{ setIndex: setIndex + (currentPage - 1) * 10, mapIndex, value })"
                   />
                   <template v-else>
                     {{ map.index }}
                   </template>
                 </b-td>
-                <b-th v-if="!mapIndex" :rowspan="set.maps.length" style="max-width:150px" class="text-right">
-                  {{ songName(set) }}
+                <b-th
+                  v-if="!mapIndex"
+                  :rowspan="set.maps.length"
+                  class="text-right bg"
+                >
+                  <a :href="beatmapsetLink(set)">{{ songName(set) }}</a>
                 </b-th>
-                <b-th style="max-width:150px">
-                  {{ map.difficulty }}
+                <b-th>
+                  <a :href="beatmapLink(map)">{{ map.difficulty }}</a>
                 </b-th>
                 <b-td class="text-right">
                   {{ map.beatmap_id > 0 ? map.beatmap_id : 'unsubmitted' }}
                 </b-td>
                 <b-td class="text-right">
-                  {{ difficultyFromMods(map) }}
+                  ★{{ difficultyFromMods(map, collection.mod) }}
                 </b-td>
                 <b-td class="text-right">
+                  {{ map.circle_size | fractionDigits1 }}
+                </b-td>
+                <b-td class="text-right">
+                  {{ map.approach_rate | fractionDigits1 }}
+                </b-td>
+                <b-td class="text-right">
+                  {{ map.overall_difficulty | fractionDigits1 }}
+                </b-td>
+                <b-td class="text-right border-right-0">
                   {{ map.drain_time }}s
                 </b-td>
               </b-tr>
             </template>
           </b-tbody>
-          <b-tfoot v-if="collection.mapsets.length > tournamentMode.perPage">
+          <b-tfoot v-if="collection.mapsets.length > perPage">
             <b-tr>
               <b-td colspan="7" variant="secondary">
-                <base-pagination v-model="tournamentMode.currentPage" align="center" :per-page="tournamentMode.perPage" :total="collection.mapsets.length" />
+                <base-pagination v-model="currentPage" align="center" :per-page="perPage" :total="collection.mapsets.length" />
                 <!-- Total Rows: <b>5</b> -->
               </b-td>
             </b-tr>
@@ -141,11 +125,19 @@
 
 <script>
 import BeatmapsetListItem from '@/components/sb-components/BeatmapsetListItem'
-
+import TournamentHead from './tournament/TournamentTableHead'
 export default {
   components: {
-    BeatmapsetListItem
-    // SyncLoader
+    BeatmapsetListItem,
+    TournamentHead
+  },
+  filters: {
+    fractionDigits2 (num) {
+      return num.toLocaleString('decimal', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    },
+    fractionDigits1 (num) {
+      return num.toLocaleString('decimal', { minimumFractionDigits: 0, maximumFractionDigits: 1 })
+    }
   },
   props: {
     collection: {
@@ -176,10 +168,8 @@ export default {
   },
   data () {
     return {
-      tournamentMode: {
-        currentPage: 1,
-        perPage: 10
-      }
+      currentPage: 1,
+      perPage: 10
     }
   },
   methods: {
@@ -228,5 +218,25 @@ table.table-fit thead th, table.table-fit tfoot th {
 }
 table.table-fit tbody td, table.table-fit tfoot td {
     width: auto !important;
+}
+</style>
+<style lang="scss" scoped>
+.bg {
+  background-color: transparent !important;
+  position: relative;
+  z-index: 1;
+
+  &::before {
+    content: '';
+    background-image: var(--var-bg);
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    // opacity: 0.2;
+    mask-image: linear-gradient(to right, rgba(0,0,0,0.46), rgba(0,0,0,0.1) 40%, rgba(0,0,0,0));
+    z-index: -1;
+  }
 }
 </style>

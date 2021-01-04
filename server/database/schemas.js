@@ -29,20 +29,11 @@ const Schemas = {
   Set: new Mongoose.Schema({
     name: { type: String },
     folderName: { type: String },
-    id: { type: Number },
-    collectionSet: {
-      _id: {
-        type: Mongoose.Types.ObjectId, index: true
-      }
-    },
-    collectionDB: {
-      _id: {
-        type: Mongoose.Types.ObjectId, index: true
-      }
-    }
+    id: { type: Number }
   }),
   CollectionBeatmap: new Mongoose.Schema({
     localOffset: { type: Number, default: 0 },
+    index: { type: Number },
     beatmap: {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
@@ -62,8 +53,7 @@ const Schemas = {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
       }
-    },
-    index: { type: Number }
+    }
   }),
   Beatmap: new Mongoose.Schema({
     approach_rate: { type: Number },

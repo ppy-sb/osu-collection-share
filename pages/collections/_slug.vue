@@ -13,7 +13,7 @@
             </div>
             <div
               class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center"
-              style="visibility:hidden"
+              style="visibility: hidden"
             >
               <div class="card-profile-actions py-4 mt-lg-0">
                 <base-button type="info" size="sm" class="mr-4">
@@ -24,7 +24,7 @@
                 </base-button>
               </div>
             </div>
-            <div class="col-lg-4 order-lg-1" style="visibility:hidden">
+            <div class="col-lg-4 order-lg-1" style="visibility: hidden">
               <div class="card-profile-stats d-flex justify-content-center">
                 <div>
                   <span class="heading">22</span>
@@ -44,41 +44,45 @@
           <div class="text-center mt-5">
             <h3>{{ collectionDB.name }}</h3>
             <div class="h6 font-weight-300">
-              {{ $t('user.uploadedBy') }}
+              {{ $t("user.uploadedBy") }}
               <i>
-                <a :href="`https://osu.ppy.sh/users/${user.name}`">{{ user.name }}</a>
+                <a :href="`https://osu.ppy.sh/users/${user.name}`">{{
+                  user.name
+                }}</a>
               </i>
             </div>
           </div>
           <div class="mt-5 py-4 border-top text-center">
             <div class="row justify-content-center">
               <div class="col-lg-9">
-                <p>{{ collectionDB.description || 'no description' }}</p>
+                <p>{{ collectionDB.description || "no description" }}</p>
               </div>
             </div>
           </div>
-          <collection-button-group
-            class="pb-3"
-            :collection-d-b="collectionDB"
-            :compiled-collection-data="compiledCollectionData"
-            :user="user"
-          />
-          <div v-if="collectionDB.tournament" class="tournament">
-            <h1>
-              <b-badge>
-                tournament
-              </b-badge>
+          <template v-if="collectionDB.tournament">
+            <h1 class="tournament">
+              <b-badge>tournament</b-badge>
             </h1>
-          </div>
+          </template>
         </div>
         <div v-else>
           <b-card-body>
-            <h2>{{ $t('viewer.collectionNonExists') }}</h2>
-            <h4>{{ $t('viewer.somethingWentWrong') }}</h4>
+            <h2>{{ $t("viewer.collectionNonExists") }}</h2>
+            <h4>{{ $t("viewer.somethingWentWrong") }}</h4>
           </b-card-body>
         </div>
       </card>
     </top-section-layout>
+    <section-layout skew :section-class="['py-0', 'my-0']" class="non-print">
+      <card shadow>
+        <collection-button-group
+          class="pb-3"
+          :collection-d-b="collectionDB"
+          :compiled-collection-data="compiledCollectionData"
+          :user="user"
+        />
+      </card>
+    </section-layout>
     <section-layout
       v-if="compiledCollectionData"
       :contained="undefined"
@@ -87,22 +91,29 @@
       shaped
       last
     >
-      <b-card class="shadow" no-body>
-        <!-- <b-card-body>
-
-        </b-card-body> -->
-        <collection-section
-          v-for="(collection) of compiledCollectionData"
-          :key="`collection-${collection.slug}`"
-          style="border: 0"
-          :collection="collection"
-          :tournament="collectionDB.tournament"
-        >
-          <template v-if="collectionDB.tournament" #title>
+      <fullscreen :fullscreen.sync="fullscreen">
+        <b-card class="shadow border-0" no-body>
+          <template v-if="!collectionDB.tournament">
+            <collection-section
+              v-for="collection of compiledCollectionData"
+              :key="`collection-${collection.slug}`"
+              style="border: 0"
+              :collection="collection"
+              :tournament="collectionDB.tournament"
+            >
+            <!-- <template v-if="collectionDB.tournament" #title>
             {{ collection.name }} | Mods Enabled: {{ collection.mod.join(', ') }} | Scoring: {{ collection.scoreType }}
+          </template> -->
+            </collection-section>
           </template>
-        </collection-section>
-      </b-card>
+          <template v-else>
+            <sheet :collections="compiledCollectionData" :small="!fullscreen" />
+            <b-button @click="() => fullscreen = !fullscreen">
+              fullscreen
+            </b-button>
+          </template>
+        </b-card>
+      </fullscreen>
     </section-layout>
   </profile-layout>
 </template>
@@ -114,6 +125,7 @@ import CollectionButtonGroup from '@/components/CollectionButtonGroup'
 import SectionLayout from '@/components/sb-layouts/components/SectionLayout'
 import TopSectionLayout from '@/components/sb-layouts/components/TopSectionLayout'
 import ProfileLayout from '@/components/sb-layouts/ProfileLayout'
+import Sheet from '~/components/tournament/Sheet.vue'
 export default {
   watchQuery: ['slug'],
   components: {
@@ -121,18 +133,26 @@ export default {
     CollectionButtonGroup,
     SectionLayout,
     ProfileLayout,
-    TopSectionLayout
+    TopSectionLayout,
+    Sheet
   },
   asyncData ({ params }) {
     if (process.server) {
-      return axios.get(`http://localhost:3000/api/collectionDB/get/${params.slug}`).then((res) => {
-        return res.data
-      })
+      return axios
+        .get(`http://localhost:3000/api/collectionDB/get/${params.slug}`)
+        .then((res) => {
+          return res.data
+        })
     }
     if (process.client) {
       return axios.get(`/api/collectionDB/get/${params.slug}`).then((res) => {
         return res.data
       })
+    }
+  },
+  data () {
+    return {
+      fullscreen: false
     }
   },
   computed: {
@@ -143,10 +163,20 @@ export default {
 }
 </script>
 <style>
-.tournament{
+.tournament {
   position: absolute;
-  top: -1em;
-  right: -2em;
+  top: -0.3em;
+  right: -1em;
   transform: rotate(12deg);
+}
+</style>
+<style lang="scss">
+@media print {
+  .non-print {
+    display: none;
+  }
+  .mt--300 {
+    margin-top: 140px !important;
+  }
 }
 </style>

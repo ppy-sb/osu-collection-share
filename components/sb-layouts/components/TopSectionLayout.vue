@@ -2,7 +2,7 @@
   <div>
     <section
       :class="[floatCover ?`section-profile-cover` :``]"
-      class="section-shaped my-0"
+      class="section-shaped my-0 non-print"
     >
       <div
         :class="[`bg-${variant}`,useBootstrapColor ? '':`shape-${variant}` ]"
@@ -51,3 +51,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+@media print {
+  .non-print {
+    display: none;
+  }
+}
+</style>

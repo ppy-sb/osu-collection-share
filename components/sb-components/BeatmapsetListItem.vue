@@ -13,7 +13,7 @@
                 <!-- <a :href="banchoBeatmapLink" v-html="score.beatmap.song_name" /> -->
                 {{ songName() }}
               </h5>
-              <p v-for="(map,index) in set.maps.filter((_,index) => index < 2)" :key="(()=>`${index}-diff-${set.id}-${map.md5}`)()" class="mb-1">
+              <p v-for="(map,index) in set.maps.slice(0,2)" :key="`${index}-diff-${set.id}-${map.md5}`" class="mb-1">
                 {{ map.difficulty }}
               </p>
             </div>
@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <b-collapse :id="(()=>`collapse-${set.id}`)()">
+    <b-collapse :id="`collapse-${set.id}`">
       <b-table-simple>
         <b-tbody>
           <b-tr v-for="map in set.maps" :key="`detail-${set.id}-${map.md5}`">

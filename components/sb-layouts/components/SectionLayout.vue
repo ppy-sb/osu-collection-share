@@ -7,7 +7,7 @@
       shaped == undefined && bgVariant !== undefined ? `bg-${bgVariant}` : '',
       //last !== undefined ? '' : 'mb-0'
       //contained !== undefined  ? '' : 'mb-0'
-      sectionClass
+      ...sectionClass
     ]"
     class="section my-0"
   >
@@ -27,7 +27,7 @@
         :key="index"
       />
     </div>
-    <b-container :class="[shaped !== undefined ? '' : 'fill-shaped-pt', containerClass]">
+    <b-container :class="[shaped === undefined ? '' : 'fill-shaped-pt', containerClass]">
       <slot />
     </b-container>
   </section>
@@ -60,8 +60,8 @@ export default {
       default: undefined
     },
     sectionClass: {
-      type: String,
-      default: undefined
+      type: Array,
+      default: () => []
     },
     containerClass: {
       type: String,

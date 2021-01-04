@@ -1,7 +1,7 @@
 <template>
   <div>
     <section-layout
-      section-class="section-lg"
+      :section-class="['section-lg']"
       shaped
       bg-variant="dark"
     >

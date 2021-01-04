@@ -19,7 +19,12 @@
             label-for="collectionName"
             :description="notices.describeSlug"
           >
-            <b-form-input id="collectionName" v-model="collection.name" :placeholder="$t('upload.form.placeholder.myCollection')" debounce="300" />
+            <b-form-input
+              id="collectionName"
+              v-model.lazy.trim="collection.name"
+              :placeholder="$t('upload.form.placeholder.myCollection')"
+              debounce="300"
+            />
           </b-form-group>
           <b-form-group
             label-cols-sm="3"
@@ -58,17 +63,17 @@
           >
             <b-form-textarea
               id="description"
-              v-model="collection.description"
+              v-model.lazy.trim="collection.description"
               :placeholder="$t('upload.form.placeholder.descriptionPlaceholder')"
               rows="3"
               max-rows="6"
             />
           </b-form-group>
           <b-button-group>
-            <b-button :variant="osuCollectionData ? 'success' : 'primary'" @click="readData">
+            <b-button :variant="osuCollectionDataStat ? 'success' : 'primary'" @click="readData">
               {{ $t('upload.parse') }}
             </b-button>
-            <b-button v-if="osuCollectionData" :variant="compiledCollectionData.length ? 'success' : 'primary'" @click="compileData">
+            <b-button v-if="osuCollectionDataStat" :variant="compiledCollectionData.length ? 'success' : 'primary'" @click="compileData">
               {{ $t('upload.compile') }}
             </b-button>
             <b-button v-if="compiledCollectionData.length" variant="primary" @click="upload">
@@ -110,7 +115,7 @@
                 </b-button>
               </b-button-group>
             </b-button-toolbar>
-            <div v-if="uploadResult">
+            <template v-if="uploadResult">
               <b-card-title>
                 {{ $t('upload.done') }}
               </b-card-title>
@@ -119,7 +124,7 @@
                   {{ $t('upload.collectionLink') }}
                 </nuxt-link>
               </b-card-text>
-            </div>
+            </template>
           </b-card-text>
         </b-card-body>
         <collection-section
@@ -269,13 +274,16 @@ export default {
       collectionDBBuffer: undefined,
       osuDB: undefined,
       osuDBBuffer: undefined,
-      osuCollectionData: undefined,
-      osuDBData: undefined,
+      osuCollectionDataStat: false,
+      // osuCollectionData: undefined,
+      // osuDBData: undefined,
       uploadResult: undefined,
       onlyShowUploading: false,
       isTournamentPool: false
     }
   },
+  osuCollectionData: undefined,
+  osuDBData: undefined,
   computed: {
     uploadingCollections () {
       return this.compiledCollectionData.filter(collection => collection.upload)
@@ -329,17 +337,18 @@ export default {
       const { osuDBData, osuCollectionData } = await resultPromise
       worker.terminate()
 
-      this.osuDBData = osuDBData
-      this.osuCollectionData = osuCollectionData
-      this.username = this.osuDBData.username
+      this.$options.osuDBData = osuDBData
+      this.$options.osuCollectionData = osuCollectionData
+      this.osuCollectionDataStat = Boolean(osuDBData)
+      this.username = this.$options.osuDBData.username
 
-      if (this.collection.name === '') { this.collection.name = `${this.osuDBData.username}'s collection` }
+      if (this.collection.name === '') { this.collection.name = `${this.$options.osuDBData.username}'s collection` }
       this.onJob = false
     },
 
     async compileData () {
       this.onJob = true
-      this.compiledCollectionData = await this.$worker.run((osuDBData, osuCollectionData) => {
+      const compiledCollectionData = this.$worker.run((osuDBData, osuCollectionData) => {
         function setIdGuessFromFolderName (name) {
           name = name.split(' ')
           if (!Number.isInteger(parseInt(name[0]))) { return null }
@@ -348,14 +357,15 @@ export default {
         }
 
         function mapListToMapsetList (mapset) {
-          return mapset.reduce((acc, beatmap) => {
+          const result = mapset.reduce((acc, beatmap) => {
             if (beatmap.unknown) {
               console.log('unknown beatmap', beatmap.md5)
               return acc
             }
-            let set = acc.find((set) => {
-              if (beatmap.beatmapset_id !== -1) { return set.id === beatmap.beatmapset_id } else { return set.folderName === beatmap.folder_name }
-            })
+            // let set = acc.find((set) => {
+            //   if (beatmap.beatmapset_id !== -1) { return set.id === beatmap.beatmapset_id } else { return set.folderName === beatmap.folder_name }
+            // })
+            let set = acc.get(beatmap.beatmapset_id) || acc.get(beatmap.folder_name) || undefined
             // if (set) { set.maps.push(beatmap) }
             if (!set) {
               set = {
@@ -372,18 +382,21 @@ export default {
                 thread: beatmap.thread_id,
                 maps: []
               }
-              acc.push(set)
+              if (beatmap.beatmapset_id && beatmap.beatmapset_id > 0) { acc.set(beatmap.beatmapset_id, set) } else { acc.set(beatmap.folder_name, set) }
             }
             set.maps.push(beatmap)
             return acc
-          }, [])
+          }, new Map())
+          return Array.from(result.values())
         }
+
+        const beatmapsMap = new Map(osuDBData.beatmaps.map(beatmap => [beatmap.md5, beatmap]))
 
         const collections = osuCollectionData.collection.map((collection) => {
           return {
             name: collection.name,
             id: collection.name.split(' ').join('-'),
-            maps: collection.beatmapsMd5.map(md5 => osuDBData.beatmaps.find(beatmap => beatmap.md5 === md5) || { md5, unknown: true })
+            maps: collection.beatmapsMd5.map(md5 => beatmapsMap.get(md5) || { md5, unknown: true })
           }
         }).filter(collection => collection.maps.length)
 
@@ -397,7 +410,10 @@ export default {
             upload: true
           }
         })
-      }, [this.osuDBData, this.osuCollectionData])
+      }, [this.$options.osuDBData, this.$options.osuCollectionData])
+      this.$options.osuDBData = undefined
+      this.$options.osuCollectionData = undefined
+      this.compiledCollectionData = await compiledCollectionData
       this.onJob = false
     },
     upload () {
