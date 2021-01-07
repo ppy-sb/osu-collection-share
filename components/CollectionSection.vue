@@ -44,7 +44,7 @@
               </template>
             </b-list-group>
           </keep-alive>
-          <base-pagination v-model="currentPage" align="center" :per-page="perPage" :total="collection.mapsets.length" />
+          <base-pagination v-model="currentPage" align="center" :per-page="perPage" :total="collection.mapsets.length" class="pt-2" />
         </template>
 
         <b-table-simple
@@ -112,7 +112,6 @@
             <b-tr>
               <b-td colspan="7" variant="secondary">
                 <base-pagination v-model="currentPage" align="center" :per-page="perPage" :total="collection.mapsets.length" />
-                <!-- Total Rows: <b>5</b> -->
               </b-td>
             </b-tr>
           </b-tfoot>
