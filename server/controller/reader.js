@@ -17,20 +17,19 @@ class CollectionReader {
     this.collectionDB = collectionDB
 
     const user = await User.findOne(collectionDB.user).exec().then(doc => doc.toObject()).catch(_err => null)
-    const collections = await CollectionSet.find({ collectionDB: { _id: collectionDB._id } }).exec().then(docs => docs.map(doc => doc.toObject())).catch(_err => null)
+    const collections = await CollectionSet.find({ collectionDB: { _id: collectionDB._id } }).exec().then(docs => docs.map(doc => doc.toObject())).catch(_err => console.warn)
+    collections.map((c) => { c.maps = [] })
     const allCollectionMaps = await CollectionBeatmap.find({ collectionDB: { _id: collectionDB._id } }).exec().then(docs => docs.map(doc => doc.toObject())).catch(_err => null)
     const allBeatmaps = await this.docCollectionBeatmapToMap(allCollectionMaps)
-    const collectionResult = allCollectionMaps.reduce((acc, map, index) => {
+    allCollectionMaps.map((map, index) => {
       const beatmap = allBeatmaps.find(beatmap => beatmap._id.toString() === map.beatmap._id.toString())
-      const collection = acc.find(what => what._id.toString() === map.collectionSet._id.toString())
-      if (!collection.maps) { collection.maps = [] }
+      const collection = collections.find(what => what._id.toString() === map.collectionSet._id.toString())
       if (!beatmap) { console.log(map) }
       beatmap.index = map.index
       beatmap.localOffset = map.localOffset
       collection.maps.push(beatmap)
-      return acc
-    }, collections)
-    const compiledCollectionData = collectionResult.map((collection) => {
+    })
+    const compiledCollectionData = collections.map((collection) => {
       return {
         name: collection.name,
         _id: collection._id,
