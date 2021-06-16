@@ -1,7 +1,11 @@
 <template>
-  <b-card no-body :name="collection.slug">
-    <b-card-header header-tag="header" class="p-1" role="tab">
-      <b-button v-b-toggle="collection.slug" block :variant="titleButtonVariant">
+  <b-card no-body :name="collection.slug" class="my-2 border-0 shadow">
+    <b-card-header header-tag="header" class="rounded p-0" role="tab">
+      <b-button
+        v-b-toggle="collection.slug"
+        block
+        :variant="titleButtonVariant"
+      >
         <slot name="title">
           {{ collection.name }}
         </slot>
@@ -12,22 +16,20 @@
         <b-card-body class="py-2">
           <b-button-toolbar justify>
             <b-button-group size="sm" class="flex-wrap">
-              <b-button variant="primary" @click="() =>collectionSetIds()">
-                {{ $t('collectionCard.copySetIds') }}
+              <b-button variant="primary" @click="() => collectionSetIds()">
+                {{ $t("collectionCard.copySetIds") }}
               </b-button>
-              <b-button variant="info" @click="() =>collectionSetLinks()">
-                {{ $t('collectionCard.copySetLinks') }}
+              <b-button variant="info" @click="() => collectionSetLinks()">
+                {{ $t("collectionCard.copySetLinks") }}
               </b-button>
-              <b-button variant="warning" @click="() =>collectionBeatmapIds()">
-                {{ $t('collectionCard.copyBeatmapIds') }}
+              <b-button variant="warning" @click="() => collectionBeatmapIds()">
+                {{ $t("collectionCard.copyBeatmapIds") }}
               </b-button>
-              <b-button variant="danger" @click="() =>collectionBeatmapLinks()">
-                {{ $t('collectionCard.copyBeatmapLinks') }}
-              </b-button>
-            </b-button-group>
-            <b-button-group size="sm">
-              <b-button variant="dark" @click="() =>copySomething(JSON.stringify(collection))">
-                copy as JSON Format
+              <b-button
+                variant="danger"
+                @click="() => collectionBeatmapLinks()"
+              >
+                {{ $t("collectionCard.copyBeatmapLinks") }}
               </b-button>
             </b-button-group>
           </b-button-toolbar>
@@ -39,12 +41,27 @@
             <b-list-group>
               <template v-for="(set, index) of collection.mapsets">
                 <keep-alive :key="`${collection.name}-${set.id}`">
-                  <beatmapset-list-item v-if="index >= (currentPage - 1) * 10 && index < currentPage * 10" :key="`${collection.name}-${set.id}`" :set="set" class="border-right-0 border-left-0" />
+                  <beatmapset-list-item
+                    v-if="
+                      index >= (currentPage - 1) * perPage &&
+                        index < currentPage * perPage
+                    "
+                    :key="`${collection.name}-${set.id}`"
+                    :set="set"
+                    class="border-right-0 border-left-0"
+                  />
                 </keep-alive>
               </template>
             </b-list-group>
           </keep-alive>
-          <base-pagination v-model="currentPage" align="center" :per-page="perPage" :total="collection.mapsets.length" class="pt-2" />
+          <base-pagination
+            v-if="collection.mapsets.length > perPage"
+            v-model="currentPage"
+            align="center"
+            :per-page="perPage"
+            :total="collection.mapsets.length"
+            class="pt-2"
+          />
         </template>
 
         <b-table-simple
@@ -58,20 +75,36 @@
         >
           <tournament-head />
           <b-tbody>
-            <template v-for="(set, setIndex) of collection.mapsets.slice((currentPage - 1) * 10, currentPage * 10)">
+            <template
+              v-for="(set, setIndex) of collection.mapsets.slice(
+                (currentPage - 1) * perPage,
+                currentPage * perPage
+              )"
+            >
               <b-tr
                 v-for="(map, mapIndex) in set.maps"
                 :key="`collapse-${set.id}-${map.md5}`"
                 :style="`--var-bg: url('https://assets.ppy.sh/beatmaps/${set.id}/covers/cover@2x.jpg')`"
               >
-                <b-td :variant="edit ? map.indexStatus ? 'success' : 'danger' : ''">
+                <b-td
+                  :variant="
+                    edit ? (map.indexStatus ? 'success' : 'danger') : ''
+                  "
+                >
                   <b-form-input
                     v-if="edit"
                     size="sm"
-                    style="width:50px"
+                    style="width: 50px"
                     type="number"
                     :value="map.index"
-                    @change="(value) => $emit('updateIndex',{ setIndex: setIndex + (currentPage - 1) * 10, mapIndex, value })"
+                    @change="
+                      (value) =>
+                        $emit('updateIndex', {
+                          setIndex: setIndex + (currentPage - 1) * perPage,
+                          mapIndex,
+                          value,
+                        })
+                    "
                   />
                   <template v-else>
                     {{ map.index }}
@@ -88,7 +121,7 @@
                   <a :href="beatmapLink(map)">{{ map.difficulty }}</a>
                 </b-th>
                 <b-td class="text-right">
-                  {{ map.beatmap_id > 0 ? map.beatmap_id : 'unsubmitted' }}
+                  {{ map.beatmap_id > 0 ? map.beatmap_id : "unsubmitted" }}
                 </b-td>
                 <b-td class="text-right">
                   ★{{ difficultyFromMods(map, collection.mod) }}
@@ -111,7 +144,12 @@
           <b-tfoot v-if="collection.mapsets.length > perPage">
             <b-tr>
               <b-td colspan="7" variant="secondary">
-                <base-pagination v-model="currentPage" align="center" :per-page="perPage" :total="collection.mapsets.length" />
+                <base-pagination
+                  v-model="currentPage"
+                  align="center"
+                  :per-page="perPage"
+                  :total="collection.mapsets.length"
+                />
               </b-td>
             </b-tr>
           </b-tfoot>
@@ -209,14 +247,16 @@ export default {
 </script>
 <style>
 table.table-fit {
-    width: auto !important;
-    table-layout: auto !important;
+  width: auto !important;
+  table-layout: auto !important;
 }
-table.table-fit thead th, table.table-fit tfoot th {
-    width: auto !important;
+table.table-fit thead th,
+table.table-fit tfoot th {
+  width: auto !important;
 }
-table.table-fit tbody td, table.table-fit tfoot td {
-    width: auto !important;
+table.table-fit tbody td,
+table.table-fit tfoot td {
+  width: auto !important;
 }
 </style>
 <style lang="scss" scoped>
@@ -226,7 +266,7 @@ table.table-fit tbody td, table.table-fit tfoot td {
   z-index: 1;
 
   &::before {
-    content: '';
+    content: "";
     background-image: var(--var-bg);
     position: absolute;
     left: 0;
@@ -234,7 +274,12 @@ table.table-fit tbody td, table.table-fit tfoot td {
     right: 0;
     bottom: 0;
     // opacity: 0.2;
-    mask-image: linear-gradient(to right, rgba(0,0,0,0.46), rgba(0,0,0,0.1) 40%, rgba(0,0,0,0));
+    mask-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.46),
+      rgba(0, 0, 0, 0.1) 40%,
+      rgba(0, 0, 0, 0)
+    );
     z-index: -1;
   }
 }

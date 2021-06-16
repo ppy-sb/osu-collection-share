@@ -1,7 +1,7 @@
 {
   "collectionCard": {
     "beatmapLink": "/b/ link",
-    "beatmapSetPage": "beatmapset page",
+    "beatmapSetPage": "to beatmapset",
     "beatmapStatic": "beatmap static",
     "copyBeatmapIds": "copy all map's id",
     "copyBeatmapLinks": "copy all map's link",
@@ -60,6 +60,6 @@
     "copySummary": "copy collection summary",
     "generateCollectionDB": "generate collection.db",
     "somethingWentWrong": "or something went (pretty badly) wrong!",
-    "summaryAsText": "summary as text file (sayo compatible)"
+    "summaryAsText": "summary as text file"
   }
 }

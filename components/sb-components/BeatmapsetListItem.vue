@@ -1,96 +1,70 @@
 <template>
-  <b-list-group-item>
+  <b-list-group-item v-b-hover="(hover) => visible = hover">
     <div class="d-flex w-100 justify-content-between align-items-stretch">
-      <div class="d-flex">
-        <lazy-image
-          :src="smallPreviewImgSrc"
-          class="align-top mr-2 hide-when-too-small bp-img"
-        />
-        <div class="align-top">
-          <div class="d-flex">
-            <div class="d-inline-block">
-              <h5 class="mb-1">
-                <!-- <a :href="banchoBeatmapLink" v-html="score.beatmap.song_name" /> -->
-                {{ songName() }}
-              </h5>
-              <p v-for="(map,index) in set.maps.slice(0,2)" :key="`${index}-diff-${set.id}-${map.md5}`" class="mb-1">
+      <div class="d-flex flex-grow-1">
+        <div class="d-flex flex-column justify-content-center mr-2">
+          <lazy-image
+            :src="smallPreviewImgSrc"
+            class="hide-when-too-small bp-img"
+          />
+          <b-button
+            variant="light"
+            :href="beatmapSetLink"
+            target="_blank"
+            size="sm"
+            class="mt-2"
+            :disabled="set.id <= 0"
+          >
+            {{ $t('collectionCard.beatmapSetPage') }}
+          </b-button>
+        </div>
+        <div class="align-top d-flex-column flex-grow-1">
+          <div class="d-flex mb-1">
+            <h5>
+              <!-- <a :href="banchoBeatmapLink" v-html="score.beatmap.song_name" /> -->
+              {{ songName() }}
+            </h5>
+            <small class="float-right ml-auto text-nowrap">
+              {{ $t('collectionCard.setId') }} {{ set.id }}
+            </small>
+          </div>
+          <div class="d-block">
+            <b-collapse :visible="!visible" class="mx-1">
+              <p v-for="(map) in set.maps" :key="`-diff-${set.id}-${map.md5}`" class="mb-1">
                 {{ map.difficulty }}
               </p>
-            </div>
+            </b-collapse>
+            <b-collapse v-model="visible" class="mx-1">
+              <div
+                v-for="(map,index) in set.maps"
+                :key="`detail-${set.id}-${map.md5}`"
+                class="my-1"
+              >
+                <b-button v-b-toggle="`accordion-detail-${set.id}-${map.md5}`" block variant="info" size="sm" class="text-left">
+                  {{ map.difficulty }}
+                </b-button>
+                <b-collapse :id="`accordion-detail-${set.id}-${map.md5}`" :accordion="`accordion-detail-${set.id}`" :visible="bmstatistics[index]">
+                  <div>
+                    AR: {{ map.approach_rate.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                    CS: {{ map.circle_size.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                    HP: {{ map.hp_drain.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                    OD: {{ map.overall_difficulty.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                  </div>
+                  <div v-if="map.mode === 0">
+                    star rating:
+                    NM: {{ map.star_rating_standard[0].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                    HR: {{ map.star_rating_standard[16].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                    DT: {{ map.star_rating_standard[64].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                    DTHR: {{ map.star_rating_standard[80].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                  </div>
+                </b-collapse>
+              </div>
+            </b-collapse>
           </div>
-          <small v-if="set.maps.length > 2">{{ set.maps.length - 2 }} {{ $t('collectionCard.otherDiffs') }}</small>
-        </div>
-      </div>
-      <div class="d-flex align-items-end flex-column">
-        <div class="align-top">
-          <small
-            class="float-right text-right text-nowrap"
-          >{{ $t('collectionCard.setId') }} {{ set.id }}</small>
-          <br>
-          <p
-            class="float-right text-right mb-0 text-nowrap"
-          >
-            <span>{{ set.maps.length }}</span> {{ $t("collectionCard.mapCount") }}
-          </p>
-        </div>
-        <div class="mt-auto">
-          <h4 class="mb-0 float-right text-right text-nowrap">
-            <b-button-group size="sm" class="mb-1">
-              <b-button v-b-toggle="`collapse-${set.id}`" variant="primary">
-                {{ $t('collectionCard.more') }}
-              </b-button>
-              <b-button variant="light" :href="beatmapSetLink" target="_blank">
-                {{ $t('collectionCard.beatmapSetPage') }}
-              </b-button>
-            </b-button-group>
-          </h4>
         </div>
       </div>
     </div>
-    <b-collapse :id="`collapse-${set.id}`">
-      <b-table-simple>
-        <b-tbody>
-          <b-tr v-for="map in set.maps" :key="`detail-${set.id}-${map.md5}`">
-            <b-th>{{ map.difficulty }}</b-th>
-            <b-td>
-              <b-button-group size="sm">
-                <b-button variant="light" :href="thread(map)" target="_blank">
-                  {{ $t('collectionCard.thread') }}
-                </b-button>
-                <b-button variant="success" :href="beatmapLink(map)" target="_blank">
-                  {{ $t('collectionCard.beatmapLink') }}
-                </b-button>
-                <b-button v-b-toggle="`collapse-${set.id}-${map.md5}`">
-                  {{ $t('collectionCard.beatmapStatic') }}
-                </b-button>
-              </b-button-group>
-              <b-collapse :id="(()=>`collapse-${set.id}-${map.md5}`)()" :key="`collaspe-${set.id}-${map.md5}`">
-                <div>
-                  AR: {{ map.approach_rate.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
-                  CS: {{ map.circle_size.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
-                  HP: {{ map.hp_drain.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
-                  OD: {{ map.overall_difficulty.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
-                </div>
-
-                <div v-if="map.mode === 0">
-                  star rating:<br>
-                  NM: {{ map.star_rating_standard[0].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
-                  HR: {{ map.star_rating_standard[16].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
-                  DT: {{ map.star_rating_standard[64].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
-                  DTHR: {{ map.star_rating_standard[80].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
-                </div>
-              </b-collapse>
-            </b-td>
-          </b-tr>
-        </b-tbody>
-      </b-table-simple>
-    </b-collapse>
   </b-list-group-item>
-  <!-- <b-list-group-item v-else class="rounded-0">
-    <b-list-group-item v-for="(map) in set.maps" :key="`collapse-${set.id}-${map.md5}`">
-      {{ map.difficulty }}
-    </b-list-group-item>
-  </b-list-group-item> -->
 </template>
 <script>
 // const moment = require("moment");
@@ -118,6 +92,12 @@ export default {
       })
     }
   },
+  data () {
+    return {
+      visible: false,
+      bmstatistics: this.set.maps.map(m => false)
+    }
+  },
   computed: {
     beatmapSetLink () {
       return `https://osu.ppy.sh/s/${this.set.id}`
@@ -139,6 +119,9 @@ export default {
     },
     beatmapLink (map) {
       return `https://osu.ppy.sh/b/${map.beatmap_id}`
+    },
+    hoverBeatmap (index, hover) {
+      this.$set(this.bmstatistics, index, hover)
     }
   }
 }

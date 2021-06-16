@@ -1,7 +1,7 @@
 <template>
   <b-button-toolbar>
     <b-button-group size="sm" class="flex-wrap">
-      <b-button variant="primary" @click="copyCollectionSummary">
+      <!-- <b-button variant="primary" @click="copyCollectionSummary">
         {{ $t('viewer.copySummary') }}
       </b-button>
       <b-button
@@ -10,9 +10,28 @@
       >
         {{ $t('viewer.summaryAsText') }}
       </b-button>
+       -->
       <b-button variant="success" @click="saveCollectionDB">
         {{ $t('viewer.generateCollectionDB') }}
       </b-button>
+      <b-dropdown id="collection-download-dropdown" text="Sayobot" size="sm" variant="primary">
+        <b-dropdown-item @click="copyCollectionSummary">
+          {{ $t('viewer.copySummary') }}
+        </b-dropdown-item>
+        <b-dropdown-item
+          @click="saveCollectionSummary"
+        >
+          {{ $t('viewer.summaryAsText') }}
+        </b-dropdown-item>
+        <!-- <b-dropdown-item>Third Action</b-dropdown-item>
+        <b-dropdown-divider />
+        <b-dropdown-item active>
+          Active action
+        </b-dropdown-item>
+        <b-dropdown-item disabled>
+          Disabled action
+        </b-dropdown-item> -->
+      </b-dropdown>
     </b-button-group>
   </b-button-toolbar>
 </template>

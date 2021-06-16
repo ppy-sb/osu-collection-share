@@ -92,27 +92,23 @@
       last
     >
       <fullscreen :fullscreen.sync="fullscreen">
-        <b-card class="shadow border-0" no-body>
-          <template v-if="!collectionDB.tournament">
-            <collection-section
-              v-for="collection of compiledCollectionData"
-              :key="`collection-${collection.slug}`"
-              style="border: 0"
-              :collection="collection"
-              :tournament="collectionDB.tournament"
-            >
-            <!-- <template v-if="collectionDB.tournament" #title>
-            {{ collection.name }} | Mods Enabled: {{ collection.mod.join(', ') }} | Scoring: {{ collection.scoreType }}
-          </template> -->
-            </collection-section>
-          </template>
-          <template v-else>
+        <template v-if="!collectionDB.tournament">
+          <collection-section
+            v-for="collection of compiledCollectionData"
+            :key="`collection-${collection.slug}`"
+            style="border: 0"
+            :collection="collection"
+            :tournament="collectionDB.tournament"
+          />
+        </template>
+        <template v-else>
+          <b-card class="shadow border-0 overflow-hidden" no-body>
             <sheet :collections="compiledCollectionData" :small="!fullscreen" />
-            <b-button @click="() => fullscreen = !fullscreen">
+            <b-button variant="light" squared @click="() => fullscreen = !fullscreen">
               fullscreen
             </b-button>
-          </template>
-        </b-card>
+          </b-card>
+        </template>
       </fullscreen>
     </section-layout>
   </profile-layout>
