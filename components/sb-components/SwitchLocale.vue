@@ -95,16 +95,28 @@ export default {
     BaseDropdown
   },
   created () {
-    this.setLocale()
+    let l
+    if (localStorage) {
+      l = localStorage.getItem('locale')
+    }
+    this.switchLocale(l)
   },
   methods: {
     switchLocale (locale) {
-      // this.log(locale, "locale");
+      if (!locale) { return }
+      if (localStorage) {
+        locale = locale || localStorage.getItem('locale')
+      }
+      console.log(locale, 'locale')
       this.$root.locale = locale
       this.setLocale()
     },
     setLocale () {
+      if (!this.$root.locale) { return }
       this.$root.$i18n.locale = this.$root.locale
+      if (localStorage) {
+        localStorage.setItem('locale', this.$root.locale)
+      }
     }
   }
 }

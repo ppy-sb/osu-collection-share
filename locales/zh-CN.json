@@ -29,8 +29,9 @@
   "upload": {
     "collectionLink": "收藏夹链接",
     "compile": "生成",
-    "disclaimer": "我们需要您提供 osu.db，只是为了提取 collection.db 中的谱面信息，它并不会被上传！因此我们可能会收集一些数据来改善其他玩家的体验，例如您的本地 offset",
+    "disclaimer": "我们需要您提供 osu.db，只是为了提取 collection.db 中的谱面信息，它并不会被上传！因此我们可能会收集一些数据来改善其他玩家的体验，例如您的本地 offset.<hr class=\"my-2\">步骤:<br>1. 选择 osu.db 和 collections.db<br>2. 按 '读取数据库'<br>3. 所有项目填好后按 '准备数据'<br>4. 选择想要上传的收藏夹<br>(收藏夹名为绿色的会上传)<br>5. 按 '上传'. 上传完成后你会看到链接.<hr class=\"my-2\">取决于你的收藏夹的大小，上传可能需要一些时间。",
     "done": "完成",
+    "restart": "重新开始（任何你输入的数据都会被重置）",
     "form": {
       "label": {
         "collectionDB": "collection.db:",

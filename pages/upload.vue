@@ -8,79 +8,122 @@
         opacity="0.6"
         spinner-variant="primary"
       >
-        <card shadow class="card-profile mt--300">
-          <b-card-text>
+        <b-card no-body class="shadow card-profile mt--300">
+          <h1 class="text-right pr-2 m-0">
+            <i v-b-popover.hover.focus.rightbottom.html="$t('upload.disclaimer')" class="fa fa-question-circle" />
+          </h1>
+          <!-- <b-card-text
             {{ $t('upload.disclaimer') }}
-          </b-card-text>
-          <b-form-group
-            label-cols-sm="3"
-            :label="$t('upload.form.label.collectionName')"
-            label-align-sm="right"
-            label-for="collectionName"
-            :description="notices.describeSlug"
-          >
-            <b-form-input
-              id="collectionName"
-              v-model.lazy.trim="collection.name"
-              :placeholder="$t('upload.form.placeholder.myCollection')"
-              debounce="300"
-            />
-          </b-form-group>
-          <b-form-group
-            label-cols-sm="3"
-            :label="$t('upload.form.label.collectionDB')"
-            label-align-sm="right"
-            label-for="collectionDB"
-          >
-            <b-form-file
-              id="collectionDB"
-              v-model="collectionDB"
-              :state="Boolean(collectionDB)"
-              :placeholder="$t('upload.form.placeholder.collectionDB')"
-              :drop-placeholder="$t('upload.form.placeholder.dropFile')"
-              :description="collectionDB"
-            />
-          </b-form-group>
-          <b-form-group
-            label-cols-sm="3"
-            label="osu.db:"
-            label-align-sm="right"
-            label-for="osuDB"
-          >
-            <b-form-file
-              id="osuDB"
-              v-model="osuDB"
-              :state="Boolean(osuDB)"
-              :placeholder="$t('upload.form.placeholder.osuDB')"
-              :drop-placeholder="$t('upload.form.placeholder.dropFile')"
-            />
-          </b-form-group>
-          <b-form-group
-            label-cols-sm="3"
-            :label="$t('upload.form.label.collectionDescription')"
-            label-align-sm="right"
-            label-for="description"
-          >
-            <b-form-textarea
-              id="description"
-              v-model.lazy.trim="collection.description"
-              :placeholder="$t('upload.form.placeholder.descriptionPlaceholder')"
-              rows="3"
-              max-rows="6"
-            />
-          </b-form-group>
-          <b-button-group>
-            <b-button :variant="osuCollectionDataStat ? 'success' : 'primary'" @click="readData">
-              {{ $t('upload.parse') }}
-            </b-button>
-            <b-button v-if="osuCollectionDataStat" :variant="compiledCollectionData.length ? 'success' : 'primary'" @click="compileData">
-              {{ $t('upload.compile') }}
-            </b-button>
-            <b-button v-if="compiledCollectionData.length" variant="primary" @click="upload">
-              {{ $t('upload.upload') }}
-            </b-button>
-          </b-button-group>
-        </card>
+          </b-card-text> -->
+          <b-card-body>
+            <b-collapse :visible="!osuCollectionDataStat">
+              <b-form-group
+                label-cols-sm="3"
+                :label="$t('upload.form.label.collectionDB')"
+                label-align-sm="right"
+                label-for="collectionDB"
+              >
+                <b-form-file
+                  id="collectionDB"
+                  v-model="collectionDB"
+                  :state="Boolean(collectionDB)"
+                  :placeholder="$t('upload.form.placeholder.collectionDB')"
+                  :drop-placeholder="$t('upload.form.placeholder.dropFile')"
+                  :description="collectionDB"
+                />
+              </b-form-group>
+              <b-form-group
+                label-cols-sm="3"
+                label="osu.db:"
+                label-align-sm="right"
+                label-for="osuDB"
+              >
+                <b-form-file
+                  id="osuDB"
+                  v-model="osuDB"
+                  :state="Boolean(osuDB)"
+                  :placeholder="$t('upload.form.placeholder.osuDB')"
+                  :drop-placeholder="$t('upload.form.placeholder.dropFile')"
+                />
+              </b-form-group>
+            </b-collapse>
+            <b-form-group
+              label-cols-sm="3"
+              :label="$t('upload.form.label.collectionName')"
+              label-align-sm="right"
+              label-for="collectionName"
+              :description="notices.describeSlug"
+            >
+              <b-form-input
+                id="collectionName"
+                v-model.lazy.trim="collection.name"
+                :placeholder="$t('upload.form.placeholder.myCollection')"
+                debounce="300"
+              />
+            </b-form-group>
+            <b-form-group
+              label-cols-sm="3"
+              :label="$t('upload.form.label.username')"
+              label-align-sm="right"
+              label-for="collectionName"
+            >
+              <b-form-input
+                id="collectionName"
+                v-model.lazy.trim="username"
+                :placeholder="$t('upload.form.placeholder.username')"
+                debounce="300"
+              />
+            </b-form-group>
+            <b-form-group
+              label-cols-sm="3"
+              :label="$t('upload.form.label.urlForUsername')"
+              label-align-sm="right"
+              label-for="collectionName"
+            >
+              <b-form-input
+                id="collectionName"
+                v-model.lazy.trim="hyperlink"
+                :placeholder="$t('upload.form.placeholder.defaultLink') + username"
+                debounce="300"
+              />
+            </b-form-group>
+            <b-form-group
+              label-cols-sm="3"
+              :label="$t('upload.form.label.collectionDescription')"
+              label-align-sm="right"
+              label-for="description"
+            >
+              <b-form-textarea
+                id="description"
+                v-model.lazy.trim="collection.description"
+                :placeholder="$t('upload.form.placeholder.descriptionPlaceholder')"
+                rows="3"
+                max-rows="6"
+              />
+            </b-form-group>
+            <b-card-text>
+              {{ complaint }}
+            </b-card-text>
+            <div class="d-flex">
+              <b-button-group>
+                <b-button :variant="osuCollectionDataStat ? 'success' : 'primary'" @click="readData">
+                  {{ $t('upload.parse') }}
+                </b-button>
+                <b-button v-if="osuCollectionDataStat" :variant="compiledCollectionData.length ? 'success' : 'primary'" @click="compileData">
+                  {{ $t('upload.compile') }}
+                </b-button>
+                <b-button v-if="compiledCollectionData.length" variant="primary" @click="upload">
+                  {{ $t('upload.upload') }}
+                </b-button>
+              </b-button-group>
+              <b-button-group class="ml-auto">
+                <b-button variant="warning" @click="reset">
+                  {{ $t('upload.restart') }}
+                </b-button>
+              </b-button-group>
+            </div>
+          </b-card-body>
+        </b-card>
       </b-overlay>
     </top-section-layout>
     <section-layout
@@ -241,7 +284,9 @@ export default {
   },
   data () {
     return {
+      complaint: '',
       username: 'Unknown',
+      hyperlink: undefined,
       onJob: false,
       collection: {
         name: '',
@@ -294,11 +339,12 @@ export default {
       const result = await this.convSlugApi(newVal)
       if (result.sameCollectionDBExists) {
         this.collection.slug = result.nextAvailable
-        this.notices.describeSlug = `will be created as ${this.collection.slug}`
+        // this.notices.describeSlug = `your link will be /${this.collection.slug}`
       } else {
         this.collection.slug = result.slug
-        this.notices.describeSlug = this.collection.slug
+        // this.notices.describeSlug = this.collection.slug
       }
+      this.notices.describeSlug = `collection's link will be /${this.collection.slug}`
     },
     async collectionDB (file) {
       this.collectionDBBuffer = await this.readUploadedFileAsBuffer(file)
@@ -323,9 +369,16 @@ export default {
         temporaryFileReader.readAsArrayBuffer(inputFile)
       })
     },
+    reset () {
+      location.reload()
+    },
     async readData () {
       this.onJob = true
-      if (!this.osuDBBuffer || !this.collectionDBBuffer) { return console.log('sth went wrong') }
+      if (!this.osuDBBuffer || !this.collectionDBBuffer) {
+        this.onJob = false
+        this.complaint = 'Please select osu.db and collections.db before parse'
+        return console.log('sth went wrong')
+      }
 
       // const { osuDBData, osuCollectionData } =
       const worker = new OsuDBParserWorker()
@@ -341,6 +394,7 @@ export default {
       this.$options.osuCollectionData = osuCollectionData
       this.osuCollectionDataStat = Boolean(osuDBData)
       this.username = this.$options.osuDBData.username
+      if (!this.hyperlink) { this.hyperlink = `https://osu.ppy.sh/users/${this.username}` }
 
       if (this.collection.name === '') { this.collection.name = `${this.$options.osuDBData.username}'s collection` }
       this.onJob = false

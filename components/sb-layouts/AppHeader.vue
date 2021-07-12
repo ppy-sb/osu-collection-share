@@ -68,7 +68,9 @@
             <span class="nav-link-inner--text d-lg-none">Facebook</span>
           </a>
         </li> -->
-        <switch-locale />
+        <client-only>
+          <switch-locale />
+        </client-only>
 
         <!-- <li class="nav-item">
                     <a class="nav-link nav-link-icon" href="https://www.instagram.com/creativetimofficial"
