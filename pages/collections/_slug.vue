@@ -6,7 +6,7 @@
           <div class="row justify-content-center">
             <div class="col-lg-3 order-lg-2">
               <div class="card-profile-image">
-                <a :href="`https://osu.ppy.sh/users/${user.name}`">
+                <a :href="collectionDB.uploaderLink || `https://osu.ppy.sh/users/${user.name}`">
                   <img v-lazy="avatarSrc" class="rounded-circle">
                 </a>
               </div>
@@ -46,7 +46,7 @@
             <div class="h6 font-weight-300">
               {{ $t("user.uploadedBy") }}
               <i>
-                <a :href="`https://osu.ppy.sh/users/${user.name}`">{{
+                <a :href="collectionDB.uploaderLink || `https://osu.ppy.sh/users/${user.name}`">{{
                   user.name
                 }}</a>
               </i>

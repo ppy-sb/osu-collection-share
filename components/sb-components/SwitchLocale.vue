@@ -26,7 +26,7 @@
         class="mr-1"
       />中文(中国)
     </a>
-    <a
+    <!-- <a
       class="dropdown-item"
       href="#"
       @click.prevent="switchLocale('zh-TW')"
@@ -37,7 +37,7 @@
         icon-path="/assets/flags"
         class="mr-1"
       />中文(台灣)
-    </a>
+    </a> -->
     <a
       class="dropdown-item"
       href="#"
@@ -62,7 +62,7 @@
         class="mr-1"
       />English(US)
     </a>
-    <a
+    <!-- <a
       href="#"
       class="dropdown-item"
       @click.prevent="switchLocale('ko')"
@@ -85,7 +85,7 @@
         icon-path="/assets/flags"
         class="mr-1"
       />ภาษาไทย
-    </a>
+    </a> -->
   </base-dropdown>
 </template>
 <script>

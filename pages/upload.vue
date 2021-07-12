@@ -477,7 +477,8 @@ export default {
           name: this.collection.name,
           slug: this.collection.slug,
           description: this.collection.description,
-          tournament: this.isTournamentPool
+          tournament: this.isTournamentPool,
+          uploaderLink: this.hyperlink
         },
         user: {
           name: this.username

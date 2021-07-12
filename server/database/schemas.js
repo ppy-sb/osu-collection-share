@@ -8,6 +8,7 @@ const Schemas = {
     name: { type: String },
     slug: { type: String, required: true, index: true },
     description: { type: String, default: '...' },
+    uploaderLink: { type: String },
     user: {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
