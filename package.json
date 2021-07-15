@@ -6,6 +6,7 @@
     "dev": "nuxt",
     "express-dev": "node -r dotenv/config ./server/app",
     "express-api": "node -r dotenv/config ./server/app-api",
+    "dbhelper": "node -r dotenv/config ./helpers/database-cleaner",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",

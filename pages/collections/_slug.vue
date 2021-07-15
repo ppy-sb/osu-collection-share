@@ -47,7 +47,7 @@
               {{ $t("user.uploadedBy") }}
               <i>
                 <a :href="(collectionDB.uploader && collectionDB.uploader.link) || `https://osu.ppy.sh/users/${user.name}`">{{
-                  collectionDB.uploader.name || user.name
+                  (collectionDB.uploader && collectionDB.uploader.name) || user.name
                 }}</a>
               </i>
             </div>
