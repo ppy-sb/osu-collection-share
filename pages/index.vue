@@ -25,7 +25,7 @@
                   <base-button
                     tag="a"
                     href="upload"
-                    class="mb-3 mb-sm-0"
+                    class="mb-3 mb-sm-0 text-capitalize"
                     type="info"
                     icon="ni ni-world"
                   >
@@ -35,7 +35,7 @@
                   <base-button
                     tag="a"
                     href="recent"
-                    class="mb-3 mb-sm-0"
+                    class="mb-3 mb-sm-0 text-capitalize"
                     type="white"
                     icon="ni ni-cloud-download-95"
                   >
