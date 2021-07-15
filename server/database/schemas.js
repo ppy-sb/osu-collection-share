@@ -8,13 +8,19 @@ const Schemas = {
     name: { type: String },
     slug: { type: String, required: true, index: true },
     description: { type: String, default: '...' },
-    uploaderLink: { type: String },
+    uploader: {
+      link: { type: String },
+      avatar: { type: String }
+    },
     user: {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
       }
     },
-    tournament: { type: Boolean }
+    tournament: { type: Boolean },
+    count: {
+      view: { type: Number, default: 0 }
+    }
   }),
   CollectionSet: new Mongoose.Schema({
     name: { type: String, index: true },

@@ -1,5 +1,5 @@
 <template>
-  <b-list-group-item v-b-hover="(hover) => visible = hover">
+  <b-list-group-item>
     <div class="d-flex w-100 justify-content-between align-items-stretch">
       <div class="d-flex flex-grow-1">
         <div class="d-flex flex-column justify-content-center mr-2">
@@ -29,35 +29,49 @@
             </small>
           </div>
           <div class="d-block">
-            <b-collapse :visible="!visible" class="mx-1">
+            <!-- <b-collapse :visible="!visible" class="mx-1">
               <p v-for="(map) in set.maps" :key="`-diff-${set.id}-${map.md5}`" class="mb-1">
                 {{ map.difficulty }}
               </p>
-            </b-collapse>
-            <b-collapse v-model="visible" class="mx-1">
+            </b-collapse> -->
+            <b-collapse visible class="mx-1">
               <div
                 v-for="(map,index) in set.maps"
                 :key="`detail-${set.id}-${map.md5}`"
                 class="my-1"
               >
-                <b-button v-b-toggle="`accordion-detail-${set.id}-${map.md5}`" block variant="info" size="sm" class="text-left">
-                  {{ map.difficulty }}
-                </b-button>
-                <b-collapse :id="`accordion-detail-${set.id}-${map.md5}`" :accordion="`accordion-detail-${set.id}`" :visible="bmstatistics[index]">
-                  <div>
-                    AR: {{ map.approach_rate.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
-                    CS: {{ map.circle_size.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
-                    HP: {{ map.hp_drain.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
-                    OD: {{ map.overall_difficulty.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
-                  </div>
-                  <div v-if="map.mode === 0">
-                    star rating:
-                    NM: {{ map.star_rating_standard[0].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
-                    HR: {{ map.star_rating_standard[16].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
-                    DT: {{ map.star_rating_standard[64].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
-                    DTHR: {{ map.star_rating_standard[80].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
-                  </div>
-                </b-collapse>
+                <b-card no-body class="shadow-sm">
+                  <b-button
+                    v-b-toggle="`accordion-detail-${set.id}-${map.md5}`"
+                    block
+                    variant="outline-secondary"
+                    size="sm"
+                    class="text-left border-0"
+                  >
+                    {{ map.difficulty }}
+                  </b-button>
+                  <b-collapse :id="`accordion-detail-${set.id}-${map.md5}`" :accordion="`accordion-detail-${set.id}`" :visible="bmstatistics[index]">
+                    <div class="p-2">
+                      <div>
+                        AR: {{ map.approach_rate.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                        CS: {{ map.circle_size.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                        HP: {{ map.hp_drain.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                        OD: {{ map.overall_difficulty.toLocaleString(undefined,{maximumFractionDigits: 1}) }}
+                      </div>
+                      <div v-if="map.mode === 0">
+                        <hr class="my-1">
+                        <i class="fas fa-star" />: {{ map.star_rating_standard[0].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                        <br>
+                        HR: {{ map.star_rating_standard[16].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                        <br>
+                        DT: {{ map.star_rating_standard[64].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                        <br>
+                        DTHR: {{ map.star_rating_standard[80].toLocaleString(undefined,{maximumFractionDigits: 2}) }}
+                        <br>
+                      </div>
+                    </div>
+                  </b-collapse>
+                </b-card>
               </div>
             </b-collapse>
           </div>
@@ -119,10 +133,10 @@ export default {
     },
     beatmapLink (map) {
       return `https://osu.ppy.sh/b/${map.beatmap_id}`
-    },
-    hoverBeatmap (index, hover) {
-      this.$set(this.bmstatistics, index, hover)
     }
+    // hoverBeatmap (index, hover) {
+    //   this.$set(this.bmstatistics, index, hover)
+    // }
   }
 }
 </script>

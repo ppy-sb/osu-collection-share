@@ -15,12 +15,12 @@
           <!-- <b-card-text
             {{ $t('upload.disclaimer') }}
           </b-card-text> -->
-          <b-card-body>
+          <b-card-body class="pt-1">
             <b-collapse :visible="!osuCollectionDataStat">
               <b-form-group
-                label-cols-sm="3"
+                label-cols-sm="2"
                 :label="$t('upload.form.label.collectionDB')"
-                label-align-sm="right"
+                label-align="right"
                 label-for="collectionDB"
               >
                 <b-form-file
@@ -33,9 +33,9 @@
                 />
               </b-form-group>
               <b-form-group
-                label-cols-sm="3"
+                label-cols-sm="2"
                 label="osu.db:"
-                label-align-sm="right"
+                label-align="right"
                 label-for="osuDB"
               >
                 <b-form-file
@@ -48,9 +48,9 @@
               </b-form-group>
             </b-collapse>
             <b-form-group
-              label-cols-sm="3"
+              label-cols-sm="2"
               :label="$t('upload.form.label.collectionName')"
-              label-align-sm="right"
+              label-align="right"
               label-for="collectionName"
               :description="notices.describeSlug"
             >
@@ -62,35 +62,49 @@
               />
             </b-form-group>
             <b-form-group
-              label-cols-sm="3"
+              label-cols-sm="2"
               :label="$t('upload.form.label.username')"
-              label-align-sm="right"
-              label-for="collectionName"
+              label-align="right"
+              label-for="username"
             >
               <b-form-input
-                id="collectionName"
+                id="username"
                 v-model.lazy.trim="username"
                 :placeholder="$t('upload.form.placeholder.username')"
                 debounce="300"
               />
             </b-form-group>
             <b-form-group
-              label-cols-sm="3"
+              label-cols-sm="2"
               :label="$t('upload.form.label.urlForUsername')"
-              label-align-sm="right"
-              label-for="collectionName"
+              label-align="right"
+              label-for="usernameURL"
             >
               <b-form-input
-                id="collectionName"
+                id="usernameURL"
                 v-model.lazy.trim="hyperlink"
                 :placeholder="$t('upload.form.placeholder.defaultLink') + username"
                 debounce="300"
               />
             </b-form-group>
             <b-form-group
-              label-cols-sm="3"
+              label-cols-sm="2"
+              :label="$t('upload.form.label.avatarSrcForUsername')"
+              label-align="right"
+              label-for="avatarSrc"
+            >
+              <b-form-input
+                id="avatarSrc"
+                v-model.lazy.trim="avatarSrc"
+                :placeholder="$t('upload.form.placeholder.defaultAvatar')"
+                :state="avatarSrcValid"
+                debounce="300"
+              />
+            </b-form-group>
+            <b-form-group
+              label-cols-sm="2"
               :label="$t('upload.form.label.collectionDescription')"
-              label-align-sm="right"
+              label-align="right"
               label-for="description"
             >
               <b-form-textarea
@@ -101,18 +115,38 @@
                 max-rows="6"
               />
             </b-form-group>
+            <b-form-group
+              label-cols-sm="2"
+              :label="$t('upload.form.label.config')"
+              label-align="right"
+              label-for="description"
+            >
+              <b-form-checkbox
+                v-show="!uploadResult"
+                v-model="isTournamentPool"
+              >
+                {{ $t('upload.isTournamentPool') }}
+              </b-form-checkbox>
+            </b-form-group>
             <b-card-text>
               {{ complaint }}
             </b-card-text>
             <div class="d-flex">
               <b-button-group>
-                <b-button :variant="osuCollectionDataStat ? 'success' : 'primary'" @click="readData">
+                <b-button variant="primary" class="text-capitalize" :pressed="osuCollectionDataStat" :disabled="osuCollectionDataStat" @click="readData">
                   {{ $t('upload.parse') }}
                 </b-button>
-                <b-button v-if="osuCollectionDataStat" :variant="compiledCollectionData.length ? 'success' : 'primary'" @click="compileData">
+                <b-button
+                  v-if="osuCollectionDataStat"
+                  class="text-capitalize"
+                  :pressed="compiledCollectionData.length > 0"
+                  :disabled="compiledCollectionData.length > 0"
+                  variant="primary"
+                  @click="compileData"
+                >
                   {{ $t('upload.compile') }}
                 </b-button>
-                <b-button v-if="compiledCollectionData.length" variant="primary" @click="upload">
+                <b-button v-if="compiledCollectionData.length" class="text-capitalize" variant="primary" @click="upload">
                   {{ $t('upload.upload') }}
                 </b-button>
               </b-button-group>
@@ -142,18 +176,12 @@
             >
               {{ $t('upload.onlyShowUploadingCollections') }}
             </b-form-checkbox>
-            <b-form-checkbox
-              v-show="!uploadResult"
-              v-model="isTournamentPool"
-            >
-              {{ $t('upload.isTournamentPool') }}
-            </b-form-checkbox>
             <b-button-toolbar class="pt-2">
               <b-button-group size="sm">
-                <b-button variant="info" @click="() => compiledCollectionData.map(c => c.upload = true)">
+                <b-button variant="info" class="text-capitalize" @click="() => compiledCollectionData.map(c => c.upload = true)">
                   {{ $t('upload.checkAll') }}
                 </b-button>
-                <b-button variant="success" @click="() => compiledCollectionData.map(c => c.upload = false)">
+                <b-button variant="success" class="text-capitalize" @click="() => compiledCollectionData.map(c => c.upload = false)">
                   {{ $t('upload.uncheckAll') }}
                 </b-button>
               </b-button-group>
@@ -186,6 +214,7 @@
             <b-card-body>
               <b-form-group
                 label="Upload Collection"
+                label-align="right"
                 :label-for="`collection-${c.slug}-upload`"
                 label-cols="3"
               >
@@ -202,6 +231,7 @@
                   label="Mod"
                   :label-for="`collection-${c.slug}-mod`"
                   label-cols="3"
+                  label-align="right"
                   :state="c.modstate"
                   invalid-feedback="This field is required"
                 >
@@ -217,6 +247,7 @@
                   label="Scoring"
                   :label-for="`collection-${c.slug}-scoring`"
                   label-cols="3"
+                  label-align="right"
                   :state="c.scoreState"
                   invalid-feedback="This field is required"
                 >
@@ -262,18 +293,14 @@
 </template>
 <script>
 import axios from 'axios'
-// import BeatmapsetCard from '@/components/BeatmapsetCard'
-// import BeatmapsetListItem from '@/components/sb-components/BeatmapsetListItem'
-// import RecentCard from '@/components/sb-components/RecentCard'
 import SectionLayout from '@/components/sb-layouts/components/SectionLayout'
 import TopSectionLayout from '@/components/sb-layouts/components/TopSectionLayout'
 import ProfileLayout from '@/components/sb-layouts/ProfileLayout'
 
 import CollectionSection from '@/components/CollectionSection'
-// const OsuDBParser = require('osu-db-parser')
-// const OsuDBParserWorker = require('@/assets/scripts/parseDB.worker.js')
 import OsuDBParserWorker from '@/assets/scripts/parseDB.worker.js'
-// const debounce = require('lodash.debounce')
+
+import isUrl from '~/helpers/isUrl'
 export default {
   components: {
     // BeatmapsetListItem,
@@ -285,8 +312,10 @@ export default {
   data () {
     return {
       complaint: '',
-      username: 'Unknown',
+      username: '',
       hyperlink: undefined,
+      avatarSrc: undefined,
+      avatarSrcValid: undefined,
       onJob: false,
       collection: {
         name: '',
@@ -351,6 +380,9 @@ export default {
     },
     async osuDB (file) {
       this.osuDBBuffer = await this.readUploadedFileAsBuffer(file)
+    },
+    avatarSrc (url) {
+      this.avatarSrcValid = isUrl(url)
     }
   },
   methods: {
@@ -478,7 +510,10 @@ export default {
           slug: this.collection.slug,
           description: this.collection.description,
           tournament: this.isTournamentPool,
-          uploaderLink: this.hyperlink
+          uploader: {
+            link: this.hyperlink,
+            avatar: this.avatarSrc
+          }
         },
         user: {
           name: this.username

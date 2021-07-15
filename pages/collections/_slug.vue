@@ -71,18 +71,20 @@
             <h4>{{ $t("viewer.somethingWentWrong") }}</h4>
           </b-card-body>
         </div>
+        <hr class="mb-0">
+        <b-card-body>
+          <collection-button-group
+            :collection-d-b="collectionDB"
+            :compiled-collection-data="compiledCollectionData"
+            :user="user"
+          />
+        </b-card-body>
       </card>
     </top-section-layout>
-    <section-layout skew :section-class="['py-0', 'my-0']" class="non-print">
+    <!-- <section-layout skew :section-class="['py-0', 'my-0']" class="non-print">
       <card shadow>
-        <collection-button-group
-          class="pb-3"
-          :collection-d-b="collectionDB"
-          :compiled-collection-data="compiledCollectionData"
-          :user="user"
-        />
       </card>
-    </section-layout>
+    </section-layout> -->
     <section-layout
       v-if="compiledCollectionData"
       :contained="undefined"
@@ -153,7 +155,7 @@ export default {
   },
   computed: {
     avatarSrc () {
-      return `https://a.ppy.sh/${this.user.id}`
+      return (this.collectionDB.uploader && this.collectionDB.uploader.avatar) || `https://a.ppy.sh/${this.user.id || -1}`
     }
   }
 }
@@ -174,5 +176,8 @@ export default {
   .mt--300 {
     margin-top: 140px !important;
   }
+}
+.mt--300 {
+  margin-top: -400px !important;
 }
 </style>

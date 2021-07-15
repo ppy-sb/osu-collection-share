@@ -138,5 +138,21 @@ module.exports = {
       }
     }
   },
-  telemetry: false
+
+  telemetry: false,
+
+  loading: {
+    color: 'white',
+    height: '2px'
+  },
+
+  router: {
+    extendRoutes (routes, resolve) {
+      routes.push({
+        name: 'help-md',
+        path: '/help/*',
+        component: resolve(__dirname, 'pages/help/render.vue')
+      })
+    }
+  }
 }

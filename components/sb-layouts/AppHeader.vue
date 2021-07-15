@@ -33,6 +33,11 @@
       </div>
 
       <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+        <b-navbar-nav>
+          <b-nav-item :to="{name: 'upload'}">
+            {{ $t('upload.upload') }}
+          </b-nav-item>
+        </b-navbar-nav>
         <base-dropdown
           tag="li"
           class="nav-item"
@@ -46,11 +51,8 @@
             @click.prevent
           >
             <i class="ni ni-collection d-lg-none" />
-            <span class="nav-link-inner--text">pages</span>
+            <span class="nav-link-inner--text">in progress pages</span>
           </a>
-          <nuxt-link :to="{name: 'upload'}" class="dropdown-item">
-            {{ $t('upload.upload') }}
-          </nuxt-link>
         </base-dropdown>
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto text-nowrap">

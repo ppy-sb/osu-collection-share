@@ -8,7 +8,7 @@
               {{ collection.name }}
             </nuxt-link>
           </h5>
-          <small>{{ moment(dateFromObjectId(collection._id)) | fromNow }}</small>
+          <small>{{ moment(dateFromObjectId(collection._id)) | fromNow }} | <i class="fas fa-eye" /> {{ collection.count.view }}</small>
         </div>
 
         <p class="mb-1" v-html="bbcode(collection.description)" />

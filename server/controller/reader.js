@@ -12,7 +12,11 @@ class CollectionReader {
 
   async toCollection () {
     const { CollectionDB, CollectionSet, CollectionBeatmap, User } = this.models
-    const collectionDB = await CollectionDB.findOne(this.query).exec().then(doc => doc.toObject()).catch(_err => null)
+    const collectionDB = await CollectionDB.findOneAndUpdate(this.query, { $inc: { 'count.view': 1 } }, { setDefaultsOnInsert: true, new: true }).exec().then(doc => doc.toObject()).catch((_err) => {
+      return {
+        error: _err
+      }
+    })
     if (!collectionDB) { return null }
     this.collectionDB = collectionDB
 

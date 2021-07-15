@@ -24,23 +24,20 @@
                 <div class="buttons">
                   <base-button
                     tag="a"
-                    href="#"
+                    href="upload"
                     class="mb-3 mb-sm-0"
                     type="info"
                     icon="ni ni-world"
-                    @click.prevent="$router.push({name:'top'})"
                   >
                     <!-- <template v-slot:icon><font-awesome-icon icon="fa-chess-queen" /></template> -->
-                    {{ $t("landing.topCollectionsButton") }}
+                    {{ $t('upload.upload') }}
                   </base-button>
-
                   <base-button
                     tag="a"
-                    href="#"
+                    href="recent"
                     class="mb-3 mb-sm-0"
                     type="white"
                     icon="ni ni-cloud-download-95"
-                    @click.prevent="$router.push({name:'recent'})"
                   >
                     {{ $t("landing.recentCollectionsButton") }}
                   </base-button>
