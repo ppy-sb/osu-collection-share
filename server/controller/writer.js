@@ -77,14 +77,19 @@ class CollectionSet {
     })).then(b => b.map(collection => collection.toObject()))
 
     // create Sets
+    const setCache = new Map()
     await Promise.all(this.compiledCollectionData.map(async (collection, collectionIndex) => {
       // const s = collection.mapsets.map((beatmapset) => {
       //   beatmapset.collectionSet = collection.collectionSet
       //   beatmapset.collectionDB = collectionDB
       //   return beatmapset
       // })
-
-      const beatmapsets = await Promise.all(collection.mapsets.map(s => this.findOrCreateSet(s)))
+      const beatmapsets = await Promise.all(collection.mapsets.map((s) => {
+        const hash = s.id + s.folderName
+        if (setCache.has(hash)) { return setCache.get(hash) }
+        const set = this.findOrCreateSet(s)
+        setCache.set(hash, set)
+      }))
 
       // create CollectionBeatmap
       collection.mapsets.map((beatmapset, beatmapsetIndex) => {
