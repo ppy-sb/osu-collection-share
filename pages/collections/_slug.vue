@@ -6,7 +6,7 @@
           <div class="row justify-content-center">
             <div class="col-lg-3 order-lg-2">
               <div class="card-profile-image">
-                <a :href="collectionDB.uploaderLink || `https://osu.ppy.sh/users/${user.name}`">
+                <a :href="(collectionDB.uploader && collectionDB.uploader.link) || `https://osu.ppy.sh/users/${user.name}`">
                   <img v-lazy="avatarSrc" class="rounded-circle">
                 </a>
               </div>

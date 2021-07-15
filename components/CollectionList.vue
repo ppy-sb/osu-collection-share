@@ -13,7 +13,17 @@
 
         <p class="mb-1" v-html="bbcode(collection.description)" />
 
-        <small>{{ $t('user.uploadedBy') }} <a :href="`https://osu.ppy.sh/users/${collection.user.name}`">{{ collection.user.name }}</a></small>
+        <small>{{ $t('user.uploadedBy') }}
+          <a
+            :href="
+              (collection.uploader &&
+                (collection.uploader.link
+                  || (collection.uploader.name &&
+                    `https://osu.ppy.sh/users/${collection.uploader.name}`)))
+                || `https://osu.ppy.sh/users/${collection.user.name}`"
+          >{{ (collection.uploader && collection.uploader.name)
+            || collection.user.name }}</a>
+        </small>
       </b-list-group-item>
     </b-list-group>
   </card>

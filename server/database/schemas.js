@@ -2,13 +2,14 @@ const Mongoose = require('mongoose')
 const Schemas = {
   User: new Mongoose.Schema({
     id: { type: Number },
-    name: { type: String, default: 'Guest' }
+    name: { type: String }
   }),
   CollectionDB: new Mongoose.Schema({
     name: { type: String },
     slug: { type: String, required: true, index: true },
-    description: { type: String, default: '...' },
+    description: { type: String },
     uploader: {
+      name: { type: String },
       link: { type: String },
       avatar: { type: String }
     },
