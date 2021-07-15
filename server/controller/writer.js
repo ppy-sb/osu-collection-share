@@ -84,10 +84,10 @@ class CollectionSet {
       //   beatmapset.collectionDB = collectionDB
       //   return beatmapset
       // })
-      const beatmapsets = await Promise.all(collection.mapsets.map((s) => {
+      const beatmapsets = await Promise.all(collection.mapsets.map(async (s) => {
         const hash = s.id + s.folderName
         if (setCache.has(hash)) { return setCache.get(hash) }
-        const set = this.findOrCreateSet(s)
+        const set = await this.findOrCreateSet(s)
         setCache.set(hash, set)
       }))
 
