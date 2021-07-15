@@ -60,7 +60,7 @@ export default {
     },
     collectionSummary () {
       const description = [
-        `# creator: ${this.user.name}`,
+        `# creator: ${this.uploader.name || this.user.name}`,
         `# generated At: ${new Date()}`,
         '# ========',
         `# ${this.collectionDB.description.replace('\r', '\n').replace('\n', '\n# ')}`,
