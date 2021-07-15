@@ -6,7 +6,7 @@ router.post('/collectionDB/upload', bodyParser.json({ limit: '50mb' }), require(
 router.get('/collectionDB/search/:name', require('./collectionDB/search'))
 router.get('/collectionDB/get/:slug', require('./collectionDB/read'))
 router.get('/collectionDB/recent', require('./collectionDB/recent'))
-router.get('/collectionDB/top', require('./collectionDB/top'))
+router.get('/collectionDB/top', require('./collectionDB/most-viewed'))
 router.get('/slug/*', require('./slug'))
 
 module.exports = router

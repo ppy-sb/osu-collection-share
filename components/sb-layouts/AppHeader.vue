@@ -53,6 +53,13 @@
             <i class="ni ni-collection d-lg-none" />
             <span class="nav-link-inner--text">in progress pages</span>
           </a>
+          <b-dropdown-item
+            :to="{
+              name: 'most-viewed'
+            }"
+          >
+            most viwed
+          </b-dropdown-item>
         </base-dropdown>
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto text-nowrap">
