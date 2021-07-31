@@ -30,6 +30,7 @@ export default {
     TopSectionLayout,
     ProfileLayout
   },
+  transition: 'bounce',
   data () {
     return {
       user: undefined

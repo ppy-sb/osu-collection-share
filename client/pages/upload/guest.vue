@@ -531,7 +531,8 @@ export default {
         content: this.$t('upload.description')
       }]
     }
-  }
+  },
+  transition: 'page'
 }
 </script>
 <style lang="scss">

@@ -123,7 +123,8 @@ export default {
         content: this.$t('landing.description')
       }]
     }
-  }
+  },
+  transition: 'bounce'
 }
 </script>
 <style scoped>
