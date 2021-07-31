@@ -1,4 +1,5 @@
-
+// eslint-disable-next-line nuxt/no-cjs-in-config
+import webpack from 'webpack'
 // eslint-disable-next-line nuxt/no-cjs-in-config
 module.exports = {
   vue: {
@@ -180,7 +181,12 @@ module.exports = {
         fs: 'empty'
       }
       config.resolve.alias.vue = 'vue/dist/vue.common'
-    }
+    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer']
+      })
+    ]
   },
   srcDir: 'client/',
 

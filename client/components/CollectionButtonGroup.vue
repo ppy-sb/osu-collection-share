@@ -37,6 +37,8 @@
 </template>
 <script>
 import uploaderMixin from '~/../universal/uploaderMixin'
+/* important IDK why but buffer is undefined */
+global.Buffer = global.Buffer || require('buffer').Buffer
 const FileSaver = require('file-saver')
 const osuColle = require('osucolle')
 export default {
