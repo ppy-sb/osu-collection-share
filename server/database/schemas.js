@@ -1,22 +1,27 @@
 const Mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
+const SALT_WORK_FACTOR = 10
 const Schemas = {
   User: new Mongoose.Schema({
-    id: { type: Number },
-    name: { type: String }
+    id: { type: String, unique: true, required: true },
+    name: { type: String, required: true },
+    password: { type: String, required: true },
+    hashed: { type: Number, default: SALT_WORK_FACTOR }
   }),
   CollectionDB: new Mongoose.Schema({
     name: { type: String },
     slug: { type: String, required: true, index: true },
     description: { type: String },
     uploader: {
-      name: { type: String },
+      name: { type: String, index: true },
       link: { type: String },
       avatar: { type: String }
     },
     user: {
       _id: {
         type: Mongoose.Types.ObjectId, index: true
-      }
+      },
+      anonymous: { type: Boolean, default: true }
     },
     tournament: { type: Boolean },
     count: {
@@ -106,5 +111,27 @@ const Schemas = {
   })
 }
 Schemas.CollectionDB.index({ name: 'text', description: 'text' })
+// Schemas.CollectionDB.virtual('user', {
+//   ref: 'User',
+//   localField: 'user._id',
+//   foreignField: '_id'
+// })
+Schemas.User.pre('save', (next) => {
+  // only hash the password if it has been modified (or is new)
+  if (!this.isModified('password')) { return next() }
+
+  // generate a salt
+  bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
+    if (err) { return next(err) }
+
+    // hash the password using our new salt
+    bcrypt.hash(this.password, salt, (err, hash) => {
+      if (err) { return next(err) }
+      // override the cleartext password with the hashed one
+      this.password = hash
+      next()
+    })
+  })
+})
 
 module.exports = Schemas

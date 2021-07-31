@@ -1,0 +1,69 @@
+{
+  "collectionCard": {
+    "beatmapLink": "/b/ link",
+    "beatmapSetPage": "to beatmapset",
+    "beatmapStatic": "beatmap static",
+    "copyBeatmapIds": "copy all map's id",
+    "copyBeatmapLinks": "copy all map's link",
+    "copySetIds": "copy all set's id",
+    "copySetLinks": "copy all set's link",
+    "mapCount": "maps",
+    "more": "More",
+    "otherDiffs": "other diffs",
+    "setId": "set id:",
+    "thread": "thread"
+  },
+  "header": {
+    "findCollection": "Searching for collections? <<<<<<"
+  },
+  "landing": {
+    "recentCollectionsButton": "recent",
+    "subtitle": "find more [ M A P S ]",
+    "title": "collection sharing",
+    "topCollectionsButton": "most voted"
+  },
+  "locale": "Swtich locale",
+  "statements": {
+    "testTitle": "collection sharing alpha"
+  },
+  "upload": {
+    "collectionLink": "collection link",
+    "compile": "prepare data to upload",
+    "disclaimer": "osu.db are only used for referencing the map in your collection.db and will not be uploaded!<br>thus we may collect some data to improve other user's experirence such as your local offset.<hr class=\"my-2\">steps:<br>1. select osu.db and collections.db<br>2. click 'read db'<br>3. click 'prepare data' when everthing is good<br>4. select collections you want to upload<br>(any collection with title in green will be uploaded)<br>5. click upload. You will see your link when upload is done.<hr class=\"my-2\">Depending on your collection's size, upload might cost some time.",
+    "done": "done",
+    "restart": "start again (any data you filled will be reset)",
+    "form": {
+      "label": {
+        "collectionDB": "collection.db:",
+        "collectionDescription": "collection description:",
+        "collectionName": "name of your collection:",
+        "username": "uploader's name:",
+        "urlForUsername": "uploader's link:"
+      },
+      "placeholder": {
+        "collectionDB": "Choose collection.db in your osu! folder or drop it here...",
+        "descriptionPlaceholder": "Enter something...",
+        "dropFile": "Drop file here...",
+        "myCollection": "my collection",
+        "osuDB": "Choose osu!.db in your osu! folder or drop it here...",
+        "defaultLink": "https://osu.ppy.sh/users/"
+      }
+    },
+    "onlyShowUploadingCollections": "show uploading collections only",
+    "isTournamentPool": "tournament pool mode (allows you to fill in mods etc.)",
+    "parse": "read db",
+    "upload": "upload",
+    "checkAll": "upload all ",
+    "uncheckAll": "deselect all"
+  },
+  "user": {
+    "uploadedBy": "uploaded by"
+  },
+  "viewer": {
+    "collectionNonExists": "collection not exist.",
+    "copySummary": "copy collection summary",
+    "generateCollectionDB": "generate collection.db",
+    "somethingWentWrong": "or something went (pretty badly) wrong!",
+    "summaryAsText": "summary as text file"
+  }
+}

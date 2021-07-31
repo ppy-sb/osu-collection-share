@@ -15,5 +15,5 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {},
-  ignorePatterns: ['components/argon/*', 'components/argon-components/*', 'components/argon-demo/*', 'components/argon-layout/*']
+  ignorePatterns: ['client/components/argon/*', 'client/components/argon-components/*', 'client/components/argon-demo/*', 'client/components/argon-layout/*']
 }

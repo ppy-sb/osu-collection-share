@@ -1,11 +1,11 @@
 
 // eslint-disable-next-line nuxt/no-cjs-in-config
 module.exports = {
-  /*
-  ** Nuxt rendering mode
-  ** See https://nuxtjs.org/api/configuration-mode
-  */
-  mode: 'universal',
+  vue: {
+    config: {
+      performance: process.env.NODE_ENV !== 'production'
+    }
+  },
   /*
   ** Nuxt target
   ** See https://nuxtjs.org/api/configuration-target
@@ -66,7 +66,6 @@ module.exports = {
     { src: '~/plugins/debounce/index.js', mode: 'client' },
     { src: '~/plugins/vue-worker.js', mode: 'client' },
     { src: '~/plugins/vue-fullscreen.js', mode: 'client' },
-    '~/plugins/i18n.js',
     '~/plugins/vue-flag.js',
     '~/plugins/moment.js'
   ],
@@ -86,6 +85,13 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
+    ['nuxt-i18n', {
+      detectBrowserLanguage: {
+        useCookie: true,
+        cookieKey: 'i18n_redirected',
+        onlyOnRoot: true // recommended
+      }
+    }],
     // // Doc: https://bootstrap-vue.js.org
     // 'bootstrap-vue/nuxt',
     // // Doc: https://axios.nuxtjs.org/usage
@@ -108,14 +114,44 @@ module.exports = {
       // ]
 
     }],
+    '@nuxtjs/proxy',
+    'cookie-universal-nuxt',
+    '@nuxtjs/auth-next',
     'nuxt-clipboard2'
     // '@nuxtjs/pwa'
   ],
+  i18n: {
+    locales: [
+      { code: 'gb', iso: 'en-GB', file: 'en-GB.json', dir: 'ltr', name: 'English - International' },
+      { code: 'us', iso: 'en-US', file: 'en-US.json', dir: 'ltr', name: 'English - US' },
+      { code: 'cn', iso: 'zh-CN', file: 'zh-CN.json', dir: 'ltr', name: '中文 - 中国' }
+    ],
+    defaultLocale: 'gb',
+    langDir: 'locales/',
+    lazy: true,
+    strategy: 'prefix_and_default',
+    vueI18n: {
+      fallbackLocale: 'gb'
+    }
+  },
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: '/'
+    }
+  },
+
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: `http://localhost:${process.env.PORT || 3000}`
+    }
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
-  axios: {},
+  axios: {
+    baseURL: '/'
+  },
   /*
   ** Content module configuration
   ** See https://content.nuxtjs.org/configuration
@@ -136,8 +172,10 @@ module.exports = {
       config.node = {
         fs: 'empty'
       }
+      config.resolve.alias.vue = 'vue/dist/vue.common'
     }
   },
+  srcDir: 'client/',
 
   telemetry: false,
 
@@ -146,13 +184,29 @@ module.exports = {
     height: '2px'
   },
 
-  router: {
-    extendRoutes (routes, resolve) {
-      routes.push({
-        name: 'help-md',
-        path: '/help/*',
-        component: resolve(__dirname, 'pages/help/render.vue')
-      })
-    }
+  proxy: {
+    // see Proxy section
+    '/api': process.env.API_SCHEME?.startsWith('unix')
+      ? {
+        changeOrigin: false,
+        target: { socketPath: process.env.API_LISTEN }
+      }
+      : {
+        changeOrigin: false,
+        target: `${process.env.API_SCHEME}${process.env.API_DOMAIN}:${process.env.API_LISTEN}`
+      }
+  },
+  server: {
+    host: '0' // default: localhost
   }
+
+  // router: {
+  //   extendRoutes (routes, resolve) {
+  //     routes.push({
+  //       name: 'help-md',
+  //       path: '/help/*',
+  //       component: resolve(__dirname, 'client/pages/help/render.vue')
+  //     })
+  //   }
+  // }
 }

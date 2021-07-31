@@ -1,40 +1,50 @@
-// const { Nuxt, Builder } = require('nuxt')
+const fs = require('fs')
 const express = require('express')
-const session = require('express-session')
+// const session = require('express-session')
 
 const app = express()
 // const isProd = process.env.NODE_ENV === 'production'
-const port = process.env.PORT || 3000
-const sess = {
-  secret: 'keyboard cat',
-  cookie: {},
-  resave: false,
-  saveUninitialized: false
-}
+const port = process.env.API_LISTEN || process.env.PORT || 3000
+
+// const sess = {
+//   secret: 'keyboard cat',
+//   cookie: {},
+//   resave: false,
+//   saveUninitialized: false
+// }
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy
   // sess.cookie.secure = true // serve secure cookies
 }
+// 用指定的配置对象实例化 Nuxt.js
+// const config = require('../nuxt.config.js')
+// config.dev = !isProd
 
-app.use(express.static('../static'))
-
-app.use(session(sess))
+// app.use((req, res, next) => {
+//   console.log(req.url)
+//   console.log(req.query)
+//   return next()
+// })
+// app.use(session(sess))
+// app.use(express.static('../static'))
 app.use('/api', require('./api'))
 
-app.use('/api', require('./api'))
-
-// 用 Nuxt.js 渲染每个路由
-// app.use(nuxt.render)
-// 在开发模式下启用编译构建和热加载
-// if (config.dev) {
-//   new Builder(nuxt).build().then(listen)
-// } else {
-//   listen()
-// }
 listen()
-
 function listen () {
+  if (process.env.API_SCHEME?.startsWith('unix') && fs.existsSync(port)) {
+    fs.unlinkSync(port)
+  }
   // 服务端监听
-  app.listen(port, '0.0.0.0')
-  console.log('Server listening on `localhost:' + port + '`.')
+  const server = app.listen(port)
+  console.log(`Server listening on ${port}`)
+
+  function shutdown () {
+    server.close()
+    process.exit()
+  }
+  ['exit', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'SIGTERM'].forEach((eventType) => {
+    process.on(eventType, shutdown.bind(null, eventType))
+  })
 }
+
+app.use(require('./errorHandler'))
