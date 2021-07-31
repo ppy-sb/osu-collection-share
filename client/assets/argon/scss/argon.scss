@@ -19,13 +19,13 @@
 // Core
 
 @import "bootstrap/functions";
-@import "custom/_functions";
+@import "custom/functions";
 
-@import "custom/_variables";
+@import "custom/variables";
 @import "bootstrap/variables";
 
 @import "bootstrap/mixins";
-@import "custom/_mixins";
+@import "custom/mixins";
 
 // Bootstrap components
 
@@ -64,37 +64,37 @@
 
 // Custom components
 
-@import "custom/_reboot.scss";
-@import "custom/_global.scss";
-@import "custom/_utilities.scss";
+@import "custom/reboot";
+@import "custom/global";
+@import "custom/utilities";
 
-@import "custom/_accordion.scss";
-@import "custom/_alerts.scss";
-@import "custom/_avatars.scss";
-@import "custom/_badge.scss";
-@import "custom/_buttons.scss";
-@import "custom/_card.scss";
-@import "custom/_carousel.scss";
-@import "custom/_close.scss";
-@import "custom/_custom-forms.scss";
-@import "custom/_dropdown.scss";
-@import "custom/_footer.scss";
-@import "custom/_forms.scss";
-@import "custom/_grid.scss";
-@import "custom/_icons.scss";
-@import "custom/_input-group.scss";
-@import "custom/_list-group.scss";
-@import "custom/_modal.scss";
-@import "custom/_nav.scss";
-@import "custom/_navbar.scss";
-@import "custom/_pagination.scss";
-@import "custom/_popover.scss";
-@import "custom/_progress.scss";
-@import "custom/_section.scss";
-@import "custom/_type.scss";
+@import "custom/accordion";
+@import "custom/alerts";
+@import "custom/avatars";
+@import "custom/badge";
+@import "custom/buttons";
+@import "custom/card";
+@import "custom/carousel";
+@import "custom/close";
+@import "custom/custom-forms";
+@import "custom/dropdown";
+@import "custom/footer";
+@import "custom/forms";
+@import "custom/grid";
+@import "custom/icons";
+@import "custom/input-group";
+@import "custom/list-group";
+@import "custom/modal";
+@import "custom/nav";
+@import "custom/navbar";
+@import "custom/pagination";
+@import "custom/popover";
+@import "custom/progress";
+@import "custom/section";
+@import "custom/type";
 
 // Vendor
 
-@import "custom/vendor/flatpickr.scss";
-@import "custom/vendor/headroom.scss";
-@import "custom/vendor/nouislider.scss";
+@import "custom/vendor/flatpickr";
+@import "custom/vendor/headroom";
+@import "custom/vendor/nouislider";
