@@ -36,6 +36,7 @@
   </b-button-toolbar>
 </template>
 <script>
+import uploaderMixin from '~/../universal/uploaderMixin'
 const FileSaver = require('file-saver')
 const osuColle = require('osucolle')
 export default {
@@ -60,7 +61,7 @@ export default {
     },
     collectionSummary () {
       const description = [
-        `# creator: ${this.uploader.name || this.user.name || 'unknown'}`,
+        `# creator: ${this.uploaderName(this.collectionDB)}`,
         `# generated At: ${new Date()}`,
         '# ========',
         `# ${this.collectionDB.description.replace('\r', '\n').replace('\n', '\n# ')}`,
@@ -106,7 +107,8 @@ export default {
       } catch (e) {
         console.error(e)
       }
-    }
+    },
+    ...uploaderMixin
   }
 }
 </script>
