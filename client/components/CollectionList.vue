@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import mixin from '~/../universal/uploaderMixin'
 export default {
   filters: {
     fromNow (moment) {
@@ -51,20 +52,7 @@ export default {
     bbcode (str) {
       return str
     },
-    uploaderLink (collection) {
-      if (!collection.user || collection.user.anonymous) {
-        if (collection.uploader) {
-          return collection.uploader.link || '#'
-        } else { return '#' }
-      } else { return collection.user.link || '#' }
-    },
-    uploaderName (collection) {
-      if (!collection.user || collection.user.anonymous) {
-        if (collection.uploader) {
-          return collection.uploader.name || 'Guest'
-        } else { return 'Guest' }
-      } else { return collection.user.name || 'Unknown' }
-    }
+    ...mixin
   }
 }
 </script>

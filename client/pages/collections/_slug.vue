@@ -46,8 +46,8 @@
             <div class="h6 font-weight-300">
               {{ $t("user.uploadedBy") }}
               <i>
-                <a :href="(collectionDB.uploader && collectionDB.uploader.link) || `https://osu.ppy.sh/users/${user.name}`">{{
-                  (collectionDB.uploader && collectionDB.uploader.name) || user.name
+                <a :href="uploaderLink(collectionDB)">{{
+                  uploaderName(collectionDB)
                 }}</a>
               </i>
             </div>
@@ -124,6 +124,8 @@ import SectionLayout from '@/components/sb-layouts/components/SectionLayout'
 import TopSectionLayout from '@/components/sb-layouts/components/TopSectionLayout'
 import ProfileLayout from '@/components/sb-layouts/ProfileLayout'
 import Sheet from '~/components/tournament/Sheet.vue'
+
+import mixin from '~/../universal/uploaderMixin'
 export default {
   watchQuery: ['slug'],
   components: {
@@ -155,12 +157,10 @@ export default {
   },
   computed: {
     avatarSrc () {
-      if (!this.user || this.user.anonymous) {
-        return this.collectionDB.uploader && this.collectionDB.uploader.avatar
-      } else { return this.user.avatar || '#' }
-      // return (this.collectionDB.uploader && this.collectionDB.uploader.avatar) || `https://a.ppy.sh/${this.user.id || -1}`
+      return mixin.uploaderAvatarSrc(this.collectionDB)
     }
-  }
+  },
+  methods: mixin
 }
 </script>
 <style>
