@@ -35,6 +35,16 @@ export default {
         }
       })
     }
+  },
+  head () {
+    return {
+      title: `${this.$t('mostViewed.collections')} - ${this.$t('landing.title')}`,
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: this.$t('mostViewed.description')
+      }]
+    }
   }
 }
 </script>

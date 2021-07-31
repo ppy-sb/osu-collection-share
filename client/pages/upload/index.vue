@@ -3,23 +3,20 @@
     <top-section-layout>
       <b-card no-body class="shadow card-profile mt--300 p-3">
         <b-card-title class="text-center py-4">
-          how you want to upload your collection?
+          {{ $t('upload.howToUpload') }}
         </b-card-title>
         <div class="d-flex">
           <b-button v-if="user" class="mr-auto" variant="primary" disabled @click="$router.push(localeLocation({ name: 'upload-my-collection'}))">
-            Upload to my account
+            {{ $t('upload.toMyAccount') }}
           </b-button>
           <b-button v-else class="mr-auto" variant="primary" disabled @click="$router.push(localeLocation({ name: 'login'}))">
-            Upload after Login
+            {{ $t('upload.afterLogin') }}
           </b-button>
           <b-button class="ml-auto" variant="dark" @click="$router.push(localeLocation({ name: 'upload-guest'}))">
-            As Guest
+            {{ $t('upload.asGuest') }}
           </b-button>
         </div>
       </b-card>
-      <div>
-        123
-      </div>
     </top-section-layout>
   </profile-layout>
 </template>
@@ -36,6 +33,16 @@ export default {
   data () {
     return {
       user: undefined
+    }
+  },
+  head () {
+    return {
+      title: `${this.$t('upload.upload')} - ${this.$t('landing.title')}`,
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: this.$t('upload.description')
+      }]
     }
   }
 }

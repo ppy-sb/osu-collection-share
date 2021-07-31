@@ -37,7 +37,7 @@
                     icon="ni ni-cloud-download-95"
                     @click="$router.push(localeLocation({ name: 'recent'}))"
                   >
-                    {{ $t("landing.recentCollectionsButton") }}
+                    {{ $t("recent.collections") }}
                   </base-button>
                   <!-- <a href="/u/40455" class="home-btn btn-key">view profile</a>
                   <a
@@ -113,6 +113,16 @@ export default {
   mounted () {
     setTimeout(() => (this.blur = false), 0)
     setTimeout(() => (this.loading = false), 500)
+  },
+  head () {
+    return {
+      title: `${this.$t('landing.title')} - ${this.$t('landing.subtitle')}`,
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: this.$t('landing.description')
+      }]
+    }
   }
 }
 </script>

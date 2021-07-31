@@ -17,10 +17,10 @@
     "findCollection": "Search collections..."
   },
   "landing": {
-    "recentCollectionsButton": "recent",
     "subtitle": "find more [ M A P S ]",
     "title": "collection sharing",
-    "topCollectionsButton": "most voted"
+    "topCollectionsButton": "most voted",
+    "description": "WIP, this site is for sharing your collection to others, still in alpha."
   },
   "locale": "Swtich locale",
   "statements": {
@@ -58,7 +58,12 @@
     "parse": "read database",
     "restart": "start again (any data you filled will be reset)",
     "uncheckAll": "deselect all",
-    "upload": "upload"
+    "upload": "upload",
+    "description": "upload your collection",
+    "toMyAccount": "Upload to my account",
+    "howToUpload": "how you want to upload your collection?",
+    "afterLogin": "Upload after Login",
+    "asGuest": "As Guest"
   },
   "user": {
     "uploadedBy": "uploaded by"
@@ -69,5 +74,27 @@
     "generateCollectionDB": "generate collection.db",
     "somethingWentWrong": "or something went (pretty badly) wrong!",
     "summaryAsText": "summary as text file"
+  },
+  "navbar": {
+    "inProgressTab": "in progress pages",
+    "item": {
+      "mostViewed": "most viwed"
+    },
+    "discord": {
+      "message": "Join our discord server!",
+      "server": "Discord server"
+    },
+    "github": {
+      "message": "Contribute to this site",
+      "name": "Github"
+    }
+  },
+  "recent": {
+    "collections": "recent",
+    "description": "latest uploaded collections"
+  },
+  "mostViewed": {
+    "collections": "most viewed collections",
+    "description": "most viewed collections"
   }
 }

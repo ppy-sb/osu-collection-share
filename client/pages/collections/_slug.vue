@@ -160,7 +160,17 @@ export default {
       return mixin.uploaderAvatarSrc(this.collectionDB)
     }
   },
-  methods: mixin
+  methods: mixin,
+  head () {
+    return {
+      title: `${this.collectionDB.name} - ${this.$t('landing.title')}`,
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: this.$t('upload.description')
+      }]
+    }
+  }
 }
 </script>
 <style>

@@ -67,7 +67,8 @@ module.exports = {
     { src: '~/plugins/vue-worker.js', mode: 'client' },
     { src: '~/plugins/vue-fullscreen.js', mode: 'client' },
     '~/plugins/vue-flag.js',
-    '~/plugins/moment.js'
+    // '~/plugins/moment.js'
+    '~/plugins/i18n-connect-dayjs.js'
   ],
   /*
   ** Auto import components
@@ -117,14 +118,21 @@ module.exports = {
     '@nuxtjs/proxy',
     'cookie-universal-nuxt',
     '@nuxtjs/auth-next',
-    'nuxt-clipboard2'
+    'nuxt-clipboard2',
     // '@nuxtjs/pwa'
+    '@nuxtjs/dayjs'
   ],
+  dayjs: {
+    locales: ['zh-cn', 'en-gb'],
+    plugins: [
+      'relativeTime'
+    ]
+  },
   i18n: {
     locales: [
-      { code: 'gb', iso: 'en-GB', file: 'en-GB.json', dir: 'ltr', name: 'English - International' },
-      { code: 'us', iso: 'en-US', file: 'en-US.json', dir: 'ltr', name: 'English - US' },
-      { code: 'cn', iso: 'zh-CN', file: 'zh-CN.json', dir: 'ltr', name: '中文 - 中国' }
+      { code: 'gb', flag: 'gb', dayjs: 'en-gb', iso: 'en-GB', file: 'en-GB.json', dir: 'ltr', name: 'English - International' },
+      { code: 'us', flag: 'us', dayjs: 'en', iso: 'en-US', file: 'en-US.json', dir: 'ltr', name: 'English - US' },
+      { code: 'cn', flag: 'cn', dayjs: 'zh-cn', iso: 'zh-CN', file: 'zh-CN.json', dir: 'ltr', name: '中文 - 中国' }
     ],
     defaultLocale: 'gb',
     langDir: 'locales/',
@@ -139,7 +147,6 @@ module.exports = {
       browserBaseURL: '/'
     }
   },
-
   privateRuntimeConfig: {
     axios: {
       baseURL: `http://localhost:${process.env.PORT || 3000}`

@@ -81,7 +81,6 @@
   </b-list-group-item>
 </template>
 <script>
-// const moment = require("moment");
 import LazyImage from './LazyImage.vue'
 export default {
   components: {

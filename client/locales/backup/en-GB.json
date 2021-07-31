@@ -17,7 +17,7 @@
     "findCollection": "Searching for collections? <<<<<<"
   },
   "landing": {
-    "recentCollectionsButton": "recent",
+    "recentCollections": "recent",
     "subtitle": "find more [ M A P S ]",
     "title": "collection sharing",
     "topCollectionsButton": "most voted"

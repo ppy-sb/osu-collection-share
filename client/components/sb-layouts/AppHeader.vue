@@ -50,14 +50,14 @@
             role="button"
           >
             <i class="ni ni-collection d-lg-none" />
-            <span class="nav-link-inner--text">in progress pages</span>
+            <span class="nav-link-inner--text">{{ $t('navbar.inProgressTab') }}</span>
           </a>
           <b-dropdown-item
             :to="localePath({
               name: 'most-viewed'
             })"
           >
-            most viwed
+            {{ $t('navbar.item.mostViewed') }}
           </b-dropdown-item>
         </base-dropdown>
       </ul>
@@ -81,26 +81,44 @@
         </client-only>
 
         <!-- <li class="nav-item">
-                    <a class="nav-link nav-link-icon" href="https://www.instagram.com/creativetimofficial"
-                       target="_blank" rel="noopener" data-toggle="tooltip" title="Follow us on Instagram">
-                        <i class="fa fa-instagram"></i>
-                        <span class="nav-link-inner--text d-lg-none">Instagram</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-icon" href="https://twitter.com/creativetim" target="_blank" rel="noopener"
-                       data-toggle="tooltip" title="Follow us on Twitter">
-                        <i class="fa fa-twitter-square"></i>
-                        <span class="nav-link-inner--text d-lg-none">Twitter</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-icon" href="https://github.com/creativetimofficial/vue-argon-design-system"
-                       target="_blank" rel="noopener" data-toggle="tooltip" title="Star us on Github">
-                        <i class="fa fa-github"></i>
-                        <span class="nav-link-inner--text d-lg-none">Github</span>
-                    </a>
-                </li>-->
+          <a
+            class="nav-link nav-link-icon"
+            href="https://www.instagram.com/creativetimofficial"
+            target="_blank"
+            rel="noopener"
+            data-toggle="tooltip"
+            title="Follow us on Instagram"
+          >
+            <i class="fa fa-instagram" />
+            <span class="nav-link-inner--text d-lg-none">Instagram</span>
+          </a>
+        </li> -->
+        <li class="nav-item">
+          <a
+            class="nav-link nav-link-icon"
+            href="https://discord.gg/5qTPyDzmGk"
+            target="_blank"
+            rel="noopener"
+            data-toggle="tooltip"
+            :title="$t('navbar.discord.message')"
+          >
+            <i class="fab fa-discord" />
+            <span class="nav-link-inner--text d-lg-none">{{ $t('navbar.discord.server') }}</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link nav-link-icon"
+            href="https://github.com/ppy-sb/osu-collection-share"
+            target="_blank"
+            rel="noopener"
+            data-toggle="tooltip"
+            :title="$t('navbar.github.message')"
+          >
+            <i class="fa fa-github" />
+            <span class="nav-link-inner--text d-lg-none">{{ $t('navbar.github.name') }}</span>
+          </a>
+        </li>
         <!-- <li class="nav-item d-none d-lg-block ml-lg-4">
                     <a href="https://www.creative-tim.com/product/vue-argon-design-system" target="_blank" rel="noopener"
                        class="btn btn-neutral btn-icon">

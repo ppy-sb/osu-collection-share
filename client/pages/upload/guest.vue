@@ -263,30 +263,6 @@
             </b-card-body>
           </template>
         </collection-section>
-        <!-- <b-card
-          v-for="(c) of uploadingCollections"
-          :key="c.id"
-          no-body
-          class="mb-1"
-          :name="c.id"
-        >
-          <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-button v-b-toggle="c.id" block variant="info">
-              {{ c.name }}
-            </b-button>
-          </b-card-header>
-          <b-collapse :id="c.id" accordion="my-accordion" role="tabpanel">
-            <b-card-body>
-              <b-form-checkbox
-                :id="`${c.name}-upload`"
-                v-model="c.upload"
-              >
-                {{ $t('upload.upload') }}
-              </b-form-checkbox>
-            </b-card-body>
-            <beatmapset-list-item v-for="(set) of c.mapsets" :key="`${c.name}-${set.id}`" :set="set" class="border-right-0 border-left-0" />
-          </b-collapse>
-        </b-card> -->
       </card>
     </section-layout>
   </profile-layout>
@@ -542,27 +518,18 @@ export default {
     beatmapLink (beatmap) {
       return `https://osu.ppy.sh/b/${beatmap.beatmap_id}`
     },
-    // collectionSetIds (collection) {
-    //   this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.id).join('\n')}`)
-    // },
-    // collectionBeatmapIds (collection) {
-    //   this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.maps.map(map => map.beatmap_id).join('\n')).join('\n')}`)
-    // },
-    // collectionSetLinks (collection) {
-    //   this.copySomething(`${collection.name}\n${collection.mapsets.map(set => this.beatmapsetLink(set)).join('\n')}`)
-    // },
-    // collectionBeatmapLinks (collection) {
-    //   this.copySomething(`${collection.name}\n${collection.mapsets.map(set => set.maps.map(map => this.beatmapLink(map)).join('\n')).join('\n')}`)
-    // },
-    // async copySomething (text) {
-    //   try {
-    //     await this.$copyText(text)
-    //   } catch (e) {
-    //     console.error(e)
-    //   }
-    // },
     async convSlugApi (name) {
       return await this.$axios.get('/api/slug/' + name).then(res => res.data)
+    }
+  },
+  head () {
+    return {
+      title: `${this.$t('upload.upload')} - ${this.$t('landing.title')}`,
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: this.$t('upload.description')
+      }]
     }
   }
 }
