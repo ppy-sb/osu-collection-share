@@ -8,21 +8,16 @@
               {{ collection.name }}
             </nuxt-link>
           </h5>
-          <small>{{ $dayjs(dateFromObjectId(collection._id)) | fromNow }} | <i class="fas fa-eye" /> {{ collection.count.view }}</small>
+          <div class="text-nowrap d-flex align-items-end flex-column position-absolute pr-2 pt-2" style="right:0px; top: 0px; width:10%">
+            <div><small><i class="fas fa-cloud-upload-alt" /> {{ $dayjs(dateFromObjectId(collection._id)) | fromNow }}</small></div>
+            <div><small><i class="fas fa-eye" /> {{ collection.count.view }}</small></div>
+            <div><small>6 <i class="far fa-thumbs-up" /> | <i class="far fa-thumbs-down" /> 727</small></div>
+          </div>
         </div>
 
-        <p class="mb-1" v-html="bbcode(collection.description)" />
+        <p class="mb-1" style="width:calc(90% - 1.5em)" v-html="bbcode(collection.description)" />
 
         <small>{{ $t('user.uploadedBy') }}
-          <!-- <a
-            :href="
-              (collection.uploader &&
-                (collection.uploader.link
-                  || (collection.uploader.name &&
-                    `https://osu.ppy.sh/users/${collection.uploader.name}`)))
-                || `https://osu.ppy.sh/users/${collection.user.name}`"
-          >{{ (collection.uploader && collection.uploader.name)
-            || collection.user.name }}</a> -->
           <a :href="uploaderLink(collection)">{{ uploaderName(collection) }}</a>
         </small>
       </b-list-group-item>
