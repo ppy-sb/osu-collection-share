@@ -4,5 +4,6 @@ const router = express.Router()
 router.use('/collectionDB', require('./collectionDB'))
 router.use('/user', require('./user'))
 
-router.get('/slug/*', require('./slug'))
+router.use('/slug', require('./slug'))
+router.use('/session', require('./session'))
 module.exports = router

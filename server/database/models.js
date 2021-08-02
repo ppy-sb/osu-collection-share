@@ -1,5 +1,7 @@
+const requireDir = require('require-dir')
+
 const Mongoose = require('./connect')
-const Schemas = require('./schemas')
+const Schemas = requireDir('./schemas')
 
 // const User = Mongoose.model('User', Schemas.User)
 // const MapCollection = Mongoose.model('MapCollection', Schemas.MapCollection)

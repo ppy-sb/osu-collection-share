@@ -1,7 +1,8 @@
+const Mongoose = require('mongoose')
 const slug = require('slug')
 const models = require('../../database/models.js')
 const getSlug = require('../slug.js')
-const UserController = require('../User')
+// const UserController = require('../User')
 
 class CollectionSet {
   constructor ({ collectionDB, user, compiledCollectionData }) {
@@ -63,12 +64,12 @@ class CollectionSet {
 
     if (!this.user.anonymous) {
       // create or find user
-      const user = await this.findOrCreateUser()
+      const user = await models.User.findOne({ _id: Mongoose.Types.ObjectId(this.user._id) })
+      // const user = await this.findOrCreateUser()
 
       // create collectionDB
-      this.collectionDB.user = user
+      if (user._id) { this.collectionDB.user = { _id: user._id } }
     } else {
-      this.collectionDB.user = { anonymous: true }
     }
     const dbSlug = await getSlug(this.collectionDB.slug, CollectionDB)
     if (dbSlug.sameCollectionDBExists) { this.collectionDB.slug = dbSlug.nextAvailable } else { this.collectionDB.slug = dbSlug.slug }
@@ -112,9 +113,9 @@ class CollectionSet {
     }
   }
 
-  findOrCreateUser () {
-    return UserController.findOrCreateUser(this.user)
-  }
+  // findOrCreateUser () {
+  //   return UserController.findOrCreateUser(this.user)
+  // }
 
   async findOrCreateSet (s) {
     const { Set } = this.models

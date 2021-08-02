@@ -15,7 +15,7 @@
 import 'vue-search-select/dist/VueSearchSelect.css'
 
 import { ModelListSelect } from 'vue-search-select'
-import axios from 'axios'
+// import axios from 'axios'
 // import { ajaxFindCountry } from "../data/countriesApi";
 
 export default {
@@ -47,7 +47,7 @@ export default {
       if (searchText === '') { return }
       if (this.results.length === 0 || this.searchText !== searchText) {
         this.searchText = searchText
-        axios
+        this.$axios
           .get(`/api/collectionDB/search/${searchText}`)
           .then((response) => {
             if (response.data) { this.results = response.data }

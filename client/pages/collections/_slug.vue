@@ -13,30 +13,29 @@
             </div>
             <div
               class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center"
-              style="visibility: hidden"
             >
               <div class="card-profile-actions py-4 mt-lg-0">
-                <base-button type="info" size="sm" class="mr-4">
-                  Connect
-                </base-button>
-                <base-button type="default" size="sm" class="float-right">
-                  Bancho profile
-                </base-button>
+                <b-button variant="info" size="sm" class="mr-4" :pressed="myVote.vote === 1" @click="voteUp">
+                  <i class="far fa-thumbs-up" />
+                </b-button>
+                <b-button variant="danger" size="sm" class="float-right" :pressed="myVote.vote === -1" @click="voteDown">
+                  <i class="far fa-thumbs-down" />
+                </b-button>
               </div>
             </div>
-            <div class="col-lg-4 order-lg-1" style="visibility: hidden">
-              <div class="card-profile-stats d-flex justify-content-center">
+            <div class="col-lg-4 order-lg-1">
+              <div class="card-profile-stats d-flex justify-content-between">
                 <div>
-                  <span class="heading">22</span>
-                  <span class="description">Collections</span>
+                  <span class="heading">{{ collectionDB.count.vote.up }}</span>
+                  <span class="description"><i class="far fa-thumbs-up" /></span>
                 </div>
                 <div>
-                  <span class="heading">10</span>
-                  <span class="description">Photos</span>
+                  <span class="heading">{{ collectionDB.count.vote.down }}</span>
+                  <span class="description"><i class="far fa-thumbs-down" /></span>
                 </div>
                 <div>
-                  <span class="heading">89</span>
-                  <span class="description">Comments</span>
+                  <span class="heading">{{ collectionDB.count.view }}</span>
+                  <span class="description"><i class="fas fa-eye" /></span>
                 </div>
               </div>
             </div>
@@ -116,7 +115,6 @@
   </profile-layout>
 </template>
 <script>
-import axios from 'axios'
 import CollectionSection from '@/components/CollectionSection'
 import CollectionButtonGroup from '@/components/CollectionButtonGroup'
 
@@ -136,19 +134,10 @@ export default {
     TopSectionLayout,
     Sheet
   },
-  asyncData ({ params }) {
-    if (process.server) {
-      return axios
-        .get(`http://localhost:3000/api/collectionDB/get/${params.slug}`)
-        .then((res) => {
-          return res.data
-        })
-    }
-    if (process.client) {
-      return axios.get(`/api/collectionDB/get/${params.slug}`).then((res) => {
-        return res.data
-      })
-    }
+  asyncData ({ params, $axios }) {
+    return $axios.get(`/api/collectionDB/get/${params.slug}`).then((res) => {
+      return res.data
+    })
   },
   data () {
     return {
@@ -160,7 +149,39 @@ export default {
       return mixin.uploaderAvatarSrc(this.collectionDB)
     }
   },
-  methods: mixin,
+  methods: {
+    ...mixin,
+    async voteUp () {
+      try {
+        if (this.myVote.vote !== 1) {
+          const result = await this.$axios.get(`/api/collectionDB/${this.collectionDB.slug}/vote/up`).then(res => res.data)
+          if (result.success) { this.$set(this.collectionDB.count, 'vote', result.vote) }
+          this.myVote.vote = 1
+        } else {
+          const result = await this.$axios.get(`/api/collectionDB/${this.collectionDB.slug}/vote/unvote`).then(res => res.data)
+          if (result.success) { this.$set(this.collectionDB.count, 'vote', result.vote) }
+          this.myVote.vote = 0
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async voteDown () {
+      try {
+        if (this.myVote.vote !== -1) {
+          const result = await this.$axios.get(`/api/collectionDB/${this.collectionDB.slug}/vote/down`).then(res => res.data)
+          if (result.success) { this.$set(this.collectionDB.count, 'vote', result.vote) }
+          this.myVote.vote = -1
+        } else {
+          const result = await this.$axios.get(`/api/collectionDB/${this.collectionDB.slug}/vote/unvote`).then(res => res.data)
+          if (result.success) { this.$set(this.collectionDB.count, 'vote', result.vote) }
+          this.myVote.vote = 0
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  },
   head () {
     return {
       title: `${this.collectionDB.name} - ${this.$t('landing.title')}`,
