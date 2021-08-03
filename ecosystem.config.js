@@ -5,14 +5,14 @@ module.exports = {
       script: 'npm',
       args: 'run express-api',
       exec_mode: 'cluster',
-      instances: 4
+      instances: 2
     },
     {
       name: 'osu-collection-share/frontend',
       script: './node_modules/nuxt/bin/nuxt.js',
       exec_mode: 'cluster',
       args: 'start',
-      instances: 4
+      instances: 2
     }
   ]
 }
