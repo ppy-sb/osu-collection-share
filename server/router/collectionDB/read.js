@@ -6,10 +6,7 @@ module.exports = async (req, res, next) => {
   if (req.session.user) {
     collection.myVote = { vote: 0 }
   } else if (req.session) {
-    collection.myVote = req.session.votes.find((voted) => {
-      console.log(voted.collectionDB._id, collection.collectionDB._id)
-      return voted.collectionDB._id.equals(collection.collectionDB._id)
-    }) || { vote: 0 }
+    collection.myVote = req.session.votes.find(voted => voted.collectionDB._id.equals(collection.collectionDB._id)) || { vote: 0 }
   }
   res.json(collection)
 }
