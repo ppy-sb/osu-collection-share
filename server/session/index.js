@@ -22,7 +22,7 @@ router.use(require('express-session')({
   // * https://www.npmjs.com/package/express-session#resave
   // * https://www.npmjs.com/package/express-session#saveuninitialized
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: false
 }))
 
 router.use((req, res, next) => {
