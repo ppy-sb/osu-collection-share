@@ -9,10 +9,9 @@ module.exports = {
     },
     {
       name: 'osu-collection-share/frontend',
-      script: 'npm',
+      script: './node_modules/nuxt/bin/nuxt.js',
       exec_mode: 'cluster',
-      instances: 4,
-      args: 'start'
+      instances: 4
     }
   ]
 }
