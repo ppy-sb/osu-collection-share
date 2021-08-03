@@ -11,6 +11,7 @@ module.exports = {
       name: 'osu-collection-share/frontend',
       script: './node_modules/nuxt/bin/nuxt.js',
       exec_mode: 'cluster',
+      args: 'start',
       instances: 4
     }
   ]
