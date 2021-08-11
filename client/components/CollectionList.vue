@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import mixin from '~/../universal/uploaderMixin'
+import mixin from '~universal/uploaderMixin'
 export default {
   filters: {
     fromNow (m) {

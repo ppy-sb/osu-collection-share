@@ -1,7 +1,7 @@
 const Mongoose = require('mongoose')
 const slug = require('slug')
-const models = require('../../database/models.js')
-const getSlug = require('../slug.js')
+const models = require('~models')
+const getSlug = require('~controllers/slug.js')
 // const UserController = require('../User')
 
 class CollectionSet {

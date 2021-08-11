@@ -1,4 +1,4 @@
-const { CollectionDB } = require('../../database/models.js')
+const { CollectionDB } = require('~models')
 module.exports = async (req, res, next) => {
   const searchText = req.params.name
 

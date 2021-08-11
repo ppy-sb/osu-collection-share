@@ -1,3 +1,4 @@
+require('module-alias/register')
 const fs = require('fs')
 const app = require('./base')
 const port = process.env.API_LISTEN || process.env.PORT || 3000

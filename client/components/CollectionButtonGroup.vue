@@ -36,7 +36,7 @@
   </b-button-toolbar>
 </template>
 <script>
-import uploaderMixin from '~/../universal/uploaderMixin'
+import uploaderMixin from '~universal/uploaderMixin'
 /* important IDK why but buffer is undefined */
 global.Buffer = global.Buffer || require('buffer').Buffer
 const FileSaver = require('file-saver')

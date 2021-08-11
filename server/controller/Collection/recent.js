@@ -1,4 +1,4 @@
-const { CollectionDB, User } = require('../../database/models.js')
+const { CollectionDB, User } = require('~models')
 
 module.exports = async () => {
   const result = await CollectionDB.find().sort({ $natural: -1 }).limit(20).exec().then(results => results.map(result => result.toObject())).catch(_ => [])

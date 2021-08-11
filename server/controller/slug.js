@@ -1,6 +1,6 @@
-// import randomString from '~/../universal/randomString'
+// import randomString from '~universal/randomString'
 const slug = require('slug')
-const randomString = require('../../universal/randomString')
+const randomString = require('~universal/randomString')
 module.exports = async (t, model) => {
   if (!t) {
     t = randomString()

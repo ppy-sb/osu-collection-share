@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"i18n-ally.localesPaths": [
+			"client/locales"
+		],
+		"i18n-ally.keystyle": "nested"
+	}
+}

@@ -276,7 +276,7 @@ import ProfileLayout from '@/components/sb-layouts/ProfileLayout'
 import CollectionSection from '@/components/CollectionSection'
 import OsuDBParserWorker from '@/assets/scripts/parseDB.worker.js'
 
-import isUrl from '~/../universal/isUrl'
+import isUrl from '~universal/isUrl'
 export default {
   components: {
     // BeatmapsetListItem,

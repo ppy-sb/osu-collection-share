@@ -1,5 +1,5 @@
 const Mongoose = require('mongoose')
-const models = require('../../database/models')
+const models = require('~models')
 const VOTE = {
   UP: 1,
   DOWN: -1,

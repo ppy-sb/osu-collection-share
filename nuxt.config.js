@@ -1,5 +1,7 @@
 // eslint-disable-next-line nuxt/no-cjs-in-config
+import { resolve } from 'path'
 import webpack from 'webpack'
+import packageJSON from './package.json'
 // eslint-disable-next-line nuxt/no-cjs-in-config
 module.exports = {
   vue: {
@@ -211,7 +213,7 @@ module.exports = {
   },
   server: {
     host: '0' // default: localhost
-  }
+  },
 
   // router: {
   //   extendRoutes (routes, resolve) {
@@ -222,4 +224,8 @@ module.exports = {
   //     })
   //   }
   // }
+
+  alias: {
+    ...Object.entries(packageJSON?._moduleAliases ?? {}).reduce((acc, [k, v]) => { acc[k] = resolve(v); return acc }, {})
+  }
 }

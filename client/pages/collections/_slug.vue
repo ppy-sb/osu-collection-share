@@ -121,9 +121,9 @@ import CollectionButtonGroup from '@/components/CollectionButtonGroup'
 import SectionLayout from '@/components/sb-layouts/components/SectionLayout'
 import TopSectionLayout from '@/components/sb-layouts/components/TopSectionLayout'
 import ProfileLayout from '@/components/sb-layouts/ProfileLayout'
+import mixin from '~universal/uploaderMixin'
 import Sheet from '~/components/tournament/Sheet.vue'
 
-import mixin from '~/../universal/uploaderMixin'
 export default {
   watchQuery: ['slug'],
   components: {

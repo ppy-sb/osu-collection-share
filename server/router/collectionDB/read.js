@@ -1,4 +1,4 @@
-const Reader = require('../../controller/Collection/reader')
+const Reader = require('~controllers/Collection/reader')
 module.exports = async (req, res, next) => {
   const result = new Reader({ slug: req.params.slug })
   const collection = await result.toCollection()

@@ -1,4 +1,4 @@
-const User = require('../../database/models').User
+const User = require('~models').User
 class UserController {
   static async findOrCreateUser (user) {
     const _user = await User.findOne(user).exec()

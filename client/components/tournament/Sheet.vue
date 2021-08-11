@@ -66,7 +66,7 @@
 </template>
 <script>
 import TournamentHead from './TournamentTableHead'
-import modHelper from '~/../universal/enum'
+import modHelper from '~universal/enum'
 export default {
   components: {
     TournamentHead
