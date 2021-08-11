@@ -13,6 +13,9 @@
 
 // Sections
 
+section {
+    //background-color: section-color("primary");
+}
 
 @each $color, $value in $section-colors {
     @include bg-variant(".section-#{$color}", $value);
