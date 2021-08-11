@@ -89,7 +89,7 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-    ['nuxt-i18n', {
+    ['@nuxtjs/i18n', {
       detectBrowserLanguage: {
         useCookie: true,
         cookieKey: 'i18n_redirected',
