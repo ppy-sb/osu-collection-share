@@ -5,7 +5,15 @@
 ### database
 create .env file contains database connect uri
 ```
-DB_URI=``
+DB_URI=''
+
+SESSION_COLLECTION=sessions
+SESSION_SECRET=osu-collection-share-secret-very-long-string
+
+#API_SCHEME=http://
+API_SCHEME=unix
+API_DOMAIN=localhost
+API_LISTEN=/tmp/osu-collection-share.sock
 ```
 
 ```bash
