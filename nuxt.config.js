@@ -1,9 +1,7 @@
-// eslint-disable-next-line nuxt/no-cjs-in-config
 import { resolve } from 'path'
 import webpack from 'webpack'
 import packageJSON from './package.json'
-// eslint-disable-next-line nuxt/no-cjs-in-config
-module.exports = {
+export default {
   vue: {
     config: {
       performance: process.env.NODE_ENV !== 'production'

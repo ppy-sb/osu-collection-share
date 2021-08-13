@@ -24,7 +24,7 @@
     >
       <span
         v-for="index in bubbleCount"
-        :key="index"
+        :key="`${seed}-bubble-${index}`"
       />
     </div>
     <b-container :class="[shaped === undefined ? '' : 'fill-shaped-pt', containerClass]">
@@ -82,7 +82,8 @@ export default {
   },
   data () {
     return {
-      logger: false
+      logger: false,
+      seed: Math.random()
     }
   }
 }

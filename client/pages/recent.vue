@@ -11,7 +11,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import SectionLayout from '@/components/sb-layouts/components/SectionLayout'
 import CollectionList from '@/components/CollectionList'
 
@@ -20,21 +19,12 @@ export default {
     SectionLayout,
     CollectionList
   },
-  asyncData () {
-    if (process.server) {
-      return axios.get('http://localhost:3000/api/collectionDB/recent').then((res) => {
-        return {
-          list: res.data
-        }
-      })
-    }
-    if (process.client) {
-      return axios.get('/api/collectionDB/recent').then((res) => {
-        return {
-          list: res.data
-        }
-      })
-    }
+  asyncData ({ $axios }) {
+    return $axios.get('/api/collectionDB/recent').then((res) => {
+      return {
+        list: res.data
+      }
+    })
   },
   head () {
     return {

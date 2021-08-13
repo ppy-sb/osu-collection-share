@@ -1,5 +1,4 @@
 import Vue from 'vue'
-const dayjs = {}
 const dayjs = require('dayjs')
 dayjs.install = function (Vue, { locale = 'en-gb' } = {}) {
   //     // 1. 添加全局方法或 property
