@@ -139,6 +139,7 @@ import JsFileDownloader from 'js-file-downloader'
 import PQueue from 'p-queue'
 import readableFileSize from '~universal/readableFileSize'
 import Image from '~/components/sb-components/Image.vue'
+import sourceConfig from '~universal/download/sourceConfig.js'
 
 export default {
   components: {
@@ -161,56 +162,8 @@ export default {
         downloading: [{ sid: -1, total: 0, loaded: 0, downloader: undefined, lastLoaded: 0, timeStamp: 0, lastTimeStamp: 0 }],
         errored: []
       },
-      source: 'chimu.moe',
-      sourceConfig: {
-        bancho: {
-          downloadLink: (sid, { version = 'novideo' } = {}) => `https://osu.ppy.sh/beatmapsets/${sid}/download?noVideo=${version === 'noVideo'}`,
-          thumb: sid => `https://b.ppy.sh/thumb/${sid}l.jpg`,
-          set: sid => `https://osu.ppy.sh/beatmapsets/${sid}`,
-          disabled: true,
-          displayName: 'osu.ppy.sh'
-        },
-        'chimu.moe': {
-          downloadLink: (sid, { version = 'novideo' } = {}) => `https://api.chimu.moe/v1/download/${sid}?n=${version === 'noVideo'}`,
-          concurrency: 1,
-          safeConcurrency: 1,
-          shortBurstDownloadSize: 4,
-          shortBurstConcurrency: 2,
-          mirror: true,
-          version: ['full', 'novideo'],
-          note: ['1 concurrent download', 'higher rate is possible but don\'t']
-        },
-        'osu.sayobot.cn': {
-          downloadLink: (sid, { version = 'novideo' } = {}) => {
-            if (version === 'novideo') {
-              return `https://dl.sayobot.cn/beatmaps/download/novideo/${sid}`
-            } else if (version === 'mini') {
-              return `https://dl.sayobot.cn/beatmaps/download/mini/${sid}`
-            } else {
-              return `https://dl.sayobot.cn/beatmaps/download/full/${sid}`
-            }
-          },
-          version: ['full', 'novideo', 'mini'],
-          concurrency: 10,
-          mirror: true,
-          note: ['unlimited', 'higher fail rate outside from China']
-        },
-        'beatconnect.io': {
-          downloadLink: (sid, { version = 'novideo' } = {}) => {
-            // const { uniqueId } = await this.$axios.get(`/api/beatconnect.io/download/${this.version}/${sid}`).then(res => res.data)
-            // return `https://beatconnect.io/${sid}/${uniqueId}/`
-            return `/api/beatconnect.io/download/${this.version}/${sid}`
-          },
-          concurrency: 1,
-          safeConcurrency: 1,
-          shortBurstDownloadSize: 4,
-          shortBurstConcurrency: 2,
-          mirror: true,
-          version: ['full'],
-          note: ['1 concurrent download', 'higher rate is possible but don\'t', 'disabled due to cors not allowed'],
-          disabled: true
-        }
-      }
+      source: 'osu.sayobot.cn',
+      sourceConfig
     }
   },
   computed: {
@@ -311,7 +264,7 @@ export default {
           : this.sids.length > this.currentSource.shortBurstDownloadSize || 0
             ? this.currentSource.safeConcurrency
             : this.concurrency > this.currentSource.shortBurstConcurrency // allow for small size collections burst
-              ? this.currentSource.shortBurstConcurrency // max is 2 times of the rated limit
+              ? this.currentSource.shortBurstConcurrency || this.currentSource.safeConcurrency * 2 // max is 2 times of the rated limit or specified rate
               : this.concurrency
       })
       this.queue.addAll(this.sids.map(sid => async () => {
