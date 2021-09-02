@@ -71,7 +71,7 @@
         label="simultaneous downloads"
         label-align="right"
         label-for="concurrency"
-        :invalid-feedback="`You are at the risk of being banned from this source if you exceed the recommended concurrency limit (which is ${currentSource.defaultConcurrency}).`"
+        :invalid-feedback="`Exceed the recommended concurrency limit (which is ${currentSource.defaultConcurrency}). You are at the risk of being banned from this source.`"
         :state="safeConcurrency"
       >
         <b-form-input
@@ -164,7 +164,7 @@ export default {
         downloading: [{ sid: -1, total: 0, loaded: 0, downloader: undefined, lastLoaded: 0, timeStamp: 0, lastTimeStamp: 0 }],
         errored: []
       },
-      source: 'chimu-moe',
+      source: 'chimu.moe',
       sourceConfig: {
         bancho: {
           downloadLink: (sid, { version = 'novideo' } = {}) => `https://osu.ppy.sh/beatmapsets/${sid}/download?noVideo=${version === 'noVideo'}`,
@@ -173,11 +173,10 @@ export default {
           disabled: true,
           displayName: 'osu.ppy.sh'
         },
-        'chimu-moe': {
+        'chimu.moe': {
           downloadLink: (sid, { version = 'novideo' } = {}) => `https://api.chimu.moe/v1/download/${sid}?n=${version === 'noVideo'}`,
           concurrency: 1,
           defaultConcurrency: 1,
-          displayName: 'chimu.moe',
           mirror: true,
           version: ['full', 'novideo'],
           note: ['owner requires 1 download at a time', 'higher rate is possible but please don\'t']
@@ -193,9 +192,22 @@ export default {
             }
           },
           version: ['full', 'novideo', 'mini'],
-          concurrency: 4,
+          concurrency: 10,
           mirror: true,
           note: ['unlimited rate', 'higher fail rate outside from China']
+        },
+        'beatconnect.io': {
+          downloadLink: (sid, { version = 'novideo' } = {}) => {
+            // const { uniqueId } = await this.$axios.get(`/api/beatconnect.io/download/${this.version}/${sid}`).then(res => res.data)
+            // return `https://beatconnect.io/${sid}/${uniqueId}/`
+            return `/api/beatconnect.io/download/${this.version}/${sid}`
+          },
+          concurrency: 1,
+          defaultConcurrency: 1,
+          mirror: true,
+          version: ['full'],
+          note: ['owner requires 1 download at a time', 'higher rate is possible but please don\'t'],
+          disabled: true
         }
       }
     }
@@ -219,11 +231,16 @@ export default {
         if (Number.isNaN(val)) return old
         val = parseInt(val)
         this.sourceConfig[this.source].concurrency = val
-        if (this.queue) this.queue.concurrency = val
+        if (this.queue && this.currentSource.defaultConcurrency >= val) this.queue.concurrency = val
       }
     },
     safeConcurrency () {
       return Boolean(!this.currentSource.defaultConcurrency || this.currentSource.concurrency <= this.currentSource.defaultConcurrency)
+    }
+  },
+  watch: {
+    currentSource (newVal) {
+      if (!newVal.version.includes(this.version)) this.version = newVal.version[0]
     }
   },
 
@@ -264,7 +281,6 @@ export default {
       return lines.map(line => line.trim()).filter(line => !isNaN(line) && line)
     },
     pause () {
-      console.log(this.queue)
       if (!this.queue) return
       this.queue.pause()
       this.paused = true
@@ -285,8 +301,8 @@ export default {
       this.sids = this.idFromString(this.idString)
       this.resetStatus()
       this.queue = new PQueue({ concurrency: this.concurrency })
-      this.queue.addAll(this.sids.map(sid => () => {
-        const url = this.getLink(sid, { version: this.version })
+      this.queue.addAll(this.sids.map(sid => async () => {
+        const url = await this.getLink(sid, { version: this.version })
         const downloadTracker = {
           sid,
           url,
@@ -319,7 +335,7 @@ export default {
           })
         downloadTracker.downloader = downloader
         this.status.downloading.push(downloadTracker)
-        return downloader
+        await downloader
       }))
       this.queue.onIdle(() => {
         this.job = false
