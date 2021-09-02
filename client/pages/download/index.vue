@@ -71,7 +71,7 @@
         label="simultaneous downloads"
         label-align="right"
         label-for="concurrency"
-        :invalid-feedback="`Exceed the recommended concurrency limit (which is ${currentSource.defaultConcurrency}). You are at the risk of being banned from this source.`"
+        :invalid-feedback="`Exceed the recommended concurrency limit (which is ${currentSource.safeConcurrency}). You are at the risk of being banned from this source.`"
         :state="safeConcurrency"
       >
         <b-form-input
@@ -88,36 +88,33 @@
     </b-card>
     <b-collapse :visible="job" class="pt-2">
       <b-card class="shadow">
-        b-
-        <div class="">
-          <b-progress :max="status.total" hieght="2em">
-            <b-progress-bar :value="status.successed" variant="success" />
-            <b-progress-bar :value="status.downloading.length" variant="primary" />
-            <b-progress-bar :value="status.errored.length" variant="danger" />
+        <b-progress :max="status.total" hieght="2em">
+          <b-progress-bar :value="status.successed" variant="success" />
+          <b-progress-bar :value="status.downloading.length" variant="primary" />
+          <b-progress-bar :value="status.errored.length" variant="danger" />
+        </b-progress>
+        <div class="d-flex">
+          <b-button-group class="ml-auto pt-2 pb-4">
+            <b-button :disabled="!job" @click="() => paused ? resume() : pause()">
+              {{ paused ? "resume" : "pause" }}
+            </b-button>
+            <b-button :disabled="!job" variant="danger" @click="clear">
+              cancel
+            </b-button>
+          </b-button-group>
+        </div>
+        <div v-for="file in status.downloading" :key="`progress-download-${file.sid}`">
+          <b-progress :max="file.total" height="3em">
+            <b-progress-bar :value="file.loaded">
+              <div class="d-flex align-items-center">
+                <bs-image :src="thumbSrc(file.sid)" style="height:3em" class="pr-2" />
+                <strong v-if="file.lastTimeStamp" class="text-center">
+                  {{ readableFileSize((file.loaded - file.lastLoaded) / (file.timeStamp - file.lastTimeStamp) * 1000) }} / s<br>
+                  {{ readableFileSize(file.loaded) }} / {{ readableFileSize(file.total) }}
+                </strong>
+              </div>
+            </b-progress-bar>
           </b-progress>
-          <div class="d-flex">
-            <b-button-group class="ml-auto pt-2 pb-4">
-              <b-button :disabled="!job" @click="() => paused ? resume() : pause()">
-                {{ paused ? "resume" : "pause" }}
-              </b-button>
-              <b-button :disabled="!job" variant="danger" @click="clear">
-                cancel
-              </b-button>
-            </b-button-group>
-          </div>
-          <div v-for="file in status.downloading" :key="`progress-download-${file.sid}`">
-            <b-progress :max="file.total" height="3em">
-              <b-progress-bar :value="file.loaded">
-                <div class="d-flex align-items-center">
-                  <bs-image :src="thumbSrc(file.sid)" style="height:3em" class="pr-2" />
-                  <strong v-if="file.lastTimeStamp" class="text-center">
-                    {{ readableFileSize((file.loaded - file.lastLoaded) / (file.timeStamp - file.lastTimeStamp) * 1000) }} / s<br>
-                    {{ readableFileSize(file.loaded) }} / {{ readableFileSize(file.total) }}
-                  </strong>
-                </div>
-              </b-progress-bar>
-            </b-progress>
-          </div>
         </div>
       </b-card>
     </b-collapse>
@@ -176,10 +173,12 @@ export default {
         'chimu.moe': {
           downloadLink: (sid, { version = 'novideo' } = {}) => `https://api.chimu.moe/v1/download/${sid}?n=${version === 'noVideo'}`,
           concurrency: 1,
-          defaultConcurrency: 1,
+          safeConcurrency: 1,
+          shortBurstDownloadSize: 4,
+          shortBurstConcurrency: 2,
           mirror: true,
           version: ['full', 'novideo'],
-          note: ['owner requires 1 download at a time', 'higher rate is possible but please don\'t']
+          note: ['1 concurrent download', 'higher rate is possible but don\'t']
         },
         'osu.sayobot.cn': {
           downloadLink: (sid, { version = 'novideo' } = {}) => {
@@ -194,7 +193,7 @@ export default {
           version: ['full', 'novideo', 'mini'],
           concurrency: 10,
           mirror: true,
-          note: ['unlimited rate', 'higher fail rate outside from China']
+          note: ['unlimited', 'higher fail rate outside from China']
         },
         'beatconnect.io': {
           downloadLink: (sid, { version = 'novideo' } = {}) => {
@@ -203,10 +202,12 @@ export default {
             return `/api/beatconnect.io/download/${this.version}/${sid}`
           },
           concurrency: 1,
-          defaultConcurrency: 1,
+          safeConcurrency: 1,
+          shortBurstDownloadSize: 4,
+          shortBurstConcurrency: 2,
           mirror: true,
           version: ['full'],
-          note: ['owner requires 1 download at a time', 'higher rate is possible but please don\'t'],
+          note: ['1 concurrent download', 'higher rate is possible but don\'t', 'disabled due to cors not allowed'],
           disabled: true
         }
       }
@@ -225,17 +226,18 @@ export default {
     },
     concurrency: {
       get () {
-        return this.currentSource.concurrency || 4
+        return this.currentSource.concurrency
       },
       set (val, old) {
         if (Number.isNaN(val)) return old
         val = parseInt(val)
+        if (val <= 0) return
         this.sourceConfig[this.source].concurrency = val
-        if (this.queue && this.currentSource.defaultConcurrency >= val) this.queue.concurrency = val
+        if (this.queue && this.currentSource.safeConcurrency >= val) this.queue.concurrency = val
       }
     },
     safeConcurrency () {
-      return Boolean(!this.currentSource.defaultConcurrency || this.currentSource.concurrency <= this.currentSource.defaultConcurrency)
+      return Boolean(!this.currentSource.safeConcurrency || this.currentSource.concurrency <= this.currentSource.safeConcurrency)
     }
   },
   watch: {
@@ -300,7 +302,18 @@ export default {
       this.job = true
       this.sids = this.idFromString(this.idString)
       this.resetStatus()
-      this.queue = new PQueue({ concurrency: this.concurrency })
+      this.queue = new PQueue({
+        concurrency:
+      isNaN(this.currentSource.safeConcurrency)
+        ? this.concurrency
+        : this.concurrency < this.currentSource.safeConcurrency
+          ? this.concurrency
+          : this.sids.length > this.currentSource.shortBurstDownloadSize || 0
+            ? this.currentSource.safeConcurrency
+            : this.concurrency > this.currentSource.shortBurstConcurrency // allow for small size collections burst
+              ? this.currentSource.shortBurstConcurrency // max is 2 times of the rated limit
+              : this.concurrency
+      })
       this.queue.addAll(this.sids.map(sid => async () => {
         const url = await this.getLink(sid, { version: this.version })
         const downloadTracker = {
