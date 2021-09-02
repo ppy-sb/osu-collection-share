@@ -90,3 +90,4 @@ sw.*
 *.swp
 locales/backup/*
 server/database/osu-collection-share.code-workspace
+client/views

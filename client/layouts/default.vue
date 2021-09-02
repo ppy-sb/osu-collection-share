@@ -27,3 +27,8 @@ body, #wrapper {
    min-height:100vh;
 }
 </style>
+<style lang="scss">
+.section-shaped .shape.shape-skew + .container .col {
+  margin-top: 0 !important;
+}
+</style>

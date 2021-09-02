@@ -16,20 +16,37 @@
         <b-card-body class="py-2">
           <b-button-toolbar justify>
             <b-button-group size="sm" class="flex-wrap">
-              <b-button variant="primary" @click="() => collectionSetIds()">
-                {{ $t("collectionCard.copySetIds") }}
+              <!-- <b-button variant="primary" @click="() => copyCollectionSetIds()">
+                {{ $t("collectionCard.setIds") }}
               </b-button>
-              <b-button variant="info" @click="() => collectionSetLinks()">
-                {{ $t("collectionCard.copySetLinks") }}
+              <b-button variant="info" @click="() => copyCollectionSetLinks()">
+                {{ $t("collcollectionCard.setLinks}
               </b-button>
-              <b-button variant="warning" @click="() => collectionBeatmapIds()">
-                {{ $t("collectionCard.copyBeatmapIds") }}
+              <b-button variant="warning" @click="() => copyCollectionBeatmapIds()">
+                {{ $t("collectionCard.copy.beatmapIds") }}
               </b-button>
               <b-button
                 variant="danger"
-                @click="() => collectionBeatmapLinks()"
+                @click="() => copyCollectionBeatmapLinks()"
               >
-                {{ $t("collectionCard.copyBeatmapLinks") }}
+                {{ $t(collectionCard.copy.beatmapLinkss") }}
+              </b-button> -->
+              <b-dropdown :text="$t('collectionCard.copy')" size="sm" variant="primary">
+                <b-dropdown-item @click="() => copyCollectionSetIds()">
+                  {{ $t("collectionCard.setIds") }}
+                </b-dropdown-item>
+                <b-dropdown-item @click="() => copyCollectionSetLinks()">
+                  {{ $t("collectionCard.setLinks") }}
+                </b-dropdown-item>
+                <b-dropdown-item @click="() => copyCollectionBeatmapIds()">
+                  {{ $t("collectionCard.beatmapIds") }}
+                </b-dropdown-item>
+                <b-dropdown-item @click="() => copyCollectionBeatmapLinks()">
+                  {{ $t("collectionCard.beatmapLinksks") }}
+                </b-dropdown-item>
+              </b-dropdown>
+              <b-button variant="success" @click="() => toDownload()">
+                {{ $t("collectionCard.downloadSet") }}
               </b-button>
             </b-button-group>
           </b-button-toolbar>
@@ -224,16 +241,24 @@ export default {
       return `https://osu.ppy.sh/b/${beatmap.beatmap_id}`
     },
     collectionSetIds () {
-      this.copySomething(`# ${this.collection.name}\n${this.collection.mapsets.map(set => set.id).join('\n')}`)
+      return `# ${this.collection.name}\n${this.collection.mapsets.map(set => set.id).join('\n')}`
     },
-    collectionBeatmapIds () {
+    copyCollectionSetIds () {
+      this.copySomething(this.collectionSetIds())
+    },
+    copyCollectionBeatmapIds () {
       this.copySomething(`# ${this.collection.name}\n${this.collection.mapsets.map(set => set.maps.map(map => map.beatmap_id).join('\n')).join('\n')}`)
     },
-    collectionSetLinks () {
+    copyCollectionSetLinks () {
       this.copySomething(`# ${this.collection.name}\n${this.collection.mapsets.map(set => this.beatmapsetLink(set)).join('\n')}`)
     },
-    collectionBeatmapLinks () {
+    copyCollectionBeatmapLinks () {
       this.copySomething(`# ${this.collection.name}\n${this.collection.mapsets.map(set => set.maps.map(map => this.beatmapLink(map)).join('\n')).join('\n')}`)
+    },
+    toDownload () {
+      const sid = this.collection.mapsets.map(set => set.id > 0 ? set.id : `# ${set.artist.name} - ${set.song.title} (unable to find set ID)`)
+      const prefix = this.collection.name
+      this.$router.push(this.localeLocation({ name: 'download', query: { sid, prefix } }))
     },
     async copySomething (text) {
       try {

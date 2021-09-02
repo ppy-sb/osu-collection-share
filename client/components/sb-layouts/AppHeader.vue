@@ -59,6 +59,13 @@
           >
             {{ $t('navbar.item.mostViewed') }}
           </b-dropdown-item>
+          <b-dropdown-item
+            :to="localePath({
+              name: 'download'
+            })"
+          >
+            beatmap batch downloader
+          </b-dropdown-item>
         </base-dropdown>
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto text-nowrap">

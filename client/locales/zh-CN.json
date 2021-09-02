@@ -3,15 +3,16 @@
     "beatmapLink": "链接",
     "beatmapSetPage": "图集页面",
     "beatmapStatic": "详情",
-    "copyBeatmapIds": "复制所有谱面ID",
-    "copyBeatmapLinks": "复制所有谱面链接",
-    "copySetIds": "复制所有图集ID",
-    "copySetLinks": "复制所有图集链接",
     "mapCount": "张图",
     "more": "所有难度",
     "otherDiffs": "难度未显示",
     "setId": "图集ID：",
-    "thread": "讨论"
+    "thread": "讨论",
+    "copy": {},
+    "beatmapIds": "复制所有谱面ID",
+    "beatmapLinks": "复制所有谱面链接",
+    "setIds": "复制所有图集ID",
+    "setLinks": "复制所有图集链接"
   },
   "header": {
     "findCollection": "搜索收藏夹..."

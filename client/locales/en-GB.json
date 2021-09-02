@@ -3,15 +3,17 @@
     "beatmapLink": "/b/ link",
     "beatmapSetPage": "to beatmapset",
     "beatmapStatic": "beatmap static",
-    "copyBeatmapIds": "copy all map's id",
-    "copyBeatmapLinks": "copy all map's link",
-    "copySetIds": "copy all set's id",
-    "copySetLinks": "copy all set's link",
     "mapCount": "maps",
     "more": "More",
     "otherDiffs": "other diffs",
     "setId": "set id:",
-    "thread": "thread"
+    "thread": "thread",
+    "copy": "copy",
+    "beatmapIds": "copy all map's id",
+    "beatmapLinks": "copy all map's link",
+    "setIds": "copy all set's id",
+    "setLinks": "copy all set's link",
+    "downloadSet": "download this set"
   },
   "header": {
     "findCollection": "Search collections..."
