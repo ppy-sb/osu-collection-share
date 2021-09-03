@@ -27,7 +27,7 @@
               height="2px"
               :max="collection.count.vote.up + collection.count.vote.down"
             >
-              <b-progress-bar :value="collection.count.vote.up" :variant="primary" />
+              <b-progress-bar :value="collection.count.vote.up" variant="primary" />
               <b-progress-bar :value="collection.count.vote.down" variant="danger" />
             </b-progress>
             <small><i class="far fa-thumbs-up" /> {{ collection.count.vote.up }} | <i class="far fa-thumbs-down" /> {{ collection.count.vote.down }}</small>
