@@ -35,7 +35,7 @@ export default {
     downloadLink: (sid, { version = 'full' } = {}) => {
       // const { uniqueId } = await this.$axios.get(`/api/beatconnect.io/download/${this.version}/${sid}`).then(res => res.data)
       // return `https://beatconnect.io/${sid}/${uniqueId}/`
-      return `/api/beatconnect.io/download/${this.version}/${sid}`
+      return `/api/beatconnect.io/download/${version}/${sid}`
     },
     concurrency: 1,
     safeConcurrency: 1,
