@@ -32,7 +32,7 @@ export default {
     note: ['higher fail rate outside from China', 'cancel then start again helps']
   },
   'beatconnect.io': {
-    downloadLink: (sid) => {
+    downloadLink: (sid, { version = 'full' } = {}) => {
       // const { uniqueId } = await this.$axios.get(`/api/beatconnect.io/download/${this.version}/${sid}`).then(res => res.data)
       // return `https://beatconnect.io/${sid}/${uniqueId}/`
       return `/api/beatconnect.io/download/${this.version}/${sid}`
@@ -43,7 +43,7 @@ export default {
     shortBurstConcurrency: 2,
     mirror: true,
     version: ['full'],
-    note: ['1 concurrent download', 'higher rate is possible but don\'t', 'disabled due to cors not allowed'],
+    note: ['1 concurrent download'],
     disabled: false
   }
 }
