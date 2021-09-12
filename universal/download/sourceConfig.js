@@ -44,6 +44,6 @@ export default {
     mirror: true,
     version: ['full'],
     note: ['1 concurrent download', 'higher rate is possible but don\'t', 'disabled due to cors not allowed'],
-    disabled: true
+    disabled: false
   }
 }
