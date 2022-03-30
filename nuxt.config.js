@@ -65,7 +65,7 @@ export default {
     '~/plugins/argon/argon-kit',
     // { src: '~/plugins/database/index.js', mode: 'server' }
     { src: '~/plugins/debounce/index.js', mode: 'client' },
-    { src: '~/plugins/vue-worker.js', mode: 'client' },
+    // { src: '~/plugins/vue-worker.js', mode: 'client' },
     { src: '~/plugins/vue-fullscreen.js', mode: 'client' },
     '~/plugins/vue-flag.js',
     // '~/plugins/moment.js'
