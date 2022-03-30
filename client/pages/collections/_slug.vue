@@ -93,7 +93,7 @@
       last
     >
       <fullscreen :fullscreen.sync="fullscreen">
-        <template v-if="!collectionDB.tournament">
+        <div v-if="!collectionDB.tournament">
           <collection-section
             v-for="collection of compiledCollectionData"
             :key="`collection-${collection.slug}`"
@@ -101,7 +101,7 @@
             :collection="collection"
             :tournament="collectionDB.tournament"
           />
-        </template>
+        </div>
         <template v-else>
           <b-card class="shadow border-0 overflow-hidden" no-body>
             <sheet :collections="compiledCollectionData" :small="!fullscreen" />
@@ -195,6 +195,9 @@ export default {
 }
 </script>
 <style>
+.fullscreen:fullscreen {
+  overflow:scroll;
+}
 .tournament {
   position: absolute;
   top: -0.3em;

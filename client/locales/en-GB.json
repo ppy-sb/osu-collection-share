@@ -1,4 +1,9 @@
 {
+  "progress": {
+    "recreate-beatmapset": "recreate beatmapset",
+    "create-osu-database-index": "indexing osu database",
+    "create-collection-root": "create collection root"
+  },
   "collectionCard": {
     "beatmapLink": "/b/ link",
     "beatmapSetPage": "to beatmapset",

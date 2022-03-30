@@ -2,12 +2,25 @@
   <profile-layout>
     <top-section-layout>
       <b-overlay
+        no-center
         :show="onJob"
         rounded
-        spinner
         opacity="0.6"
-        spinner-variant="primary"
       >
+        <template #overlay>
+          <div class="fade-away h-50 d-flex flex-column justify-content-end">
+            <div v-for="job, index in jobHistory" :key="index" class="text-center">
+              {{ $t(`progress.${job.job}`) }}: {{ job.processing }}
+            </div>
+          </div>
+          <div v-if="jobProgress.current" class="p-4 m-4">
+            <b-progress :max="jobProgress.total" height="2rem">
+              <b-progress-bar :value="jobProgress.current">
+                <span>{{ $t(`progress.${jobProgress.job}`) }}: <strong>{{ jobProgress.current }} / {{ jobProgress.total }}</strong></span>
+              </b-progress-bar>
+            </b-progress>
+          </div>
+        </template>
         <b-card no-body class="shadow card-profile mt--300">
           <h1 class="text-right pr-2 m-0">
             <i v-b-popover.hover.focus.rightbottom.html="$t('upload.disclaimer')" class="fa fa-question-circle" />
@@ -275,6 +288,7 @@ import ProfileLayout from '@/components/sb-layouts/ProfileLayout'
 
 import CollectionSection from '@/components/CollectionSection'
 import OsuDBParserWorker from '@/assets/scripts/parseDB.worker.js'
+import OsuDBCompilerWorker from '@/assets/scripts/compiler.worker.js'
 
 import isUrl from '~universal/isUrl'
 export default {
@@ -293,6 +307,8 @@ export default {
       avatarSrc: undefined,
       avatarSrcValid: undefined,
       onJob: false,
+      jobProgress: {},
+      jobHistory: [],
       collection: {
         name: '',
         slug: ''
@@ -408,74 +424,40 @@ export default {
       this.onJob = false
     },
 
+    updateJobProgress (data) {
+      const { job, processing, current, total } = data
+      this.jobProgress = {
+        job,
+        processing,
+        current,
+        total
+      }
+      const last = this.jobHistory[this.jobHistory.length - 1] || {}
+      if (processing === last.processing) return
+      this.jobHistory.push(data)
+      if (this.jobHistory.length > 5) {
+        this.jobHistory.shift()
+      }
+    },
+
     async compileData () {
       this.onJob = true
-      const compiledCollectionData = this.$worker.run((osuDBData, osuCollectionData) => {
-        function setIdGuessFromFolderName (name) {
-          name = name.split(' ')
-          if (!Number.isInteger(parseInt(name[0]))) { return null }
-          const conjectureSid = parseInt(name[0])
-          return conjectureSid
+      // const compiledCollectionData = this.$worker.run((osuDBData, osuCollectionData) => {
+
+      // }, [this.$options.osuDBData, this.$options.osuCollectionData])
+      const compileCollectionWorker = new OsuDBCompilerWorker()
+      compileCollectionWorker.postMessage([this.$options.osuDBData, this.$options.osuCollectionData])
+      const compiledCollectionData = new Promise((resolve, reject) => {
+        compileCollectionWorker.onmessage = ({ data: [type, data] }) => {
+          if (type === 'report-progress') {
+            this.updateJobProgress(data)
+          } else if (type === 'result') { resolve(data) }
         }
-
-        function mapListToMapsetList (mapset) {
-          const result = mapset.reduce((acc, beatmap) => {
-            if (beatmap.unknown) {
-              console.log('unknown beatmap', beatmap.md5)
-              return acc
-            }
-            // let set = acc.find((set) => {
-            //   if (beatmap.beatmapset_id !== -1) { return set.id === beatmap.beatmapset_id } else { return set.folderName === beatmap.folder_name }
-            // })
-            let set = acc.get(beatmap.beatmapset_id) || acc.get(beatmap.folder_name) || undefined
-            // if (set) { set.maps.push(beatmap) }
-            if (!set) {
-              set = {
-                id: beatmap.beatmapset_id === -1 ? setIdGuessFromFolderName(beatmap.folder_name) : beatmap.beatmapset_id,
-                folderName: beatmap.folder_name,
-                artist: {
-                  name: beatmap.artist_name,
-                  unicodeName: beatmap.artist_name_unicode
-                },
-                song: {
-                  title: beatmap.song_title,
-                  unicodeTitle: beatmap.song_title_unicode
-                },
-                thread: beatmap.thread_id,
-                maps: []
-              }
-              if (beatmap.beatmapset_id && beatmap.beatmapset_id > 0) { acc.set(beatmap.beatmapset_id, set) } else { acc.set(beatmap.folder_name, set) }
-            }
-            set.maps.push(beatmap)
-            return acc
-          }, new Map())
-          return Array.from(result.values())
-        }
-
-        const beatmapsMap = new Map(osuDBData.beatmaps.map(beatmap => [beatmap.md5, beatmap]))
-
-        const collections = osuCollectionData.collection.map((collection) => {
-          return {
-            name: collection.name,
-            id: collection.name.split(' ').join('-'),
-            maps: collection.beatmapsMd5.map(md5 => beatmapsMap.get(md5) || { md5, unknown: true })
-          }
-        }).filter(collection => collection.maps.length)
-
-        return collections.map((collection) => {
-          return {
-            name: collection.name,
-            id: collection.id,
-            slug: collection.id,
-            mapsets: mapListToMapsetList(collection.maps),
-            mod: [],
-            upload: true
-          }
-        })
-      }, [this.$options.osuDBData, this.$options.osuCollectionData])
+      })
       this.$options.osuDBData = undefined
       this.$options.osuCollectionData = undefined
       this.compiledCollectionData = await compiledCollectionData
+      compileCollectionWorker.terminate()
       this.onJob = false
     },
     upload () {
@@ -536,6 +518,11 @@ export default {
 }
 </script>
 <style lang="scss">
+.fade-away {
+  background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  background-clip: text;
+color: transparent;
+}
 .hover-big-shadow::before {
   content: "";
   height: 100%;
