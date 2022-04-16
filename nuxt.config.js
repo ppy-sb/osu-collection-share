@@ -170,6 +170,11 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+    babel: {
+      presets ({ isServer }, [preset, options]) {
+        options.loose = true
+      }
+    },
     extend (config, { isDev, isClient }) {
       // Web Worker support
       config.module.rules.push({
