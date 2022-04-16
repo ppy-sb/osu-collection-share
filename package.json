@@ -38,7 +38,6 @@
     "express-session": "^1.17.1",
     "file-saver": "^2.0.2",
     "js-file-downloader": "^1.1.22",
-    "lodash.debounce": "^4.0.8",
     "module-alias": "^2.2.2",
     "mongoose": "5.9.29",
     "nouislider": "^14.6.1",
@@ -72,6 +71,7 @@
     "eslint-plugin-nuxt": "^1.0.0",
     "jest": "^26.1.0",
     "json-stable-stringify": "^1.0.1",
+    "nodemon": "^2.0.15",
     "vue-cli-plugin-i18n": "^1.0.1",
     "vue-jest": "^3.0.4"
   },
