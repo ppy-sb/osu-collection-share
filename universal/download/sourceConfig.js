@@ -34,6 +34,7 @@ export default {
       try {
         const url = new URL(job.finalUrl)
         const fileName = url.searchParams.get('filename')
+        if (!fileName) { return name }
         return decodeURIComponent(fileName) + '.osz'
       } catch (e) {
         console.warn(e)
