@@ -1,11 +1,5 @@
 <template>
-  <section-layout
-    :contained="undefined"
-    bg-variant="warning"
-    skew
-    shaped
-    class="pt-100"
-  >
+  <section-layout :contained="undefined" bg-variant="warning" skew shaped class="pt-100">
     <b-card class="shadow">
       <b-form-group
         label-cols-sm="3"
@@ -13,11 +7,7 @@
         label-align="right"
         label-for="prefix"
       >
-        <b-form-input
-          id="prefix"
-          v-model.lazy.trim="prefix"
-          debounce="300"
-        />
+        <b-form-input id="prefix" v-model.lazy.trim="prefix" debounce="300" />
       </b-form-group>
       <b-form-group
         label-cols-sm="3"
@@ -42,14 +32,26 @@
       >
         <b-form-select id="source" v-model="source">
           <template v-for="(site, name) in sourceConfig">
-            <b-form-select-option v-if="!site.mirror" :key="`selector-source-${name}`" :value="name" :disabled="site.disabled">
-              {{ site.displayName || name }} {{ site.note ? ` | ${site.note.join(' | ')}` : "" }}
+            <b-form-select-option
+              v-if="!site.mirror"
+              :key="`selector-source-${name}`"
+              :value="name"
+              :disabled="site.disabled"
+            >
+              {{ site.displayName || name }}
+              {{ site.note ? ` | ${site.note.join(" | ")}` : "" }}
             </b-form-select-option>
           </template>
           <b-form-select-option-group label="- Mirror Sites">
             <template v-for="(site, name) in sourceConfig">
-              <b-form-select-option v-if="site.mirror" :key="`selector-source-${name}`" :value="name" :disabled="site.disabled">
-                {{ site.displayName || name }} {{ site.note ? ` | ${site.note.join(' | ')}` : "" }}
+              <b-form-select-option
+                v-if="site.mirror"
+                :key="`selector-source-${name}`"
+                :value="name"
+                :disabled="site.disabled"
+              >
+                {{ site.displayName || name }}
+                {{ site.note ? ` | ${site.note.join(" | ")}` : "" }}
               </b-form-select-option>
             </template>
             <!-- <b-form-select-option value="osu.sayobot.cn">
@@ -74,11 +76,7 @@
         :invalid-feedback="`Exceed the recommended concurrency limit (which is ${currentSource.safeConcurrency}). You are at the risk of being banned from this source.`"
         :state="safeConcurrency"
       >
-        <b-form-input
-          id="concurrency"
-          v-model.lazy="concurrency"
-          type="number"
-        />
+        <b-form-input id="concurrency" v-model.lazy="concurrency" type="number" />
       </b-form-group>
       <div class="d-flex">
         <b-button :disabled="job" variant="primary" class="ml-auto" @click="download">
@@ -95,7 +93,7 @@
         </b-progress>
         <div class="d-flex">
           <b-button-group class="ml-auto pt-2 pb-4">
-            <b-button :disabled="!job" @click="() => paused ? resume() : pause()">
+            <b-button :disabled="!job" @click="() => (paused ? resume() : pause())">
               {{ paused ? "resume" : "pause" }}
             </b-button>
             <b-button :disabled="!job" variant="danger" @click="clear">
@@ -107,9 +105,16 @@
           <b-progress :max="file.total" height="3em">
             <b-progress-bar :value="file.loaded">
               <div class="d-flex align-items-center">
-                <bs-image :src="thumbSrc(file.sid)" style="height:3em" class="pr-2" />
+                <bs-image :src="thumbSrc(file.sid)" style="height: 3em" class="pr-2" />
                 <strong v-if="file.lastTimeStamp" class="text-center">
-                  {{ readableFileSize((file.loaded - file.lastLoaded) / (file.timeStamp - file.lastTimeStamp) * 1000) }} / s<br>
+                  {{
+                    readableFileSize(
+                      ((file.loaded - file.lastLoaded) /
+                        (file.timeStamp - file.lastTimeStamp)) *
+                        1000
+                    )
+                  }}
+                  / s<br>
                   {{ readableFileSize(file.loaded) }} / {{ readableFileSize(file.total) }}
                 </strong>
               </div>
@@ -120,11 +125,13 @@
     </b-collapse>
     <b-collapse :visible="Boolean(status.errored.length)" class="pt-2">
       <b-card no-body class="shadow">
-        <b-card-header>
-          failed
-        </b-card-header>
+        <b-card-header> failed </b-card-header>
         <b-list-group flush>
-          <b-list-group-item v-for="(f) in status.errored" :key="`failed-download-${f.sid}`" :href="currentSource.set(f.sid)">
+          <b-list-group-item
+            v-for="f in status.errored"
+            :key="`failed-download-${f.sid}`"
+            :href="currentSource.set(f.sid)"
+          >
             <bs-image :src="thumbSrc(f.sid)" />
           </b-list-group-item>
         </b-list-group>
@@ -159,7 +166,17 @@ export default {
         total: 0,
         // errored: 0,
         successed: 0,
-        downloading: [{ sid: -1, total: 0, loaded: 0, downloader: undefined, lastLoaded: 0, timeStamp: 0, lastTimeStamp: 0 }],
+        downloading: [
+          {
+            sid: -1,
+            total: 0,
+            loaded: 0,
+            downloader: undefined,
+            lastLoaded: 0,
+            timeStamp: 0,
+            lastTimeStamp: 0
+          }
+        ],
         errored: []
       },
       source: 'osu.sayobot.cn',
@@ -170,7 +187,7 @@ export default {
     currentSource: {
       get () {
         let ret = { ...this.sourceConfig.bancho }
-        if (this.sourceConfig[this.source]) ret = { ...ret, ...this.sourceConfig[this.source] }
+        if (this.sourceConfig[this.source]) { ret = { ...ret, ...this.sourceConfig[this.source] } }
         return ret
       },
       set (val) {
@@ -186,11 +203,14 @@ export default {
         val = parseInt(val)
         if (val <= 0) return
         this.sourceConfig[this.source].concurrency = val
-        if (this.queue && this.currentSource.safeConcurrency >= val) this.queue.concurrency = val
+        if (this.queue && this.currentSource.safeConcurrency >= val) { this.queue.concurrency = val }
       }
     },
     safeConcurrency () {
-      return Boolean(!this.currentSource.safeConcurrency || this.currentSource.concurrency <= this.currentSource.safeConcurrency)
+      return Boolean(
+        !this.currentSource.safeConcurrency ||
+          this.currentSource.concurrency <= this.currentSource.safeConcurrency
+      )
     }
   },
   watch: {
@@ -213,7 +233,7 @@ export default {
     }
 
     if (query.source) {
-      if (Object.keys(this.sourceConfig).includes(query.source)) this.source = query.source
+      if (Object.keys(this.sourceConfig).includes(query.source)) { this.source = query.source }
     }
   },
 
@@ -251,58 +271,71 @@ export default {
       this.queue = undefined
       this.job = false
     },
+    createFileName () {},
     download () {
       this.job = true
       this.sids = this.idFromString(this.idString)
       this.resetStatus()
       this.queue = new PQueue({
-        concurrency:
-      isNaN(this.currentSource.safeConcurrency)
-        ? this.concurrency
-        : this.concurrency < this.currentSource.safeConcurrency
+        concurrency: isNaN(this.currentSource.safeConcurrency)
           ? this.concurrency
-          : this.sids.length > this.currentSource.shortBurstDownloadSize || 0
-            ? this.currentSource.safeConcurrency
-            : this.concurrency > this.currentSource.shortBurstConcurrency // allow for small size collections burst
-              ? this.currentSource.shortBurstConcurrency || this.currentSource.safeConcurrency * 2 // max is 2 times of the rated limit or specified rate
-              : this.concurrency
+          : this.concurrency < this.currentSource.safeConcurrency
+            ? this.concurrency
+            : this.sids.length > this.currentSource.shortBurstDownloadSize || 0
+              ? this.currentSource.safeConcurrency
+              : this.concurrency > this.currentSource.shortBurstConcurrency // allow for small size collections burst
+                ? this.currentSource.shortBurstConcurrency ||
+            this.currentSource.safeConcurrency * 2 // max is 2 times of the rated limit or specified rate
+                : this.concurrency
       })
-      this.queue.addAll(this.sids.map(sid => async () => {
-        const url = await this.getLink(sid, { version: this.version })
-        const downloadTracker = {
-          sid,
-          url,
-          total: 0,
-          loaded: 0,
-          currentEvent: undefined,
-          lastEvent: undefined
-        }
-        const updateStatus = (event) => {
-          const current = downloadTracker
-          current.lastLoaded = current.loaded
-          current.lastTimeStamp = current.timeStamp
-          if (!event.lengthComputable) return // guard
-          if (current.total !== event.total) current.total = event.total // prevent update if unnecessarily
-          current.loaded = event.loaded
-          // current.currentEvent = event
-          current.timeStamp = event.timeStamp
-        }
-        const downloader = new JsFileDownloader({ url, process: updateStatus, filename: `${this.prefix}-${sid}.osz`, timeout: 10000000 })
-          .then(() => {
-            this.status.successed += 1
-            const left = this.idString.split(/\r?\n/).filter(s => s !== downloadTracker.sid)
-            this.idString = left.join('\n')
+      this.queue.addAll(
+        this.sids.map(sid => async () => {
+          const url = await this.getLink(sid, { version: this.version })
+          const downloadTracker = {
+            sid,
+            url,
+            total: 0,
+            loaded: 0,
+            currentEvent: undefined,
+            lastEvent: undefined
+          }
+          const updateStatus = (event) => {
+            const current = downloadTracker
+            current.lastLoaded = current.loaded
+            current.lastTimeStamp = current.timeStamp
+            if (!event.lengthComputable) return // guard
+            if (current.total !== event.total) current.total = event.total // prevent update if unnecessarily
+            current.loaded = event.loaded
+            // current.currentEvent = event
+            current.timeStamp = event.timeStamp
+          }
+          const downloader = new JsFileDownloader({
+            url,
+            process: updateStatus,
+            /* filename: `${this.prefix}-${sid}.osz`, */
+            timeout: 10000000
           })
-          .catch(() => {
-            this.status.errored.push(downloadTracker)
-          })
-          .finally(() => {
-            this.status.downloading.splice(this.status.downloading.findIndex(i => i === downloadTracker), 1)
-          })
-        downloadTracker.downloader = downloader
-        this.status.downloading.push(downloadTracker)
-        await downloader
-      }))
+            .then(() => {
+              this.status.successed += 1
+              const left = this.idString
+                .split(/\r?\n/)
+                .filter(s => s !== downloadTracker.sid)
+              this.idString = left.join('\n')
+            })
+            .catch(() => {
+              this.status.errored.push(downloadTracker)
+            })
+            .finally(() => {
+              this.status.downloading.splice(
+                this.status.downloading.findIndex(i => i === downloadTracker),
+                1
+              )
+            })
+          downloadTracker.downloader = downloader
+          this.status.downloading.push(downloadTracker)
+          await downloader
+        })
+      )
       this.queue.onIdle(() => {
         this.job = false
         this.queue = undefined
