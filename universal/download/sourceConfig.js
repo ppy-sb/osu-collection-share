@@ -29,7 +29,17 @@ export default {
     version: ['full', 'novideo', 'mini'],
     concurrency: 10,
     mirror: true,
-    note: ['higher fail rate outside from China', 'cancel then start again helps']
+    note: ['higher fail rate outside from China', 'cancel then start again helps'],
+    transformName (name, job) {
+      try {
+        const url = new URL(job.finalUrl)
+        const fileName = url.searchParams.get('filename')
+        return decodeURIComponent(fileName) + '.osz'
+      } catch (e) {
+        console.warn(e)
+        return name
+      }
+    }
   },
   'beatconnect.io': {
     downloadLink: (sid, { version = 'full' } = {}) => {

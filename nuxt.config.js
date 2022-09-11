@@ -29,15 +29,23 @@ export default {
     ]
   },
 
-  /*
+  pwa: {
+    /*
   ** Configuration for @nuxtjs/pwa
   ** https://developer.mozilla.org/en-US/docs/Web/Manifest
   */
-  manifest: {
-    name: 'Vue Argon Design',
-    short_name: 'Argon Design',
-    description: 'Vue Argon Design System for Nuxt',
-    theme_color: '#172b4d'
+    manifest: {
+      name: 'Vue Argon Design',
+      short_name: 'Argon Design',
+      description: 'Vue Argon Design System for Nuxt',
+      theme_color: '#172b4d',
+      permissions: [
+        // '*://dl.sayobot.cn/*',
+        // '*://api.chimu.moe/*',
+        // '*://beatconnect.io/*',
+        'downloads'
+      ]
+    }
   },
 
   meta: {
@@ -69,7 +77,8 @@ export default {
     { src: '~/plugins/vue-fullscreen.js', mode: 'client' },
     '~/plugins/vue-flag.js',
     // '~/plugins/moment.js'
-    '~/plugins/i18n-connect-dayjs.js'
+    '~/plugins/i18n-connect-dayjs.js',
+    { src: '~/plugins/iframe', mode: 'client' }
   ],
   /*
   ** Auto import components
@@ -82,6 +91,7 @@ export default {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module'
+    // '@nuxtjs/pwa'
   ],
   /*
   ** Nuxt.js modules
@@ -124,7 +134,7 @@ export default {
     '@nuxtjs/dayjs'
   ],
   dayjs: {
-    locales: ['zh-cn', 'en-gb'],
+    locales: ['zh-cn', 'en-gb', 'en'],
     plugins: [
       'relativeTime'
     ]

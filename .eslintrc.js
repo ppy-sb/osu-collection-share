@@ -4,6 +4,9 @@ module.exports = {
     browser: true,
     node: true
   },
+  globals: {
+    browser: 'writeable'
+  },
   parserOptions: {
     parser: 'babel-eslint'
   },

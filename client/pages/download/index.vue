@@ -78,6 +78,14 @@
       >
         <b-form-input id="concurrency" v-model.lazy="concurrency" type="number" />
       </b-form-group>
+      <!-- <b-form-group
+        label-cols-sm="3"
+        label="downloader"
+        label-align="right"
+        label-for="downloader"
+      >
+        <b-form-select id="downloader" v-model="downloader" :options="downloaders" />
+      </b-form-group> -->
       <div class="d-flex">
         <b-button :disabled="job" variant="primary" class="ml-auto" @click="download">
           start
@@ -102,7 +110,7 @@
           </b-button-group>
         </div>
         <div v-for="file in status.downloading" :key="`progress-download-${file.sid}`">
-          <b-progress :max="file.total" height="3em">
+          <b-progress v-if="downloader === 'javascript'" :max="file.total" height="3em">
             <b-progress-bar :value="file.loaded">
               <div class="d-flex align-items-center">
                 <bs-image :src="thumbSrc(file.sid)" style="height: 3em" class="pr-2" />
@@ -120,6 +128,10 @@
               </div>
             </b-progress-bar>
           </b-progress>
+          <div v-else class="d-flex py-2">
+            <bs-image :src="thumbSrc(file.sid)" style="height: 2em" class="pr-2" />
+            <strong> downloading... </strong>
+          </div>
         </div>
       </b-card>
     </b-collapse>
@@ -137,6 +149,15 @@
         </b-list-group>
       </b-card>
     </b-collapse>
+    <!-- <vue-iframe
+      v-for="file in browserIframes"
+      :key="`if-${file.sid}`"
+      :name="`if-${file.sid}`"
+      :src="file.url"
+      :frame-id="`if-${file.sid}`"
+      @load="file.onLoad"
+    /> -->
+    <iframe v-for="file in browserIframes" :key="`if-${file.sid}`" ref="browserDownloaders" :src="file.url" frameborder="0" />
   </section-layout>
 </template>
 
@@ -167,20 +188,23 @@ export default {
         // errored: 0,
         successed: 0,
         downloading: [
-          {
-            sid: -1,
-            total: 0,
-            loaded: 0,
-            downloader: undefined,
-            lastLoaded: 0,
-            timeStamp: 0,
-            lastTimeStamp: 0
-          }
+          // {
+          //   sid: -1,
+          //   total: 0,
+          //   loaded: 0,
+          //   downloader: undefined,
+          //   lastLoaded: 0,
+          //   timeStamp: 0,
+          //   lastTimeStamp: 0
+          // }
         ],
         errored: []
       },
       source: 'osu.sayobot.cn',
-      sourceConfig
+      sourceConfig,
+      downloader: 'javascript',
+      downloaders: ['browser', 'javascript'],
+      browserIframes: []
     }
   },
   computed: {
@@ -299,31 +323,7 @@ export default {
             currentEvent: undefined,
             lastEvent: undefined
           }
-          const updateStatus = (event) => {
-            const current = downloadTracker
-            current.lastLoaded = current.loaded
-            current.lastTimeStamp = current.timeStamp
-            if (!event.lengthComputable) return // guard
-            if (current.total !== event.total) current.total = event.total // prevent update if unnecessarily
-            current.loaded = event.loaded
-            // current.currentEvent = event
-            current.timeStamp = event.timeStamp
-          }
-          const downloader = new JsFileDownloader({
-            url,
-            process: updateStatus,
-            /* filename: `${this.prefix}-${sid}.osz`, */
-            // filename: `${sid}.osz`,
-            nameCallback (name) {
-              // eslint-disable-next-line eqeqeq
-              if (name == sid) {
-                return `${sid}.osz`
-              } else {
-                return name
-              }
-            },
-            timeout: 10000000
-          })
+          const downloader = this._downloadFile(downloadTracker)
             .then(() => {
               this.status.successed += 1
               const left = this.idString
@@ -340,7 +340,7 @@ export default {
                 1
               )
             })
-          downloadTracker.downloader = downloader
+          // downloadTracker.downloader = downloader
           this.status.downloading.push(downloadTracker)
           await downloader
         })
@@ -348,6 +348,83 @@ export default {
       this.queue.onIdle(() => {
         this.job = false
         this.queue = undefined
+      })
+    },
+    async _downloadFile (job) {
+      if (this.downloader === 'javascript') return await this._jsDownloader(job)
+      else return this._browserDownloader(job)
+    },
+    _jsDownloader (job) {
+      const { url, sid } = job
+      const downloader = new JsFileDownloader({
+        url,
+        autoStart: false,
+        process: (event) => {
+          const finalUrl = downloader.request.responseURL
+          if (job.finalUrl !== finalUrl) { job.finalUrl = finalUrl }
+          const current = job
+          current.lastLoaded = current.loaded
+          current.lastTimeStamp = current.timeStamp
+          if (!event.lengthComputable) return // guard
+          if (current.total !== event.total) current.total = event.total // prevent unnecessary update
+          current.loaded = event.loaded
+          // current.currentEvent = event
+          current.timeStamp = event.timeStamp
+        },
+        /* filename: `${this.prefix}-${sid}.osz`, */
+        // filename: `${sid}.osz`,
+        nameCallback: (name) => {
+          console.log(job)
+          const source = this.sourceConfig[this.source]
+          console.log(source)
+          if (source.transformName) {
+            name = source.transformName(name, job)
+          }
+          // eslint-disable-next-line eqeqeq
+          if (name == sid) {
+            return `${sid}.osz`
+          } else {
+            return name
+          }
+        },
+        timeout: 10000000
+      })
+      return downloader.start()
+    },
+    _browserDownloader (job) {
+      return new Promise((resolve, reject) => {
+        // const downloaded = () => {
+        //   this.browserIframes.slice(this.browserIframes.findIndex(j => j === job))
+        //   resolve()
+        // }
+        const index = this.browserIframes.length
+        this.browserIframes.push(job)
+        this.$nextTick(() => {
+          console.log(this.$refs.browserDownloaders, index)
+          const iframe = this.$refs.browserDownloaders[index]
+          console.log(iframe)
+          job.frame = iframe
+          Object.keys(iframe.contentWindow).forEach((key) => {
+            if (key.startsWith('on')) {
+              window.addEventListener(key.slice(2), (event) => {
+                console.log(event)
+              })
+            }
+          })
+          // iframe.addEventListener('load', () => {
+          //   // console.log(iframeDoc.readyState)
+          //   console.log('load')
+          // })
+          // setInterval(() => {
+          //   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document
+          //   console.log(iframeDoc.readyState)
+          //   // Check if loading is complete
+          //   if (iframeDoc.readyState === 'complete' || iframeDoc.readyState === 'interactive') {
+          //     clearInterval(timer)
+          //     downloaded()
+          //   }
+          // }, 500)
+        })
       })
     },
     readableFileSize

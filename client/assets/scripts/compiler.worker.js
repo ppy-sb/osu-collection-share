@@ -51,14 +51,20 @@ self.addEventListener('message', ({ data: [osuDBData, osuCollectionData] }) => {
   self.postMessage(['report-progress', { processing: 'beatmaps', job: 'create-osu-database-index' }])
   const beatmapsMap = new Map(osuDBData.beatmaps.map(beatmap => [beatmap.md5, beatmap]))
 
+  let currentReport
+
+  const interval = setInterval(() => {
+    if (currentReport) self.postMessage(['report-progress', currentReport])
+  }, 1000 / 120)
   const collections = osuCollectionData.collection.map((collection, index) => {
-    self.postMessage(['report-progress', { processing: collection.name, job: 'create-collection-root', current: index, total: osuCollectionData.collection.length }])
+    currentReport = { processing: collection.name, job: 'create-collection-root', current: index, total: osuCollectionData.collection.length }
     return {
       name: collection.name,
       id: collection.name.split(' ').join('-'),
       maps: collection.beatmapsMd5.map(md5 => beatmapsMap.get(md5) || { md5, unknown: true })
     }
   }).filter(collection => collection.maps.length)
+  clearInterval(interval)
 
   self.postMessage(['result', collections.map((collection) => {
     return {
