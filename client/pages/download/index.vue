@@ -313,7 +313,15 @@ export default {
             url,
             process: updateStatus,
             /* filename: `${this.prefix}-${sid}.osz`, */
-            filename: `${sid}.osz`,
+            // filename: `${sid}.osz`,
+            nameCallback (name) {
+              // eslint-disable-next-line eqeqeq
+              if (name == sid) {
+                return `${sid}.osz`
+              } else {
+                return name
+              }
+            },
             timeout: 10000000
           })
             .then(() => {
