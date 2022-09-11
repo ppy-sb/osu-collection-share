@@ -77,8 +77,8 @@ export default {
     { src: '~/plugins/vue-fullscreen.js', mode: 'client' },
     '~/plugins/vue-flag.js',
     // '~/plugins/moment.js'
-    '~/plugins/i18n-connect-dayjs.js',
-    { src: '~/plugins/iframe', mode: 'client' }
+    '~/plugins/i18n-connect-dayjs.js'
+    // { src: '~/plugins/iframe', mode: 'client' }
   ],
   /*
   ** Auto import components
