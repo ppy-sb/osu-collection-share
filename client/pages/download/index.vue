@@ -1,14 +1,14 @@
 <template>
   <section-layout :contained="undefined" bg-variant="warning" skew shaped class="pt-100">
     <b-card class="shadow">
-      <b-form-group
+      <!-- <b-form-group
         label-cols-sm="3"
         label="prefix"
         label-align="right"
         label-for="prefix"
       >
         <b-form-input id="prefix" v-model.lazy.trim="prefix" debounce="300" />
-      </b-form-group>
+      </b-form-group> -->
       <b-form-group
         label-cols-sm="3"
         label="sid(s) seprated by new line"
@@ -159,7 +159,7 @@ export default {
       queue: undefined,
       idString: '',
       sids: [],
-      prefix: `batch-${new Date().toISOString()}`,
+      // prefix: `batch-${new Date().toISOString()}`,
       job: false,
       paused: false,
       status: {
@@ -228,9 +228,9 @@ export default {
       else this.idString = sid
     }
 
-    if (query.prefix) {
-      this.prefix = query.prefix
-    }
+    // if (query.prefix) {
+    //   this.prefix = query.prefix
+    // }
 
     if (query.source) {
       if (Object.keys(this.sourceConfig).includes(query.source)) { this.source = query.source }
@@ -313,6 +313,7 @@ export default {
             url,
             process: updateStatus,
             /* filename: `${this.prefix}-${sid}.osz`, */
+            filename: `${sid}.osz`,
             timeout: 10000000
           })
             .then(() => {
