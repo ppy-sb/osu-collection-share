@@ -23,3 +23,9 @@ function listen () {
 }
 
 app.use(require('./errorHandler'))
+
+
+process.on('uncaughtException', function (err) {
+  console.error('uncaught exception: ' + err.stack)
+  process.exit(1)
+})
