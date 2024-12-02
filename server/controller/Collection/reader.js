@@ -81,7 +81,7 @@ class CollectionReader {
   }
 
   async docCollectionBeatmapToMap (cbs) {
-    const ids = cbs.map(cb => mongoose.Types.ObjectId(cb.beatmap._id))
+    const ids = cbs.map(cb => new mongoose.Types.ObjectId(cb.beatmap._id))
     return await this.models.Beatmap.find().where('_id').in(ids).exec()
       .then((res) => {
         return res.map(d => d.toObject())

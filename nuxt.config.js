@@ -109,7 +109,7 @@ export default {
     // // Doc: https://axios.nuxtjs.org/usage
     // '@nuxtjs/axios',
     // Doc: https://github.com/nuxt/content
-    '@nuxt/content',
+    // '@nuxt/content',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://bootstrap-vue.js.org/docs/

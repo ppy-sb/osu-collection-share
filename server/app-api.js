@@ -13,6 +13,7 @@ function listen () {
   console.log(`Server listening on ${port}`)
 
   function shutdown () {
+    console.trace()
     server.close()
     process.exit()
   }

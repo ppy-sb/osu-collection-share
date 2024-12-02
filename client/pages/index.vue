@@ -2,10 +2,6 @@
   <hero-section-layout>
     <div class="col px-0">
       <div class="row justify-content-center align-items-center">
-        <!-- <img
-              src="img/brand/white.png"
-              style="width: 200px;"
-                class="img-fluid">-->
         <b-container :class="[blur ?'blur' :'blur active']">
           <b-col>
             <div class="main-block shadow justify-content-between">
@@ -39,21 +35,12 @@
                   >
                     {{ $t("recent.collections") }}
                   </base-button>
-                  <!-- <a href="/u/40455" class="home-btn btn-key">view profile</a>
-                  <a
-                    href="/leaderboard"
-                    class="home-btn btn-how"
-                    style="margin-left: 6px;"
-                  >view leaderboards</a> -->
                 </div>
               </div>
             </div>
           </b-col>
         </b-container>
       </div>
-      <!-- <div class="col-lg-7 text-center pt-lg">
-        123123
-      </div> -->
       <b-collapse v-model="show">
         <div class="row align-items-center pt-lg justify-content-around">
           <!-- <div class="btn-wrapper" /> -->
@@ -61,30 +48,9 @@
         <div class="row align-items-center pt-lg justify-content-around">
           <div class="col mt-4">
             <span class="text-white alpha-7 ml-3">{{ $t('landing.title') }}</span>
-            <!-- <a
-                            href="https://github.com/creativetimofficial/argon-design-system"
-                            target="_blank"
-                            title="Support us on Github"
-                        >
-                            <img
-                                src="img/brand/github-white-slim.png"
-                                style="height: 22px; margin-top: -3px"
-                            />
-                        </a>-->
           </div>
           <div class="col mt-4 mt-sm-0 text-right">
             <span class="text-white alpha-7">{{ $t("statements.testTitle") }}</span>
-            <!-- <a
-              href="https://www.creative-tim.com"
-              target="_blank"
-              title="Creative Tim - Premium Bootstrap Themes and Templates"
-            >
-              <img
-                src="img/brand/creativetim-white-slim.png"
-                class="ml-3"
-                style="height: 30px;"
-              >
-            </a> -->
           </div>
         </div>
       </b-collapse>
@@ -146,10 +112,10 @@ export default {
     backdrop-filter: blur(15px);
 }
 .quaver {
-    background-image: url(https://Akatsuki.pw/static/characters/quaver.png);
+    background-image: url(https://osu.ppy.sb/_ipx/w_1536&f_webp/mascot/riru.png);
     background-repeat: no-repeat;
-    height: 363px;
-    width: 427px;
+    height: 420px;
+    width: 450px;
     align-self: flex-end;
 }
 .content {
